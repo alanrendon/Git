@@ -1,0 +1,27 @@
+
+CREATE TABLE IF NOT EXISTS `llx_ctrl_advance_provider` (
+  `rowid` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Id de la tabla',
+  `ref` varchar(30) DEFAULT NULL COMMENT 'Referencia del anticipo',
+  `tms` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha para cuando se hace update a tabla',
+  `concept_advance` text COMMENT 'Concepto del anticipo',
+  `import` decimal(10,2) DEFAULT NULL COMMENT 'Importe sin IVA',
+  `total_import` decimal(10,2) DEFAULT NULL COMMENT 'Importe con IVA',
+  `note_public` text COMMENT 'Nota pública',
+  `note_private` text COMMENT 'Nota privada',
+  `statut` tinyint(4) DEFAULT NULL COMMENT '0: Borrador, 1: Aturizar, 2: Autorizar pago, 3: pagado/ por aplicar, 4: concluido, 5: iniciado\r\n6:Eliminado',
+  `date_advance` date DEFAULT NULL COMMENT 'Fecha para el anticipo',
+  `date_valid` date DEFAULT NULL COMMENT 'Fecha de validación',
+  `date_modif` date DEFAULT NULL COMMENT 'Fecha de modificación específica',
+  `date_create` date DEFAULT NULL COMMENT 'Fecha de creación',
+  `fk_user_author` int(11) DEFAULT NULL COMMENT 'Usuario que creó el anticipo',
+  `fk_user_modif` int(11) DEFAULT NULL COMMENT 'Usuario que modifica registro',
+  `fk_user_valid` int(11) DEFAULT NULL COMMENT 'Usuario que ha validado',
+  `fk_soc` int(11) DEFAULT NULL COMMENT 'Proveedor',
+  `fk_user_applicant` int(11) DEFAULT NULL COMMENT 'Usuario solicitante',
+  `fk_paymen` int(11) DEFAULT NULL COMMENT 'Forma de pago del anticipo',
+  `fk_project` int(11) DEFAULT NULL COMMENT 'Proyecto asignado al anticipo',
+  `fk_tva` int(11) DEFAULT NULL COMMENT 'Muestra el enlace al diccionario llx_c_tva',
+  `fk_mcurrency` int(11) DEFAULT NULL COMMENT 'Enlace de la multidivisa en la tabla llx_multidivisa',
+  `type_advance` int(11) DEFAULT '1' COMMENT '1: Povedor Externo\r\n2: Viaticos',
+  PRIMARY KEY (`rowid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
