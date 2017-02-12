@@ -1,3 +1,4 @@
+ALTER TABLE `llx_bank` ADD `inv` tinyint(4) DEFAULT 0;
 ALTER TABLE `llx_societe_extrafields` ADD `inv001` tinyint(4);
 ALTER TABLE `llx_societe_extrafields` ADD `inv002` double(24,8);
 --INSERT INTO `llx_extrafields` VALUES ('med001', '1', 'user', '2016-10-27 17:10:10', 'Médico', 'boolean', '', '0', '1', null, '1', '1', 'a:1:{s:7:\"options\";a:1:{s:0:\"\";N;}}', '0');

@@ -300,7 +300,7 @@ if ($id>0) {
 
 							$sql.= " WHERE b.fk_account=".$object->id;
 
-							$sql.= " AND b.fk_account = ba.rowid";
+							$sql.= " AND b.fk_account = ba.rowid AND b.inv=1";
 
 							$sql.= " AND ba.entity IN (".getEntity('bank_account', 1).") AND MONTH(b.datev)=".$j." AND YEAR(b.datev)=".$k;
 

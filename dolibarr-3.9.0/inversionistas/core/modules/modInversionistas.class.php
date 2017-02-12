@@ -140,7 +140,15 @@ class modInversionistas extends DolibarrModules
 		// 'stock'            to add a tab in stock view
 		// 'thirdparty'       to add a tab in third party view
 		// 'user'             to add a tab in user view
-        $this->tabs = array('bank:+tabinvcliente:Inversión:@inversion:true:/inversionistas/bank/inversion.php?id=__ID__','bank:-cash','bank:+tabinvtrans:Transacciones previstas:@inversion:true:/inversionistas/bank/treso.php?account=__ID__');
+        $this->tabs = array(
+        	'bank:-journal',
+        	'bank:+journalni:Transacciones :@inversion:true:/inversionistas/bank/account.php?id=__ID__',
+        	'bank:+journalsi:Transacciones Inversionista:@inversion:true:/inversionistas/bank/account_inv.php?id=__ID__',
+        	'bank:-cash',
+        	'bank:+tabinvtrans:Transacciones previstas:@inversion:true:/inversionistas/bank/treso.php?account=__ID__',
+        	'bank:+tabinvcliente:Inversión:@inversion:true:/inversionistas/bank/inversion.php?id=__ID__',
+
+        	);
 
         // Dictionaries
 	    if (! isset($conf->inversionistas->enabled))
