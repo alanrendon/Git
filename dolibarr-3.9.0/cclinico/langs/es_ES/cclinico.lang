@@ -1,0 +1,79 @@
+# Index.php
+Code1=Control Clínico
+Code2=Buscar
+Code3=Referencia
+Code4=Estadísticas
+Code5=Pacientes
+Code6=Consultas
+Code7=Los 15 últimos pacientes modificados
+Code8=Estado
+Code9=Las 15 últimas consultas
+Code10=Ref. Consulta
+
+#pacientes_list.php
+Code11=Listado de pacientes
+Code12=Doctor Asignado
+
+#consultas_card.php
+Code13=Crear Consulta
+Code14=Paciente: 
+Code15=Fecha de Consulta: 
+Code16=Tipo de Consulta:
+Code17=Peso (kgs):
+Code18=Presión Arterial:
+Code19=Temperatura:
+Code20=Motivos Consulta:
+Code21=Médico
+Code22=Folio
+Code23=Detalles de consulta e Historial de la enfermedad:
+Code24=Detalles del tratamiento/Receta:
+Code25=Diagnóstico:
+Code26=Detalle de diagnosticos y/o examenes clínicos:
+Code27=Guardar Borrador
+Code28=Validar Consulta
+Code29=Cancelar
+Code29_1=Facturas relacionadas:
+Code29_2=Relacionar Factura
+Code29_3=Ref.
+Code29_4=Fecha
+Code29_5=Base imp.
+
+
+#pacientes_card.php
+Code30=Estatura
+Code31=Sexo
+Code32=Médico de Seguimiento
+
+#perso.php
+Code33=Edad Ingresada
+Code34=Médico de Seguimiento
+Code35=Antecedentes
+Code36=Nuevo
+Code37=Resumen de Consultas
+Code38=Num
+Code39=Fecha
+Code40=Doctor que atendío
+Code41=Motivo de consulta
+Code42=Diagnóstico/Enfermedad
+Code43=Tratamiento
+Code44=Nueva Consulta
+Code45=Archivos Vinculados
+Code46=Archivos vinculados al paciente
+Code47=Ningun archivo vinculado
+Code48=Generar Expediente
+Code49=Resumen de Consultas
+Code49_1=Otros comentarios:
+Code49_2=Adjuntar nuevo archivo
+Code49_3=Enviar Archivos
+Code49_4=Archivos vinculados a la consulta
+Code49_5=Generar Receta
+Code49_6=Generar Nota
+Code49_7=Existen Facturas vinculadas a esta consulta, ¿desea agregar una factura nueva?
+Code49_8=Validación de facturas
+cl_function=Puesto/Función
+
+
+#note.php
+Code51=Notas
+Code52=Documentos
+

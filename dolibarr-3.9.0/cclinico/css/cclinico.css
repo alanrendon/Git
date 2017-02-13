@@ -1,0 +1,60 @@
+.cabb{
+  background: rgb(230,230,230);padding: 2px 2px 2px 2px; border: 2px solid #888; color: rgb(0,0,0);
+}
+.inputlabel {
+	display: inline-block;
+	height: 20px;
+	line-height: 20px;
+	padding: 5px 10px;
+	color: #000;
+}
+.fader{
+	display: none;
+    border-top: 1px solid #AAA;
+    	padding: 10px 8px; 
+	color: #000;
+}
+.fader > div{
+	margin-left:30px !important;
+}
+.rotated {
+  transform: rotate(90deg);
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -moz-transform: rotate(90deg); /* Firefox */
+  -webkit-transform: rotate(90deg); /* Safari and Chrome */
+  -o-transform: rotate(90deg); /* Opera */
+}
+.imgalign{
+	margin-right: 15px;
+}
+.trans > td > input ,.trans > td > textarea ,.trans > td > select ,.trans > td > ul {
+  background:#dddddd;
+  cursor: default;
+}
+
+.box-panel{
+	  color: #111111;
+    padding-top: 6px;
+    padding-bottom: 4px;
+    margin: 0px 0px 4px 0px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    border-right: 1px solid #AAA;
+    border-bottom: 1px solid #AAA;
+    border-left: 1px solid #AAA;
+    border-top: 1px solid #BBB;
+    width: auto;
+    background: rgb(255,255,255);
+    -moz-box-shadow: 3px 3px 4px #DDD;
+    -webkit-box-shadow: 3px 3px 4px #DDD;
+    box-shadow: 3px 3px 4px #DDD;
+}
+
+.delete_consultas, .down_consultas{
+  cursor: pointer !important;
+}
+.lum:hover{
+  background-color: #eeeeee;
+}
+
