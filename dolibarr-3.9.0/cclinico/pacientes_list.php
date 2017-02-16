@@ -32,7 +32,7 @@ require '../main.inc.php';
 require_once DOL_DOCUMENT_ROOT.'/cclinico/class/pacientes.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
 dol_include_once('/cclinico/class/consultas.class.php');
-
+global $conf;
 $langs->load("companies");
 $langs->load("suppliers");
 
@@ -224,9 +224,9 @@ if (is_array($extrafields->attribute_label) && count($extrafields->attribute_lab
 } 
 $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."c_country as co ON co.rowid = p.fk_pays";
 $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."societe as s ON s.rowid = p.fk_soc";
-if (! empty($search_categ)) $sql.= ' LEFT JOIN '.MAIN_DB_PREFIX."categorie_contact as cs ON p.rowid = cs.fk_socpeople"; // We need this table joined to the select in order to filter by categ
-if (!$user->rights->societe->client->voir && !$socid) $sql .= " LEFT JOIN ".MAIN_DB_PREFIX."societe_commerciaux as sc ON s.rowid = sc.fk_soc";
-$sql.= ' WHERE p.entity IN ('.getEntity('societe', 1).')';
+
+
+$sql.= ' WHERE p.entity ='.$conf->entity;
 
 if ($fk_user!=-1 && !empty($fk_user))
 {

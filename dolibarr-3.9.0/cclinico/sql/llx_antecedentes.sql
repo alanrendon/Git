@@ -7,5 +7,6 @@ CREATE TABLE IF NOT EXISTS `llx_antecedentes` (
   `fk_user_update` int(11) DEFAULT NULL,
   `fk_pacientes` int(11) DEFAULT NULL,
   `status` tinyint(4) DEFAULT NULL,
+  `entity` int(11) DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

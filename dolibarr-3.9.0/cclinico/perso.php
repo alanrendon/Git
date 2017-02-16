@@ -39,13 +39,38 @@ $extrafields2 = new ExtraFields($db);
 $consultas = new Consultas($db);
 
 
+
 // fetch optionals attributes and labels
 $extralabels=$extrafields->fetch_name_optionals_label($pacientes->table_element);
 $extralabels2=$extrafields2->fetch_name_optionals_label($consultas->table_element);
 /*
  *  Actions
- */
+*/
 
+
+//crear borrador vacío
+if ($action=='create') {
+    
+    if (!is_dir($dir_paciente)) {
+        dol_mkdir($dir_paciente);
+    }
+    $consultas->fk_user_med            = $pacientes->fk_user;
+    $consultas->Ref                    = $tmpcode;
+    $consultas->fk_user_pacientes      = $id;
+    $id2 =  $consultas->create($user);
+
+    if ($id2 > 0){
+        $consultas->fetch($id2);
+        $aid=$id2;
+
+        $tmpcode=mascara_referencia($conf,1,$consultas);
+        $consultas->Ref                    = $tmpcode;
+        $consultas->update($user);
+
+        $dir_consulta=$dir_paciente."/Consulta-".$id2."/";
+        dol_mkdir($dir_consulta);
+    }
+}
 
 //confirmar borrar antecedentes
 if ($action == 'confirm_delete_1' && $confirm == 'yes' )
@@ -73,11 +98,14 @@ if ($action == 'confirm_delete_1' && $confirm == 'yes' )
     }
 }
 //guardar borrador
-if ($action=='create_update' && !empty($aid)) {
-
-    $tmpcode=mascara_referencia($conf,1);
+if ($action=='create_update' ) {
+    
     $consultas->fetch($aid);
-    $consultas->Ref                    = $tmpcode;
+    $tmpcode=mascara_referencia($conf,1,$consultas);
+    if (empty($consultas->Ref)) {
+        $consultas->Ref                    = $tmpcode;
+    }
+    
     $consultas->weight                 = GETPOST("weight");
     $consultas->Type_consultation      = GETPOST("Type_consultation");
     $consultas->blood_pressure         = GETPOST("blood_pressure");
@@ -114,6 +142,8 @@ if (!empty($doc) && !empty($aid)) {
         unlink ($dir_paciente."/Consulta-".$aid."/".$doc);
     }
 }
+
+
 //subir archivos a la consulta
 if (!empty($doc2) && !empty($aid)) {
     $f=$dir_paciente."/Consulta-".$aid."/".$doc2;
@@ -151,7 +181,6 @@ if ($action == 'delete' ){
         
         header("Location: ".DOL_URL_ROOT.'/cclinico/perso.php?id='.$id);
         exit;
-        
     }
     else
     {
@@ -186,26 +215,10 @@ if ($socid > 0)
     $objsoc->fetch($socid);
 }
 
-//crear borrador vacío
-if ($action=='create') {
-    $tmpcode=mascara_referencia($conf,1);
-    if (!is_dir($dir_paciente)) {
-        dol_mkdir($dir_paciente);
-    }
-    $consultas->fk_user_med            = $pacientes->fk_user;
-    $consultas->Ref                    = $tmpcode;
-    $consultas->fk_user_pacientes      = $id;
-    $id2 =  $consultas->create($user);
-    if ($id2 > 0){
-        $consultas->fetch($id2);
-        $aid=$id2;
-        $dir_consulta=$dir_paciente."/Consulta-".$id2."/";
-        dol_mkdir($dir_consulta);
-    }
-}
+
 //subir archivo al borrador
 if ($action=='create_upfile') {
-    $tmpcode=mascara_referencia($conf,1);
+    $tmpcode=mascara_referencia($conf,1,$consultas);
     //$consultas->Ref                    = $tmpcode;
     $consultas->weight                 = GETPOST("weight");
     $consultas->Type_consultation      = GETPOST("Type_consultation");
@@ -310,6 +323,7 @@ if ($action=='create_consulta') {
         if ($result > 0) {
             $consultas->cambiar_statut(1,$user);
             $action='';
+            setEventMessages($langs->trans("Code29_6")." ".str_replace('!', '',$consultas->Ref), null, 'mesgs');
         }
         if ($result <= 0)
         {
@@ -922,7 +936,7 @@ if (! empty($id) )
             print '</div>';
         }
     }
-    if ($action == 'create' && ! empty($id) && ! empty($aid))
+    if ($action == 'create' && ! empty($id) )
     {
         print '<div class="tabBar">';
         $consultas->date_consultation=(empty($consultas->date_consultation)?dol_now():$consultas->date_consultation);

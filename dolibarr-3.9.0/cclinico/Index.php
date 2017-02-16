@@ -184,17 +184,17 @@ if ($action == 'create')
 
 		$buscar_name="";
 		if (!empty($search_name)) {
-			$buscar_name=" WHERE CONCAT(a.lastname,' ',a.firstname) LIKE '%".$search_name."%' ";
+			$buscar_name=" and CONCAT(a.lastname,' ',a.firstname) LIKE '%".$search_name."%' ";
 		}
 		$buscar_ref="";
 		if (!empty($search_ref)) {
-			$buscar_ref=" WHERE a.Ref LIKE '%".$search_ref."%' ";
+			$buscar_ref=" and a.Ref LIKE '%".$search_ref."%'  ";
 		}
 
-		$sql = "SELECT COUNT(*) con FROM llx_consultas;";
+		$sql = "SELECT COUNT(*) con FROM llx_consultas WHERE entity=".$conf->entity.";";
         $result=$db->query($sql);
         $obj = $db->fetch_object($result);  
-        $sql = "SELECT COUNT(*) con FROM llx_pacientes as a WHERE a.statut=1;";
+        $sql = "SELECT COUNT(*) con FROM llx_pacientes as a WHERE a.statut=1 and a.entity=".$conf->entity.";";
         $result2=$db->query($sql);
         $obj2 = $db->fetch_object($result2);    
 
@@ -234,6 +234,8 @@ if ($action == 'create')
 				rowid,datec,statut
 			FROM
 				llx_pacientes AS a
+			WHERE
+		    	a.entity=".$conf->entity."
 			".$buscar_name."
 			ORDER BY
 				a.tms DESC
@@ -296,6 +298,8 @@ if ($action == 'create')
 				*
 			FROM
 				llx_consultas AS a
+			WHERE
+		    a.entity=".$conf->entity."
 			".$buscar_ref."
 			ORDER BY
 				a.date_creation DESC

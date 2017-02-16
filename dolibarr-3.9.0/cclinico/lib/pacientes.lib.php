@@ -153,7 +153,7 @@ function pacientes_prepare_head2(Pacientes $object)
     return $head;
 }
 
-function mascara_referencia($conf,$type=0)
+function mascara_referencia($conf,$type=0,$object="")
 {
    $module=(! empty($conf->global->SOCIETE_CODECONSULTA_ADDON)?$conf->global->SOCIETE_CODECONSULTA_ADDON:'mod_codeconsultas_monkey');
     if ($type==1) {

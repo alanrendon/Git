@@ -120,6 +120,7 @@ class Actionpacientes extends CommonObject
 	 */
 	public function create(User $user, $notrigger = false)
 	{
+		global $conf;
 		dol_syslog(__METHOD__, LOG_DEBUG);
 
 		$error = 0;
@@ -128,9 +129,6 @@ class Actionpacientes extends CommonObject
 		
 		if (isset($this->ref_ext)) {
 			 $this->ref_ext = trim($this->ref_ext);
-		}
-		if (isset($this->entity)) {
-			 $this->entity = trim($this->entity);
 		}
 		if (isset($this->fk_action)) {
 			 $this->fk_action = trim($this->fk_action);
@@ -276,7 +274,7 @@ class Actionpacientes extends CommonObject
 		$sql .= ') VALUES (';
 		
 		$sql .= ' '.(! isset($this->ref_ext)?'NULL':"'".$this->db->escape($this->ref_ext)."'").',';
-		$sql .= ' '.(! isset($this->entity)?'NULL':$this->entity).',';
+		$sql .= ' '.$conf->entity.',';
 		$sql .= ' '.(! isset($this->datep) || dol_strlen($this->datep)==0?'NULL':"'".$this->db->idate($this->datep)."'").',';
 		$sql .= ' '.(! isset($this->datep2) || dol_strlen($this->datep2)==0?'NULL':"'".$this->db->idate($this->datep2)."'").',';
 		$sql .= ' '.(! isset($this->fk_action)?'NULL':$this->fk_action).',';
@@ -436,7 +434,7 @@ class Actionpacientes extends CommonObject
 
         $this->db->begin();
 
-        $sql = "INSERT INTO ".MAIN_DB_PREFIX."action_pacientes";
+        $sql = "INSERT INTO llx_action_pacientes";
         $sql.= "(datec,";
         $sql.= "datep,";
         $sql.= "datep2,";
@@ -567,6 +565,7 @@ class Actionpacientes extends CommonObject
 	 */
 	public function fetch($id, $ref = null)
 	{
+		global $conf;
 		dol_syslog(__METHOD__, LOG_DEBUG);
 
 		$sql = 'SELECT';
@@ -619,7 +618,7 @@ class Actionpacientes extends CommonObject
 		} else {
 			$sql .= ' WHERE t.id = ' . $id;
 		}
-
+		$sql.= ' AND t.entity='.$conf->entity;
 		$resql = $this->db->query($sql);
 		if ($resql) {
 			$numrows = $this->db->num_rows($resql);

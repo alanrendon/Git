@@ -46,7 +46,7 @@ if (! $res) die("Include of main fails");
 include_once(DOL_DOCUMENT_ROOT.'/core/class/html.formcompany.class.php');
 dol_include_once('/cclinico/class/consultas.class.php');
 dol_include_once('/cclinico/class/pacientes.class.php');
-
+global $conf;
 // Load traductions files requiredby by page
 $langs->load("cclinico");
 $langs->load("other");
@@ -197,29 +197,24 @@ include DOL_DOCUMENT_ROOT.'/core/actions_changeselectedfields.inc.php';
 if ($_POST["button_removefilter_x"] || $_POST["button_removefilter.x"] || $_POST["button_removefilter"]) // All test are required to be compatible with all browsers
 {
 	
-$search_Ref='';
-$search_code_client='';
-$search_fk_user_pacientes='';
-$search_date_consultation="";
-
-
-
-$search_fk_user_creation='';
-$search_fk_user_validation='';
-$search_fk_user_close='';
-$search_Type_consultation='';
-$search_weight='';
-$search_blood_pressure='';
-$search_fk_user_med='';
-$search_reason='';
-$search_reason_detail='';
-$search_diagnostics='';
-$search_diagnostics_detail='';
-$search_treatments='';
-$search_comments='';
-$search_statut='';
-
-	
+	$search_Ref='';
+	$search_code_client='';
+	$search_fk_user_pacientes='';
+	$search_date_consultation="";
+	$search_fk_user_creation='';
+	$search_fk_user_validation='';
+	$search_fk_user_close='';
+	$search_Type_consultation='';
+	$search_weight='';
+	$search_blood_pressure='';
+	$search_fk_user_med='';
+	$search_reason='';
+	$search_reason_detail='';
+	$search_diagnostics='';
+	$search_diagnostics_detail='';
+	$search_treatments='';
+	$search_comments='';
+	$search_statut='';
 	$search_date_creation='';
 	$search_date_update='';
 	$search_array_options=array();
@@ -292,8 +287,13 @@ $parameters=array();
 $reshook=$hookmanager->executeHooks('printFieldListSelect',$parameters);    // Note that $action and $object may have been modified by hook
 $sql.=$hookmanager->resPrint;
 $sql.= " FROM ".MAIN_DB_PREFIX."consultas as t inner join llx_pacientes as u on u.rowid=t.fk_user_pacientes";
-if (is_array($extrafields->attribute_label) && count($extrafields->attribute_label)) $sql.= " LEFT JOIN ".MAIN_DB_PREFIX."consultas_extrafields as ef on (u.rowid = ef.fk_object)";
-$sql.= " WHERE 1 = 1";
+if (is_array($extrafields->attribute_label) && count($extrafields->attribute_label)){
+	$sql.= " LEFT JOIN ".MAIN_DB_PREFIX."consultas_extrafields as ef on (u.rowid = ef.fk_object)";
+	$sql.= " WHERE 1 = 1  AND t.entity=".$conf->entity." AND u.entity=".$conf->entity." ";
+} else{
+	$sql.= " WHERE 1 = 1  AND t.entity=".$conf->entity." AND u.entity=".$conf->entity." ";
+}
+
 //$sql.= " WHERE u.entity IN (".getEntity('mytable',1).")";
 
 
@@ -638,15 +638,22 @@ if (! empty($arrayfields['t.statut']['checked'])){
 			if (! empty($arrayfields['t.date_consultation']['checked'])) print '<td>'.$obj->date_consultation.'</td>';
 			if (! empty($arrayfields['t.fk_user_med']['checked'])){
 				$objsoc2 = new User($db);
-				$objsoc2->fetch($obj->fk_user_med);
-				print '<td>';
-				print $objsoc2->getNomUrl(1);
-				print '</td>';
+				if ($obj->fk_user_med<1) {
+					print '<td>';
+					print "N/A";
+					print '</td>';
+				}else{
+					$objsoc2->fetch($obj->fk_user_med);
+					print '<td>';
+					print $objsoc2->getNomUrl(1);
+					print '</td>';
+				}
+				
 			}
 
 			if (! empty($arrayfields['t.Type_consultation']['checked'])){
 				print '<td>'; 
-				$resql1=$db->query("SELECT * FROM llx_c_tipo_consulta as a WHERE a.active=1 AND a.rowid=".$obj->Type_consultation);
+				$resql1=$db->query("SELECT * FROM llx_c_tipo_consulta as a WHERE a.entity=".$conf->entity." AND a.active=1 AND a.rowid=".$obj->Type_consultation);
 
 			    if ($resql1)
 			    {
@@ -662,7 +669,7 @@ if (! empty($arrayfields['t.statut']['checked'])){
 			}
 			if (! empty($arrayfields['t.reason']['checked'])){
 				print '<td>'; 
-				$resql1=$db->query("SELECT * FROM llx_c_motivo_consulta as a WHERE a.active=1 AND a.rowid=".$obj->reason);
+				$resql1=$db->query("SELECT * FROM llx_c_motivo_consulta as a WHERE a.entity=".$conf->entity." AND a.active=1 AND a.rowid=".$obj->reason);
 			    if ($resql1)
 			    {
 			        $num2 = $db->num_rows($resql1);
@@ -678,7 +685,7 @@ if (! empty($arrayfields['t.statut']['checked'])){
 			}
 			if (! empty($arrayfields['t.diagnostics']['checked'])){
 				print '<td>'; 
-				$resql1=$db->query("SELECT * FROM llx_c_tipo_diagnostico as a WHERE a.active=1 AND a.rowid=".$obj->diagnostics);
+				$resql1=$db->query("SELECT * FROM llx_c_tipo_diagnostico as a WHERE a.entity=".$conf->entity." AND a.active=1 AND a.rowid=".$obj->diagnostics);
 			    if ($resql1)
 			    {
 			        $num2 = $db->num_rows($resql1);

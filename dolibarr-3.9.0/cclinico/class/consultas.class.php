@@ -162,14 +162,16 @@ class Consultas extends CommonObject
         		$sql.= " WHERE u.entity IN (0,".$conf->entity.")";
         	}
         }*/
-        $sql.=" AND b.med001=1 ";
+        $sql.="
+        WHERE
+         u.statut=1 AND u.entity=".$conf->entity." AND b.med001=1 ";
         if (! empty($user->societe_id)) $sql.= " AND u.fk_soc = ".$user->societe_id;
         if (is_array($exclude) && $excludeUsers) $sql.= " AND u.rowid NOT IN ('".$excludeUsers."')";
         if (is_array($include) && $includeUsers) $sql.= " AND u.rowid IN ('".$includeUsers."')";
         if (! empty($conf->global->USER_HIDE_INACTIVE_IN_COMBOBOX) || $noactive) $sql.= " AND u.statut <> 0";
         if (! empty($morefilter)) $sql.=" ".$morefilter;
         $sql.= " ORDER BY u.lastname ASC";
-
+        //echo $sql;
         dol_syslog(get_class($this)."::select_dolusers", LOG_DEBUG);
         $resql=$this->db->query($sql);
         if ($resql)
@@ -278,6 +280,7 @@ class Consultas extends CommonObject
 
     public function listar_antecedentes($id)
 	{
+		global $conf;
 		dol_syslog(__METHOD__, LOG_DEBUG);
 		$sql = 'SELECT
 			a.*,b.lastname,b.firstname
@@ -285,6 +288,8 @@ class Consultas extends CommonObject
 			llx_antecedentes AS a
 		INNER JOIN llx_pacientes AS b ON a.fk_pacientes=b.rowid
 		WHERE
+		a.entity='.$conf->entity.' AND
+		b.entity='.$conf->entity.' AND
 			a.status=1 AND a.fk_pacientes= '.trim($id).'
 		ORDER BY a.fecha_creacion desc';
 		$resql = $this->db->query($sql);
@@ -313,18 +318,22 @@ class Consultas extends CommonObject
 
 	public function listar_facturas()
 	{
-		dol_syslog(__METHOD__, LOG_DEBUG);
+		global $conf;
 		$sql = '
 		SELECT
-			a.rowid as id,c.total_ht,b.*
+			a.rowid AS id,
+			b.total_ttc as total_ht,
+			b.*
 		FROM
 			llx_facturas_consulta AS a
-		INNER JOIN llx_facture as b ON a.fk_factura = b.rowid
-		LEFT JOIN llx_facturedet as c on c.fk_facture=b.rowid
+			INNER JOIN llx_facture AS b ON a.fk_factura = b.rowid
 		WHERE
+			a.entity='.$conf->entity.' AND
+			b.entity='.$conf->entity.' AND
 			a.statut = 1
 		AND a.fk_consulta = '.trim($this->rowid).' 
 		ORDER BY date_creation DESC';
+
 		$resql = $this->db->query($sql);
 		if ($resql) {
 			$num = $this->db->num_rows($resql);
@@ -336,7 +345,7 @@ class Consultas extends CommonObject
 					$obj = $this->db->fetch_object($resql);
 					if ($obj)
 					{
-					     $array[$i]=$obj;
+					    $array[$i]=$obj;
 					}
 					$i++;
 				}
@@ -350,13 +359,16 @@ class Consultas extends CommonObject
 	}
 	public function listar_evento($evento)
 	{
+		global $conf;
 		dol_syslog(__METHOD__, LOG_DEBUG);
 		$sql = '
 		SELECT
 			a.fk_consulta,a.fk_paciente,a.rowid
 		FROM
 			llx_eventos_consultas AS a
-		WHERE a.fk_evento='.trim($evento);
+		WHERE 
+		b.entity='.$conf->entity.' AND
+		a.fk_evento='.trim($evento);
 		$resql = $this->db->query($sql);
 		if ($resql) {
 			$num = $this->db->num_rows($resql);
@@ -377,6 +389,8 @@ class Consultas extends CommonObject
 
 	public function create(User $user, $notrigger = false)
 	{
+
+		global $conf;
 		dol_syslog(__METHOD__, LOG_DEBUG);
 
 		$error = 0;
@@ -420,12 +434,13 @@ class Consultas extends CommonObject
 			 $this->fk_user_pacientes = trim($this->fk_user_pacientes);
 		}
 		if (isset($this->Ref)) {
-			 $this->Ref = ((!empty($this->Ref))?trim($this->Ref):"No Asignado");
+			 $this->Ref = ((!empty($this->Ref))?trim($this->Ref):"NA");
 		}
 		
 
 		// Insert request
 		$sql = 'INSERT INTO ' . MAIN_DB_PREFIX . $this->table_element . '(';
+		$sql.= 'entity,';
 		$sql.= 'weight,';
 		$sql.= 'Ref,';
 		$sql.= 'fk_user_pacientes,';
@@ -443,6 +458,7 @@ class Consultas extends CommonObject
 		$sql.= 'date_creation,';
 		$sql.= 'fk_user_creation';
 		$sql .= ') VALUES (';
+		$sql .= ' '.$conf->entity.',';
 		$sql .= ' '.(empty($this->weight)?'NULL':"'".$this->weight."'").',';
 		$sql .= ' '.(empty($this->Ref)?'NULL':"'".$this->db->escape($this->Ref)."'").',';
 		$sql .= $this->fk_user_pacientes.",";
@@ -459,7 +475,6 @@ class Consultas extends CommonObject
 		$sql .= ' '.$this->db->idate(dol_now()).',';
 		$sql .= ' '.$user->id;
 		$sql .= ')';
-		
 
 		$resql = $this->db->query($sql);
 
@@ -510,6 +525,8 @@ class Consultas extends CommonObject
 		$sql = 'SELECT a.fk_soc FROM llx_pacientes AS a
 		INNER JOIN llx_consultas AS b ON a.rowid = b.fk_user_pacientes
 		WHERE
+			b.entity ='.$conf->entity.' AND 
+			a.entity ='.$conf->entity.' AND 
 			b.rowid='.$this->rowid;
 		$resql = $this->db->query($sql);
 		if ($resql) {
@@ -555,11 +572,13 @@ class Consultas extends CommonObject
 
 	public function vincular_consulta_factura($consulta,User $user, $notrigger = false)
 	{
+		global $conf;
 		dol_syslog(__METHOD__, LOG_DEBUG);
 
 		$error = 0;
 
 		$sql = 'INSERT INTO llx_facturas_consulta(';
+		$sql.= 'entity,';
 		$sql.= 'date_creation,';
 		$sql.= 'fk_user_created,';
 		$sql.= 'fk_consulta,';
@@ -567,7 +586,7 @@ class Consultas extends CommonObject
 		$sql.= 'statut';
 		
 		$sql .= ') VALUES (';
-		
+		$sql .= ' '.$conf->entity.',';
 		$sql .= ' "'.$this->db->idate(dol_now()).'",';
 		$sql .= ' '.$user->id.',';
 		$sql .= ' '.$this->db->escape($this->rowid).",";
@@ -835,7 +854,7 @@ class Consultas extends CommonObject
 	 */
 	public function listar_consultas($id)
 	{
-
+		global $conf;
 		dol_syslog(__METHOD__, LOG_DEBUG);
 
 		$sql = 'SELECT
@@ -844,6 +863,8 @@ class Consultas extends CommonObject
 			llx_consultas AS a
 		INNER JOIN llx_pacientes AS b ON a.fk_user_pacientes=b.rowid
 		WHERE
+			a.entity ='.$conf->entity.' AND 
+			b.entity ='.$conf->entity.' AND 
 			a.fk_user_pacientes= '.trim($id).'
 		ORDER BY a.date_consultation desc';
 		$resql = $this->db->query($sql);
@@ -879,9 +900,12 @@ class Consultas extends CommonObject
 		$sql = "SELECT f.rowid as rowid, f.facnumber, f.fk_statut";
 		$sql.= " FROM ".MAIN_DB_PREFIX."facture as f";
 		$sql.= " WHERE ";
-		$sql.="  f.rowid NOT IN (SELECT a.fk_factura FROM llx_facturas_consulta as a WHERE a.fk_consulta=".$this->rowid.")";
+		$sql.=" 
+		f.entity =".$conf->entity." AND 
+		f.rowid NOT IN (SELECT a.fk_factura FROM llx_facturas_consulta as a WHERE a.fk_consulta=".$this->rowid.")";
 		$sql.= " ORDER BY f.facnumber";
 		//dol_syslog(get_class($this)."::list_replacable_invoices", LOG_DEBUG);
+
 		$resql=$this->db->query($sql);
 		if ($resql)
 		{
@@ -927,10 +951,12 @@ class Consultas extends CommonObject
 
 	public function listar_diagnosticos($id)
 	{
-
+		global $conf;
 		dol_syslog(__METHOD__, LOG_DEBUG);
 
-		$sql = 'SELECT a.description FROM llx_c_tipo_diagnostico as a WHERE a.active=1 AND a.rowid='.trim($id);
+		$sql = 'SELECT a.description FROM llx_c_tipo_diagnostico as a WHERE
+		 a.entity ='.$conf->entity.' AND 
+		 a.active=1 AND a.rowid='.trim($id);
 		$resql = $this->db->query($sql);
 		if ($resql) {
 			$num = $this->db->num_rows($resql);
@@ -1313,9 +1339,9 @@ class Consultas extends CommonObject
 			$evento->datep=$this->date_consultation;
 			$evento->type_id=50;
 			$evento->type_code="AC_OTH";
-			$evento->note="Consulta ".str_replace("C","",$this->Ref);
+			$evento->note="Consulta ".str_replace("!","",$this->Ref);
 			$evento->userownerid=$this->fk_user_med;
-			$evento->label="Consulta ".str_replace("C","",$this->Ref);
+			$evento->label="Consulta ".str_replace("!","",$this->Ref);
 			$evento->percentage=-1;
 			$evento->punctual=1;
 			$evento->transparency=1;
@@ -1543,7 +1569,7 @@ class Consultas extends CommonObject
 
         $label = '<u>Control Clinico</u>';
         $label.= '<div width="100%">';
-        $label.= '<b>Referencia:</b> ' . str_replace("C", "", $this->Ref);
+        $label.= '<b>Referencia:</b> ' . str_replace("!", "", $this->Ref);
         $label.= '<br><b>Fecha de Consulta:</b> '.$this->date_consultation."<br>";
         $link = '<a href="'.DOL_URL_ROOT.'/cclinico/consultas_card.php?aid='.$this->rowid.'"';
         $link.= ($notooltip?'':' title="'.dol_escape_htmltag($label, 1).'" class="classfortooltip'.($morecss?' '.$morecss:'').'"');
@@ -1555,7 +1581,7 @@ class Consultas extends CommonObject
             $result.=($link.img_object(($notooltip?'':$label), 'label', ($notooltip?'':'class="classfortooltip"')).$linkend);
             if ($withpicto != 2) $result.=' ';
 		}
-		$result.= $link.str_replace("C", "", $this->Ref).$linkend;
+		$result.= $link.str_replace("!", "", $this->Ref).$linkend;
 		return $result;
 	}
 	

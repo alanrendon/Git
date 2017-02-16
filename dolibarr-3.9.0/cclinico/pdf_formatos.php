@@ -73,7 +73,7 @@ if ($user->rights->cclinico->crear){
 			 	</tr>
 			 	<tr >
 				 	<td align="center" style="width:350px;">'.$medico->job.'</td>
-				 	<td align="right" style="padding-left:46px;"><strong>Folio:</strong>'.str_replace('C', '',$consulta->Ref).'</td>
+				 	<td align="right" style="padding-left:46px;"><strong>Folio:</strong>'.str_replace('!', '',$consulta->Ref).'</td>
 			 	</tr>
 			</table>
 			<div style="border:1px solid rgb(83,155,193);"></div>
@@ -335,7 +335,7 @@ if ($user->rights->cclinico->crear){
 				        	<div style="padding-top:-9px; padding-left:5px; width:55% !important;  float: left; word-wrap: break-word;" >
 				        		&nbsp;&nbsp;Fecha:
 					        	<strong style="float: left;">'.date("Y/m/d H:s",strtotime($key->date_consultation)).'hrs.</strong>  - 
-					        	<strong style="float: left;">'.str_replace('C', '',$key->Ref).'</strong> - Tipo de Consulta:<strong>';
+					        	<strong style="float: left;">'.str_replace('!', '',$key->Ref).'</strong> - Tipo de Consulta:<strong>';
 								$resql1=$db->query("
 								SELECT * FROM llx_c_tipo_consulta as a WHERE a.active=1 AND a.rowid=".$key->Type_consultation);
 							    if ($resql1)

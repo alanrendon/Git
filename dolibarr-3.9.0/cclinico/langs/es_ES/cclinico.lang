@@ -24,7 +24,7 @@ Code18=Presión Arterial:
 Code19=Temperatura:
 Code20=Motivos Consulta:
 Code21=Médico
-Code22=Folio
+Code22=Folio:
 Code23=Detalles de consulta e Historial de la enfermedad:
 Code24=Detalles del tratamiento/Receta:
 Code25=Diagnóstico:
@@ -37,6 +37,7 @@ Code29_2=Relacionar Factura
 Code29_3=Ref.
 Code29_4=Fecha
 Code29_5=Base imp.
+Code29_6=Consulta creada satisfactoriamente: 
 
 
 #pacientes_card.php
@@ -71,6 +72,8 @@ Code49_6=Generar Nota
 Code49_7=Existen Facturas vinculadas a esta consulta, ¿desea agregar una factura nueva?
 Code49_8=Validación de facturas
 cl_function=Puesto/Función
+Code59_9=Ningun cliente vinculado al paciente 
+Code60_1=El paciente que está vinculado a la consulta no cuenta con ningún vinculo a algún cliente, por favor ingrese uno:<br>
 
 
 #note.php

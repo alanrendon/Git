@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `llx_pacientes_extrafields` (
   `sang_con` varchar(255) DEFAULT NULL,
   `nom_seg_con` varchar(255) DEFAULT NULL,
   `num_seg_con` varchar(255) DEFAULT NULL,
+  `entity` int(11) DEFAULT '1',
   PRIMARY KEY (`rowid`),
   KEY `idx_pacientes_extrafields` (`fk_object`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

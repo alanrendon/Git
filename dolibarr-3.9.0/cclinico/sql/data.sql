@@ -25,7 +25,7 @@ INSERT INTO `llx_extrafields` (
 VALUES
 	(
 		'med001',
-		'1',
+		'0',
 		'user',
 		'2016-10-27 17:10:10',
 		'Médico',
@@ -59,7 +59,7 @@ INSERT INTO `llx_extrafields` (
 VALUES
 	(
 		'cedula_prof',
-		'1',
+		'0',
 		'user',
 		'2016-10-27 17:10:10',
 		'Cédula',
@@ -92,7 +92,7 @@ INSERT INTO `llx_extrafields` (
 VALUES
 	(
 		'sang_con',
-		'1',
+		'0',
 		'pacientes',
 		'2016-10-27 17:10:10',
 		'Tipo de Sangre',
@@ -125,7 +125,7 @@ INSERT INTO `llx_extrafields` (
 VALUES
 	(
 		'nom_seg_con',
-		'1',
+		'0',
 		'pacientes',
 		'2016-10-27 17:10:10',
 		'Nombre del Seguro',
@@ -158,7 +158,7 @@ INSERT INTO `llx_extrafields` (
 VALUES
 	(
 		'num_seg_con',
-		'1',
+		'0',
 		'pacientes',
 		'2016-10-27 17:10:10',
 		'Número de Seguro',
@@ -185,7 +185,7 @@ INSERT INTO `llx_const`
 VALUES
 	(
 		'SOCIETE_CODECONSULTA_ADDON',
-		'1',
+		'0',
 		'mod_codeconsultas_monkey',
 		'chaine',
 		'0',
@@ -212,7 +212,7 @@ INSERT INTO `llx_extrafields`
 VALUES
 (
 	'est_civ',
-	'1',
+	'0',
 	'pacientes',
 	'2016-12-14 18:05:09',
 	'Estado Civil',

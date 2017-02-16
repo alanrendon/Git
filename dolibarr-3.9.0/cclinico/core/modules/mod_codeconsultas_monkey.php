@@ -41,7 +41,7 @@ class mod_codeconsultas_monkey extends ModeleThirdPartyCode
 	var $version='dolibarr';	    	// 'development', 'experimental', 'dolibarr'
 	var $code_auto;                     // Numerotation automatique
 
-	var $prefixcustomer='C';
+	var $prefixcustomer='!';
 	var $prefixsupplier='(PROV';
 	var $prefixIsRequired; // Le champ prefix du tiers doit etre renseigne quand on utilise {pre}
 
@@ -131,6 +131,7 @@ class mod_codeconsultas_monkey extends ModeleThirdPartyCode
 			$sql = "SELECT MAX(CAST(SUBSTRING(replace( ".$field.",')','') FROM ".$posindice.") AS SIGNED)) as max";   // This is standard SQL
 			$sql.= " FROM llx_consultas";
 			$sql.= " WHERE ".$field." LIKE '".$prefix."_)%'";
+			return $prefix.$objsoc->rowid.")";
 		}
 		
 		dol_syslog(get_class($this)."::getNextValue", LOG_DEBUG);
@@ -144,7 +145,7 @@ class mod_codeconsultas_monkey extends ModeleThirdPartyCode
 		}
 		else
 		{
-			return -1;
+			return $return;
 		}
 
 		$date	= dol_now();
@@ -160,7 +161,6 @@ class mod_codeconsultas_monkey extends ModeleThirdPartyCode
 			}
 		}
 
-		dol_syslog(get_class($this)."::getNextValue return ".$prefix.$num.")");
 		if ($type == 0 )
 		{
 			return $prefix.$num;

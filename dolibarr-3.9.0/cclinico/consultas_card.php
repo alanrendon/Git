@@ -48,11 +48,12 @@ if ($action == 'edit' && ( $cid>0 || $aid>0) ) {
     }elseif ($aid>0){
         $consultas->fetch($aid);
     }
-    
-    $consultas->Ref=mascara_referencia($conf,1);
-    
-    $consultas->update($user);
-    $consultas->cambiar_statut(0,$user);
+    if ($consultas->statut==1) {
+        $consultas->Ref=mascara_referencia($conf,1,$consultas);
+        $consultas->update($user);
+        $consultas->cambiar_statut(0,$user);
+    }
+
 }
 
 // agregar consulta
@@ -136,8 +137,9 @@ if ($action == 'add'){
     }
 }
 if ($action == 'add_borrador'){
-    $tmpcode=mascara_referencia($conf,1);
-    $consultas->Ref                    = $tmpcode;
+    //$tmpcode=mascara_referencia($conf,1);
+    //$consultas->Ref                    = $tmpcode;
+
     $consultas->fk_user_pacientes      = GETPOST("fk_user_pacientes");
     $consultas->weight                 = GETPOST("weight");
     $consultas->Type_consultation      = GETPOST("Type_consultation");
@@ -159,12 +161,18 @@ if ($action == 'add_borrador'){
         $errors[]="Inserte el paciente asignado a esta consulta";
         $action = 'create';
     }
+
     $extrafields->setOptionalsFromPost($extralabels,$consultas);
     if (! $error)
     {
         $id2 =  $consultas->create($user);
+
         if ($id2 > 0) {
+
             $consultas->rowid=$id2;
+            $tmpcode=mascara_referencia($conf,1,$consultas);
+            $consultas->Ref                    = $tmpcode;
+            $consultas->update($user);
             $consultas->cambiar_statut(0,$user);
         }
         if ($id2 <= 0)
@@ -308,24 +316,178 @@ if ($action == 'confirm_delete' && $confirm == 'yes' ){
 }
 
 if ($action == 'facture' && !empty($aid) ){
-    $resql1=$db->query("SELECT a.fk_factura FROM llx_facturas_consulta as a WHERE a.statut=1 and a.fk_consulta=".$aid);
+    $resql1=$db->query("
+    SELECT
+        a.fk_factura
+    FROM
+        llx_facturas_consulta AS a
+    INNER JOIN llx_facture as b on a.fk_factura=b.rowid
+    WHERE
+        a.statut = 1
+    AND a.fk_consulta = ".$aid);
     if ($resql1){
         $num2 = $db->num_rows($resql1);
         if ($num2<1)
         {
-            $url='factura.php?aid='.$aid."&action=create";
-            header("Location: ".$url);
-            exit;
+
+            $resq=$db->query("
+            SELECT
+                b.fk_soc
+            FROM
+                llx_consultas AS a
+            INNER JOIN llx_pacientes AS b ON a.fk_user_pacientes = b.rowid
+            WHERE b.statut=1 AND a.rowid=".$aid);
+            $tercero=0;
+            if ($resq){
+                $num = $db->num_rows($resq);
+                if ($num){
+                    $objet = $db->fetch_object($resql);
+                    $tercero=$objet->fk_soc;
+                }
+            }
+
+            if ($tercero>0) {
+                $consultas->fetch($aid);
+
+                $fact= new Facture($db);
+                $fact->ref_client          = str_replace("!","",$consultas->Ref);
+
+                $fact->socid               = $tercero;
+
+                $fact->libelle             = "Factura Mensual";
+
+                $fact->date                = dol_now();
+
+                $fecha                     = date("Y-m-d", strtotime(date("d-m-Y")." + 30 days"));
+
+                $fact->date_echeance       = $fecha;
+
+                $fact->note_public         = "";
+
+                $fact->note_private        = "";
+
+                $fact->cond_reglement_id   = 1;
+
+                $fact->mode_reglement_id   = 0;
+
+                $fact->fk_account          = null;
+
+                $fact->fk_project          = null;
+
+                $fact->fk_incoterms        = 0;
+
+                $fact->location_incoterms  = "";
+
+                $produ = new Product($db);
+                $produ->fetch($conf->global->CLINICO_PROD);
+                $res=$fact->create($user);
+                if ($res>0) {
+                    $re=$fact->addline($produ->label,$produ->price_ttc,1,0,0,0,$conf->global->CLINICO_PROD);
+                    if ($re>0) {
+                        $consultas->vincular_consulta_factura($res,$user);
+                        $url=DOL_URL_ROOT."/compta/facture.php?facid=".$res;
+                        header("Location: ".$url);
+                        exit;
+                    }
+                }
+                
+            }else{
+                $action="factura_quest";
+            }
+        }else{
+            $action="facture";
         }
     }
 }
+
+
 if ($action == 'confirm_facture' && !empty($aid) ){
-    if ($_POST["confirm"]=="yes") {
-        $url='factura.php?aid='.$aid."&action=create";
-        header("Location: ".$url);
-        exit;
-    }elseif($_POST["confirm"]=="no"){
-        echo "cambio status";
+
+    if ($confirm=="yes") {
+
+        $resq=$db->query("
+        SELECT
+            b.fk_soc
+        FROM
+            llx_consultas AS a
+        INNER JOIN llx_pacientes AS b ON a.fk_user_pacientes = b.rowid
+        WHERE b.statut=1 AND a.statut=1 AND a.rowid=".$aid);
+        $tercero=0;
+        if ($resq){
+            $num = $db->num_rows($resq);
+            if ($num){
+                $objet = $db->fetch_object($resql);
+                $tercero=$objet->fk_soc;
+            }
+        }
+        $socid=GETPOST("socid","int");
+        if ($tercero>0 || $socid>0) {
+
+            $consultas->fetch($aid);
+
+            $fact= new Facture($db);
+            $fact->ref_client          = str_replace("!","",$consultas->Ref);
+
+            
+            if (!empty($socid)) {
+                $fact->socid               = $socid;
+            }else{
+                $fact->socid               = $tercero;
+            }
+
+
+            
+
+            $fact->libelle             = "Factura Mensual";
+
+            $fact->date                = dol_now();
+
+            $fecha                     = date("Y-m-d", strtotime(date("d-m-Y")." + 30 days"));
+
+            $fact->date_echeance       = $fecha;
+
+            $fact->note_public         = "";
+
+            $fact->note_private        = "";
+
+            $fact->cond_reglement_id   = 1;
+
+            $fact->mode_reglement_id   = 0;
+
+            $fact->fk_account          = null;
+
+            $fact->fk_project          = null;
+
+            $fact->fk_incoterms        = 0;
+
+            $fact->location_incoterms  = "";
+
+            if (!empty($conf->global->CLINICO_PROD)) {
+                $produ = new Product($db);
+                $produ->fetch($conf->global->CLINICO_PROD);
+                $res=$fact->create($user);
+                if ($res>0) {
+                    $re=$fact->addline($produ->label,$produ->price_ttc,1,0,0,0,$conf->global->CLINICO_PROD);
+                    if ($re>0) {
+                        $consultas->vincular_consulta_factura($res,$user);
+                        $url=DOL_URL_ROOT."/compta/facture.php?facid=".$res;
+                        header("Location: ".$url);
+                        exit;
+                    }
+                }
+            }else{
+                $res=$fact->create($user);
+                if ($res>0) {
+                    $consultas->vincular_consulta_factura($res,$user);
+                    $url=DOL_URL_ROOT."/compta/facture.php?facid=".$res;
+                    header("Location: ".$url);
+                    exit;
+                }
+            }
+            
+            
+        }
+    }elseif($confirm=="no"){
         $action="";
     }
 }
@@ -387,16 +549,19 @@ if (!empty($_POST["fact2"]) && $consultas->statut>0) {
 $dir_paciente="files/Paciente-".$id;
 //crear borrador vacío
 if ($action=='create') {
-    $tmpcode=mascara_referencia($conf,1);
+    
     if (!is_dir($dir_paciente)) {
         dol_mkdir($dir_paciente);
     }
     $consultas->fk_user_med            = $pacientes->fk_user;
-    $consultas->Ref                    = $tmpcode;
+    
     $consultas->fk_user_pacientes      = $id;
     $id2 =  $consultas->create($user);
     if ($id2 > 0){
         $consultas->fetch($id2);
+        $tmpcode=mascara_referencia($conf,1,$consultas);
+        $consultas->Ref                    = $tmpcode;
+        $consultas->update($user);
         $aid=$id2;
         $dir_consulta=$dir_paciente."/Consulta-".$id2."/";
         dol_mkdir($dir_consulta);
@@ -406,7 +571,8 @@ if ($action=='create') {
 if ($action=='create_upfile') {
     $tmpcode=mascara_referencia($conf,0);
     //$consultas->Ref                    = $tmpcode;
-    if (!isset($_POST["reabrir"])) {
+
+    if (!isset($_POST["reabrir"]) && $aid<0) {
         $consultas->weight                 = GETPOST("weight");
         $consultas->Type_consultation      = GETPOST("Type_consultation");
         $consultas->blood_pressure         = GETPOST("blood_pressure");
@@ -455,6 +621,7 @@ if ($action=='create_upfile') {
     }else{
         $action='';
     }
+
 }
 if ($action=='create_consulta') {
     $tmpcode=mascara_referencia($conf,0);
@@ -529,7 +696,15 @@ if ($action=='create_consulta') {
     }
 }
 if ($action == 'facture' && !empty($aid) ){
-    $resql1=$db->query("SELECT a.fk_factura FROM llx_facturas_consulta as a WHERE a.fk_consulta=".$aid);
+    $resql1=$db->query("
+    SELECT
+        a.fk_factura
+    FROM
+        llx_facturas_consulta AS a
+    INNER JOIN llx_facture as b on a.fk_factura=b.rowid
+    WHERE
+        a.statut=1 AND
+        a.fk_consulta = ".$aid);
     if ($resql1){
         $num2 = $db->num_rows($resql1);
         if ($num2>0)
@@ -539,31 +714,10 @@ if ($action == 'facture' && !empty($aid) ){
         }
     }
     $action="";
-    /*if (GETPOST("confirm")=="yes") {
-        $url='factura.php?aid='.$aid."&action=create";
-        header("Location: ".$url);
-        exit;
-    }elseif(GETPOST("confirm")=="no"){
-        echo "cambio status";
-    }else{
-        $resql1=$db->query("SELECT a.fk_factura FROM llx_facturas_consulta as a WHERE a.fk_consulta=".$aid);
-        if ($resql1){
-            $num2 = $db->num_rows($resql1);
-            if ($num2>0)
-            {
-                //print $form->formconfirm($_SERVER['PHP_SELF'].'?aid='.$aid,$langs->trans('Code49_8'),$tex,'facture','',$preselectedchoice);
-                print $form->formconfirm($_SERVER["PHP_SELF"]."?aid=".$aid,$langs->trans('Code49_8'),$langs->trans('Code49_7'),"confirm_delete",'',0,1);
-
-            }
-        }
-        if ($facture_con==0 ) {
-            $url='factura.php?aid='.$aid."&action=create";
-            header("Location: ".$url);
-            exit;
-        }
-    }*/
     
 }
+
+
 
 
 //borrar consulta 
@@ -578,7 +732,7 @@ if ($action == 'create')
     dol_htmloutput_errors("",$errors);
 
     $consultas->date_consultation=(empty($consultas->date_consultation)?dol_now():$consultas->date_consultation);
-    dol_fiche_head($head, 'perso', $langs->trans("Code13"), 0, 'contact');
+    dol_fiche_head($head, 'perso', $langs->trans("Code13"), 1, 'contact');
 
     print "\n".'<script type="text/javascript" language="javascript">'."\n";
             print 'jQuery(document).ready(function () {
@@ -625,7 +779,9 @@ if ($action == 'create')
                     })'."\n";
             print '</script>'."\n";
 
-    print '<form style="font-size:11px !important;" method="post" enctype="multipart/form-data" id="form" name="form" action="'.$_SERVER["PHP_SELF"].'">';
+    print '
+    <div class="tabBar" style="width: 1024px;">
+    <form style="font-size:11px !important;" method="post" enctype="multipart/form-data" id="form" name="form" action="'.$_SERVER["PHP_SELF"].'">';
     print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
     print '<input type="hidden" id="action" name="action" value="'.$action.'">';
     print '<input type="hidden" name="backtopage" value="'.$backtopage.'">';
@@ -643,11 +799,9 @@ if ($action == 'create')
             print $consultas->select_dolpacientes($consultas->fk_user_pacientes, 'fk_user_pacientes', 1, '', 0, '', 0, $conf->entity, 0, 0, '', 0, '', 'maxwidth300');
     print '
         </td>';
-        print '<td  colspan="2" align="right" >  <b>'.$langs->trans("Code22").':</b>
+        print '<td  colspan="2" align="right" >  <b>'.$langs->trans("Code22").'</b>
         </td><td>';
-
-        print '<b>'.(empty($consultas->Ref)?dol_escape_htmltag(str_replace("C","",$tmpcode)):str_replace("C","",$consultas->Ref) ).'</b>';
-
+        print '<b>'.(empty($consultas->Ref)?"Borrador":str_replace("!","",$consultas->Ref) ).'</b>';
     print '</td>
     </tr>';
     print '
@@ -703,24 +857,22 @@ if ($action == 'create')
             <input name="temperature" id="temperature" type="text" size="2" maxlength="10" value="'.$consultas->temperature.'">
         </td>
     </tr>
-
-    ';
-     print '
+    </table>
+    <table class="border" style="width:1024px !important;">
     <tr>
         <td  >
             <label for="descripcion">&nbsp;'.$langs->trans("Code23").'</label>
         </td>
         <td  >
-            <textarea class="flat" name="reason_detail" id="reason_detail" style="width:327px !important;" rows="9">'.$consultas->reason_detail.'</textarea>
+            <textarea class="flat" name="reason_detail" id="reason_detail" style="width:400px !important;" rows="9">'.$consultas->reason_detail.'</textarea>
         </td>
         <td  >
             <label for="descripcion">&nbsp;<b>'.$langs->trans("Code24").'</b></label>
         </td>
         <td  colspan="5" >
-            <textarea class="flat" name="treatments" data-limit-rows="true" id="treatments" style="width:482px !important;" rows="9">'.$consultas->treatments.'</textarea>
+            <textarea class="flat" name="treatments" data-limit-rows="true" id="treatments" style="width:400px !important;" rows="9">'.$consultas->treatments.'</textarea>
         </td>
-    </tr>';
-     print '
+    </tr>
     <tr>
         <td  >
             <label for="descripcion">&nbsp;<b>'.$langs->trans("Code25").'</b></label>
@@ -729,20 +881,19 @@ if ($action == 'create')
             print $consultas->select_dol($consultas->diagnostics,'c_tipo_diagnostico' ,'diagnostics', 1, '', 0, '', 0, $conf->entity, 0, 0, '', 0, '', 'maxwidth300');
     print '
         </td>
-    </tr>';
-    print '
+    </tr>
     <tr>
         <td  >
             <label for="descripcion">&nbsp;'.$langs->trans("Code26").'</label>
         </td>
         <td  >
-            <textarea class="flat" name="diagnostics_detail" id="diagnostics_detail" style="width:327px !important;" rows="9">'.$consultas->diagnostics_detail.'</textarea>
+            <textarea class="flat" name="diagnostics_detail" id="diagnostics_detail" style="width:400px !important;" rows="9">'.$consultas->diagnostics_detail.'</textarea>
         </td>
         <td  >
             <label for="descripcion">&nbsp;'.$langs->trans("Code49_1").'</label>
         </td>
         <td  colspan="5" >
-            <textarea class="flat" data-limit-rows="true" name="comments" id="comments" style="width:482px !important;" rows="9">'.$consultas->comments.'</textarea>
+            <textarea class="flat" data-limit-rows="true" name="comments" id="comments" style="width:400px !important;" rows="9">'.$consultas->comments.'</textarea>
         </td>
     </tr>';
     if (! empty($extrafields->attribute_label))
@@ -785,7 +936,7 @@ if ($action == 'edit' && ! empty($aid))
     dol_htmloutput_errors("",$errors);
 
     $consultas->date_consultation=(empty($consultas->date_consultation)?dol_now():$consultas->date_consultation);
-    dol_fiche_head($head, 'perso', $langs->trans("Code13"), 0, 'contact');
+    dol_fiche_head($head, 'perso', $langs->trans("Code13"), 1, 'contact');
 
     print "\n".'<script type="text/javascript" language="javascript">'."\n";
             print 'jQuery(document).ready(function () {
@@ -828,7 +979,9 @@ if ($action == 'edit' && ! empty($aid))
                     })'."\n";
             print '</script>'."\n";
 
-    print '<form style="font-size:11px !important;" method="post" enctype="multipart/form-data" id="form" name="form" action="'.$_SERVER["PHP_SELF"].'">';
+    print '
+    <div class="tabBar" style="width: 1024px;">
+    <form style="font-size:11px !important;" method="post" enctype="multipart/form-data" id="form" name="form" action="'.$_SERVER["PHP_SELF"].'">';
     print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
     print '<input type="hidden" id="action" name="action" value="'.$action.'">';
     print '<input type="hidden" name="backtopage" value="'.$backtopage.'">';
@@ -847,10 +1000,10 @@ if ($action == 'edit' && ! empty($aid))
     print '
         </td>';
 
-    print '<td  colspan="2" align="right" >  <b>'.$langs->trans("Code22").':</b>
+    print '<td  colspan="2" align="right" >  <b>'.$langs->trans("Code22").'</b>
         </td><td>';
 
-        print '<b>'.(empty($consultas->Ref)?dol_escape_htmltag(str_replace("C","",$tmpcode)):str_replace("C","",$consultas->Ref) ).'</b>';
+        print '<b>'.(empty($consultas->Ref)?dol_escape_htmltag(str_replace("!","",$tmpcode)):str_replace("!","",$consultas->Ref) ).'</b>';
 
     print '</td>
     </tr>';
@@ -905,20 +1058,21 @@ if ($action == 'edit' && ! empty($aid))
         <td colspan=7 >
             <input name="temperature" id="temperature" type="text" size="2" maxlength="10" value="'.$consultas->temperature.'">
         </td>
-    </tr>';
-     print '
+    </tr>    
+    </table>
+    <table class="border" style="width:1024px !important;">
     <tr>
         <td  >
             <label for="descripcion">&nbsp;'.$langs->trans("Code23").'</label>
         </td>
         <td  >
-            <textarea class="flat" name="reason_detail" id="reason_detail" style="width:327px !important;" rows="9">'.$consultas->reason_detail.'</textarea>
+            <textarea class="flat" name="reason_detail" id="reason_detail" style="width:400px !important;" rows="9">'.$consultas->reason_detail.'</textarea>
         </td>
         <td  >
             <label for="descripcion"><b>&nbsp;'.$langs->trans("Code24").'</b></label>
         </td>
         <td  colspan="5" >
-            <textarea class="flat" name="treatments" data-limit-rows="true" id="treatments" style="width:482px !important;" rows="9">'.$consultas->treatments.'</textarea>
+            <textarea class="flat" name="treatments" data-limit-rows="true" id="treatments" style="width:400px !important;" rows="9">'.$consultas->treatments.'</textarea>
         </td>
     </tr>';
      print '
@@ -937,13 +1091,13 @@ if ($action == 'edit' && ! empty($aid))
             <label for="descripcion">&nbsp;'.$langs->trans("Code26").'</label>
         </td>
         <td  >
-            <textarea class="flat" name="diagnostics_detail" id="diagnostics_detail" style="width:327px !important;" rows="9">'.$consultas->diagnostics_detail.'</textarea>
+            <textarea class="flat" name="diagnostics_detail" id="diagnostics_detail" style="width:400px !important;" rows="9">'.$consultas->diagnostics_detail.'</textarea>
         </td>
         <td  >
             <label for="descripcion">&nbsp;Otros comentarios:</label>
         </td>
         <td  colspan="5" >
-            <textarea class="flat" data-limit-rows="true" name="comments" id="comments" style="width:482px !important;" rows="9">'.$consultas->comments.'</textarea>
+            <textarea class="flat" data-limit-rows="true" name="comments" id="comments" style="width:400px !important;" rows="9">'.$consultas->comments.'</textarea>
         </td>
     </tr>';
     if (! empty($extrafields->attribute_label))
@@ -1046,7 +1200,7 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
     dol_htmloutput_errors("",$errors);
 
     $consultas->date_consultation=(empty($consultas->date_consultation)?dol_now():$consultas->date_consultation);
-    dol_fiche_head($head, 'perso', $langs->trans("Code13"), 0, 'contact');
+    dol_fiche_head($head, 'perso', $langs->trans("Code13"), 1, 'contact');
 
     print "\n".'<script type="text/javascript" language="javascript">'."\n";
             print 'jQuery(document).ready(function () {
@@ -1115,7 +1269,17 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
                     })'."\n";
             print '</script>'."\n";
 
-    print '<form style="font-size:11px !important;" method="post" enctype="multipart/form-data" id="form" name="form" action="'.$_SERVER["PHP_SELF"].'">';
+    print '
+    <div class="tabBar" style="width: 1024px;">';
+
+    if ($action== 'factura_quest' && !empty($aid) ) {
+        print $form->formconfirm($_SERVER["PHP_SELF"]."?aid=".$aid,$langs->trans('Code59_9'),$langs->trans('Code60_1'). $form->select_company('','socid','',0,0,0,"",0,'','style="width:200px;"'),"confirm_facture",'',0,0);
+    }
+
+
+
+    print '
+    <form style="font-size:11px !important;" method="post" enctype="multipart/form-data" id="form" name="form" action="'.$_SERVER["PHP_SELF"].'">';
     print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
     print '<input type="hidden" id="action" name="action" value="'.$action.'">';
     print '<input type="hidden" name="backtopage" value="'.$backtopage.'">';
@@ -1138,10 +1302,10 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
         </td>';
         print '
         <td  colspan="2" align="right" >  <b>'.$langs->trans("Code22").'</b></td>
-            <td>';
-        print (empty($consultas->Ref)?dol_escape_htmltag(str_replace("C","",$tmpcode)):str_replace("C","",$consultas->Ref ));
+            <td align="center"><b>';
+        print (empty($consultas->Ref)?dol_escape_htmltag(str_replace("!","",$tmpcode)):str_replace("!","",$consultas->Ref ));
 
-    print '</td>';
+    print '</b></td>';
         if ($consultas->statut==0) {
             print '
             <td colspan=3 align="center" >Estatus:&nbsp;&nbsp; <img src="../theme/eldy/img/statut0.png" border="0" alt="" title="Borrador (a validar)">&nbsp;&nbsp; Borrador</td>
@@ -1205,7 +1369,7 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
         </td>
         <td  colspan="3" >';
 
-         if (!empty($consultas->fk_user_med)) {
+         if ($consultas->fk_user_med>0) {
             $medico_prv= new User($db);
 
             $medico_prv->fetch($consultas->fk_user_med); 
@@ -1222,20 +1386,21 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
         <td colspan=7 >
             <input disabled name="temperature" id="temperature" type="text" size="2" maxlength="10" value="'.$consultas->temperature.'">
         </td>
-    </tr>';
-     print '
+    </tr>    
+    </table>
+    <table class="border" style="width:1024px !important;">
     <tr>
         <td  >
             <label for="descripcion">&nbsp;'.$langs->trans("Code23").'</label>
         </td>
         <td  >
-            <textarea disabled class="flat" name="reason_detail" id="reason_detail" style="width:327px !important;"  rows="9">'.$consultas->reason_detail.'</textarea>
+            <textarea disabled class="flat" name="reason_detail" id="reason_detail" style="width:400px !important;"  rows="9">'.$consultas->reason_detail.'</textarea>
         </td>
         <td  >
             <label for="descripcion">&nbsp;<b>'.$langs->trans("Code24").'</b></label>
         </td>
         <td  colspan="5" >
-            <textarea disabled class="flat" name="treatments" data-limit-rows="true" id="treatments" style="width:482px !important;" rows="9">'.$consultas->treatments.'</textarea>
+            <textarea disabled class="flat" name="treatments" data-limit-rows="true" id="treatments" style="width:400px !important;" rows="9">'.$consultas->treatments.'</textarea>
         </td>
 
     </tr>
@@ -1253,13 +1418,13 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
             <label for="descripcion">&nbsp;'.$langs->trans("Code26").'</label>
         </td>
         <td  >
-            <textarea disabled class="flat" name="diagnostics_detail" id="diagnostics_detail" style="width:327px !important;" rows="9">'.$consultas->diagnostics_detail.'</textarea>
+            <textarea disabled class="flat" name="diagnostics_detail" id="diagnostics_detail" style="width:400px !important;" rows="9">'.$consultas->diagnostics_detail.'</textarea>
         </td>
         <td  >
             <label for="descripcion">&nbsp;Otros comentarios:</label>
         </td>
         <td  colspan="5" >
-            <textarea disabled class="flat" data-limit-rows="true" name="comments" id="comments" style="width:482px !important;" rows="9">'.$consultas->comments.'</textarea>
+            <textarea disabled class="flat" data-limit-rows="true" name="comments" id="comments" style="width:400px !important;" rows="9">'.$consultas->comments.'</textarea>
         </td>
     </tr>';
     if (! empty($extrafields->attribute_label))
@@ -1335,9 +1500,7 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
             
         print '
         </td>
-    </tr>';
-
-    print '
+    </tr>
     <tr>
         <td colspan="2" ><br>
             <table class="border" width="100%">
@@ -1388,49 +1551,43 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
             print '</td>';
         }
     print '
-    </tr>';
-   
-        print '
-        <tr>
-            <td   colspan="2" >
-                <label for="descripcion">&nbsp;'.$langs->trans("Code29_1").'</label>
-            </td>
-        </tr>';
-        $facturestatic = new Facture($db);
-        $facids = $consultas->list_replacable_invoices(); 
-        foreach ($facids as $facparam)
-        {
-            $options .= '<option value="' . $facparam ['id'] . '"';
-            if ($facparam ['id'] == $_POST['fac_replacement'])
-                $options .= ' selected';
-            $options .= '>' . $facparam ['ref'];
-            $options .= ' (' .$facturestatic->LibStatut(0, $facparam ['status']). ')';
-            $options .= '</option>';
-        }
-        require_once DOL_DOCUMENT_ROOT . '/core/lib/ajax.lib.php';
-        print ajax_combobox('fac_replacement');
-        print '
-        <tr>
-            <td colspan="2">';
-            $text .= '<select class="flat" name="fac_replacement" id="fac_replacement"';
-            if (! $options)
-                $text .= ' disabled';
-            $text .= '>';
-            if ($options) {
-                $text .= '<option value="-1">&nbsp;</option>';
-                $text .= $options;
-            } else {
-                $text .= '<option value="-1">' . $langs->trans("NoReplacableInvoice") . '</option>';
-            }
-            $text .= '</select> <input style="font-size:11px !important;" class="button" value="'.$langs->trans("Code29_2").'" id="c_fact">';
-            print $text;
-        print ' 
-            </td>
-        </tr>';
-
-
-        print '
+    </tr>
     <tr>
+        <td   colspan="2" >
+            <label for="descripcion">&nbsp;'.$langs->trans("Code29_1").'</label>
+        </td>
+    </tr>';
+    $facturestatic = new Facture($db);
+    $facids = $consultas->list_replacable_invoices(); 
+    foreach ($facids as $facparam)
+    {
+        $options .= '<option value="' . $facparam ['id'] . '"';
+        if ($facparam ['id'] == $_POST['fac_replacement'])
+            $options .= ' selected';
+        $options .= '>' . $facparam ['ref'];
+        $options .= ' (' .$facturestatic->LibStatut(0, $facparam ['status']). ')';
+        $options .= '</option>';
+    }
+    require_once DOL_DOCUMENT_ROOT.'/core/lib/ajax.lib.php';
+    print ajax_combobox('fac_replacement');
+    print '
+    <tr>
+        <td colspan="2">';
+        $text .= '<select class="flat" name="fac_replacement" id="fac_replacement"';
+        if (! $options)
+            $text .= ' disabled';
+        $text .= '>';
+        if ($options) {
+            $text .= '<option value="-1">&nbsp;</option>';
+            $text .= $options;
+        } else {
+            $text .= '<option value="-1">' . $langs->trans("NoReplacableInvoice") . '</option>';
+        }
+        $text .= '</select> <input style="font-size:11px !important;" class="button" value="'.$langs->trans("Code29_2").'" id="c_fact">';
+        print $text;
+    print ' 
+        </td>
+    </tr>
         <td colspan="2" ><br>
             <table class="border" width="100%">
                 <tr class="liste_titre">
@@ -1450,6 +1607,7 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
                     </td>
                 </tr>';
                 $temp=$consultas->listar_facturas();
+
                 if (count($temp) >0) {
                     $total=0;
                     foreach ($temp as $key) {
@@ -1457,8 +1615,7 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
                         $facturestatic->fetch($key->rowid);
                         print '
                         <tr>
-                            <td >
-                                ';
+                            <td>';
                                 print $facturestatic->getNomUrl(1,'',200,0);
                             print '
                             </td>

@@ -93,7 +93,7 @@ class modCclinico extends DolibarrModules
 		//                        );
 		$this->module_parts = array(
 		'css' => array('/cclinico/css/cclinico.css'),
-		'hooks' => array('actioncard','invoicecard','actioncommdao')  // Set here all hooks context managed by module
+		'hooks' => array('actioncard','invoicecard','actioncommdao','invoicedao')  // Set here all hooks context managed by module
 		);
 
 		// Data directories to create when module is enabled.
@@ -171,7 +171,8 @@ class modCclinico extends DolibarrModules
             'langs'=>'',
             'tabname'=>array("llx_c_tipo_consulta","llx_c_motivo_consulta","llx_c_tipo_diagnostico"),		// List of tables we want to see into dictonnary editor
             'tablib'=>array("Típos de Consulta","Motivos de las Consultas","Tipos de Diagnostico"),													// Label of tables
-            'tabsql'=>array('SELECT f.rowid as rowid, f.code,f.description, f.active FROM llx_c_tipo_consulta as f',
+            'tabsql'=>array(
+            'SELECT f.rowid as rowid, f.code,f.description, f.active FROM llx_c_tipo_consulta as f ',
             'SELECT f.rowid as rowid, f.code,f.description, f.active FROM llx_c_motivo_consulta as f',
             'SELECT f.rowid as rowid, f.code,f.description, f.active FROM llx_c_tipo_diagnostico as f'
             ),	// Request to select fields

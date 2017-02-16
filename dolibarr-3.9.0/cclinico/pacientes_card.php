@@ -10,7 +10,6 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/html.formcompany.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
 require_once DOL_DOCUMENT_ROOT. '/core/class/html.form.class.php';
 require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
-require_once DOL_DOCUMENT_ROOT . '/categories/class/categorie.class.php';
 dol_include_once('/cclinico/class/pacientes.class.php');
 dol_include_once('/cclinico/class/consultas.class.php');
 $langs->load("companies");
@@ -37,8 +36,6 @@ $now=dol_now();
 /*
  *	Actions
  */
-
-
     // Cancel
     if (GETPOST("cancel") && ! empty($backtopage))
     {
@@ -145,10 +142,6 @@ $now=dol_now();
             {
                 $error++; $errors=array_merge($errors,($object->error?array($object->error):$object->errors));
                 $action = 'create';
-			} else {
-				// Categories association
-				$contcats = GETPOST( 'contcats', 'array' );
-				$object->setCategories($contcats);
 			}
         }
 
@@ -480,8 +473,7 @@ if ($action == 'create')
     	print '<td><label for="no_email">'.$langs->trans("No_Email").'</label></td>';
         print '<td>'.$form->selectyesno('no_email',(GETPOST("no_email",'alpha')?GETPOST("no_email",'alpha'):$object->no_email), 1).'</td>';
     }
-    else
-	      {
+    else{
   		print '<td colspan="2">&nbsp;</td>';
     }
     print '</tr>';
@@ -504,16 +496,6 @@ if ($action == 'create')
     print '</td></tr>';
 
     
-
-	// Categories
-	if (! empty($conf->categorie->enabled)  ) {
-		print '<tr><td>' . fieldLabel( 'Categories', 'contcats' ) . '</td><td colspan="3">';
-		$cate_arbo = $form->select_all_categories( Categorie::TYPE_CONTACT, null, 'parent', null, null, 1 );
-		print $form->multiselectarray( 'contcats', $cate_arbo, GETPOST( 'contcats', 'array' ), null, null, null,
-			null, '90%' );
-		print "</td></tr>";
-
-	}
 	
 
 
@@ -797,19 +779,6 @@ elseif ($action == 'edit' && ! empty($id))
     print $object->getLibStatut(4);
     print '</td></tr>';
 
-	// Categories
-	if (!empty( $conf->categorie->enabled ) ) {
-		print '<tr><td>' . fieldLabel( 'Categories', 'contcats' ) . '</td>';
-		print '<td colspan="3">';
-		$cate_arbo = $form->select_all_categories( Categorie::TYPE_CONTACT, null, null, null, null, 1 );
-		$c = new Categorie( $db );
-		$cats = $c->containing( $object->id, Categorie::TYPE_CONTACT );
-		foreach ($cats as $cat) {
-			$arrayselected[] = $cat->id;
-		}
-		print $form->multiselectarray( 'contcats', $cate_arbo, $arrayselected, '', 0, '', 0, '90%' );
-		print "</td></tr>";
-	}
 
     // Other attributes
     $parameters=array('colspan' => ' colspan="3"');
@@ -1037,14 +1006,6 @@ if (! empty($id) && $action != 'edit' && $action != 'create')
     print '<div class="underbanner clearboth"></div>';
     print '<table class="border tableforfield" width="100%">';
 
-    
-	// Categories
-	if (! empty($conf->categorie->enabled)  ) {
-		print '<tr><td>' . $langs->trans( "Categories" ) . '</td>';
-		print '<td colspan="3">';
-		print $form->showCategories( $object->id, 'contact', 1 );
-		print '</td></tr>';
-	}
 
   
     print $object->showOptionals($extrafields);

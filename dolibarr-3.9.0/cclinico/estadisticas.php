@@ -30,7 +30,7 @@ require_once DOL_DOCUMENT_ROOT.'/core/class/dolgraph.class.php';
 require_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facturestats.class.php';
 require_once DOL_DOCUMENT_ROOT.'/cclinico/lib/pacientes.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/cclinico/class/pacientes.class.php';
-
+global $conf;
 dol_include_once('/cclinico/class/consultas.class.php');
 
 
@@ -114,13 +114,16 @@ if ($action=="mes") {
 
         $sql.='
         WHERE
-            
+             a.entity='.$conf->entity.'  AND 
              YEAR(a.date_creation)='.$nowyear.' AND MONTH(a.date_creation)='.($key+1)." ".$buscar_fk_user_med.' '.$buscar_Type_consultation." ".$buscar_fk_user_pacientes;
         if ($search_statut>0) {
             $sql.=' AND a.statut='.$search_statut;
         }
         if ($search_statut==2) {
-            $sql.=" AND c.paye=1 ";
+            $sql.=" AND c.paye=1 AND
+                b.entity=".$conf->entity."  AND 
+                c.entity=".$conf->entity."   
+            ";
         }
 
         
@@ -139,12 +142,16 @@ if ($action=="mes") {
 
         $sql2.='
         WHERE
+            a.entity='.$conf->entity.'  AND 
              YEAR(a.date_creation)='.($nowyear-1).' AND MONTH(a.date_creation)='.($key+1)." ".$buscar_fk_user_med.' '.$buscar_Type_consultation." ".$buscar_fk_user_pacientes;
         if ($search_statut>0) {
             $sql2.=' AND a.statut='.$search_statut;
         }
         if ($search_statut==2) {
-            $sql2.=" AND c.paye=1 ";
+            $sql2.=" AND c.paye=1 AND
+            b.entity=".$conf->entity."  AND 
+            c.entity=".$conf->entity."   
+            ";
         }
 
         $resql=$db->query($sql);
@@ -223,12 +230,15 @@ if ($action=="mes") {
 
         $sql.='
         WHERE
+            a.entity='.$conf->entity.'  AND 
             YEAR(a.date_creation)='.$nowyear.' AND MONTH(a.date_creation)='.($key+1)." ".$buscar_fk_user_med.' '.$buscar_Type_consultation." ".$buscar_fk_user_pacientes;
         if ($search_statut>0) {
             $sql.=' AND a.statut='.$search_statut;
         }
         if ($search_statut==2) {
-            $sql.=" AND c.paye=1 ";
+            $sql.=" AND c.paye=1 AND
+            b.entity=".$conf->entity."  AND 
+            c.entity=".$conf->entity."   ";
         }
         
         $sql2='
@@ -248,7 +258,9 @@ if ($action=="mes") {
             $sql2.=' AND a.statut='.$search_statut;
         }
         if ($search_statut==2) {
-            $sql2.=" AND c.paye=1 ";
+            $sql2.=" AND c.paye=1 AND
+            b.entity=".$conf->entity."  AND 
+            c.entity=".$conf->entity."   ";
         }
 
 
@@ -434,7 +446,10 @@ if ($action=="mes") {
     inner JOIN llx_facturas_consulta AS b ON a.rowid = b.fk_consulta
     inner JOIN llx_facture as c on c.rowid=b.fk_factura
     WHERE
-         c.paye=1 AND YEAR(a.date_creation)='.$nowyear.' '.$buscar_fk_user_med.' '.$buscar_Type_consultation." ".$buscar_fk_user_pacientes;
+        a.entity='.$conf->entity.'  AND 
+        b.entity='.$conf->entity.'  AND 
+        c.entity='.$conf->entity.'  AND
+        c.paye=1 AND YEAR(a.date_creation)='.$nowyear.' '.$buscar_fk_user_med.' '.$buscar_Type_consultation." ".$buscar_fk_user_pacientes;
 
     $resql=$db->query($sql);
 
@@ -509,9 +524,9 @@ if ($action=="pacientes") {
     //var_dump($data);
     foreach ($data as $key => $val ) {
         $sql='
-        SELECT COUNT(*) as total FROM llx_pacientes as a WHERE YEAR(a.datec)='.$nowyear.' AND MONTH(a.datec)='.($key+1);
+        SELECT COUNT(*) as total FROM llx_pacientes as a WHERE a.entity='.$conf->entity.'  AND  YEAR(a.datec)='.$nowyear.' AND MONTH(a.datec)='.($key+1);
         $sql2='
-        SELECT COUNT(*) as total FROM llx_pacientes as a WHERE YEAR(a.datec)='.($nowyear-1).' AND MONTH(a.datec)='.($key+1);
+        SELECT COUNT(*) as total FROM llx_pacientes as a WHERE a.entity='.$conf->entity.'  AND  YEAR(a.datec)='.($nowyear-1).' AND MONTH(a.datec)='.($key+1);
 
         $resql=$db->query($sql);
         $num = $db->num_rows($resql);

@@ -12,9 +12,40 @@ class Actionscclinico
 	 */
 	function formObjectOptions($parameters, $object, $action, $hookmanager)
 	{
+		global $conf;
 		dol_include_once('/cclinico/class/actionpacientes.class.php');
 		dol_include_once('/cclinico/class/consultas.class.php');
 		dol_include_once('/cclinico/class/pacientes.class.php');
+
+		if (in_array('invoicecard', explode(':', $parameters['context'])))
+		{
+			$sql="
+			SELECT
+				a.fk_consulta
+			FROM
+				llx_facturas_consulta AS a
+			INNER JOIN llx_facture as b on a.fk_factura=b.rowid
+			WHERE
+				a.statut = 1
+			AND a.entity=".$conf->entity."
+			AND b.entity=".$conf->entity."
+			AND a.fk_factura = ".$object->id;
+			$resql1=$object->db->query($sql);
+			if ($resql1){
+		        $num2 = $object->db->num_rows($resql1);
+		        if ($num2>0)
+		        {
+		        	$res=$object->db->fetch_object($res);
+		        	$consultas=new Consultas($object->db);
+					$consultas->fetch($res->fk_consulta);
+					print '<tr><td class="nowrap">Consulta</td><td>';
+						print $consultas->getNomUrl(1);
+					print '</td></tr>';
+		        }
+		    }
+			
+
+		}
 
 		if ($parameters['id']>0 && $action!="edit")
 		{
@@ -80,6 +111,7 @@ class Actionscclinico
 
 	function insertExtraFields($parameters, $object, $action, $hookmanager)
 	{
+		echo "string";
 		if ($parameters['actcomm']>0 && $_POST["paciente"]>0 && $action="create") {
 			$object->db->query("INSERT INTO llx_eventos_consultas (fk_paciente,fk_evento) values (".$_POST["paciente"].",".$parameters['actcomm'].");");
 		}
@@ -87,6 +119,9 @@ class Actionscclinico
 			$object->db->query("UPDATE llx_eventos_consultas as a SET a.fk_paciente=".$_POST["paciente"]." WHERE a.fk_evento=".$parameters['actcomm']);
 		}
 	}
+
+
+
 }
 
 ?>
