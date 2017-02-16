@@ -67,7 +67,7 @@ $search_import            =GETPOST('search_import','alpha');
 $search_total_import      =GETPOST('search_total_import','alpha');
 $search_note_public       =GETPOST('search_note_public','alpha');
 $search_note_private      =GETPOST('search_note_private','alpha');
-$search_statut            =GETPOST('search_statut','int');
+$search_statut            =GETPOST('search_statut');
 $search_fk_user_author    =GETPOST('search_fk_user_author','int');
 $search_fk_user_modif     =GETPOST('search_fk_user_modif','int');
 $search_fk_user_valid     =GETPOST('search_fk_user_valid','int');
@@ -89,6 +89,32 @@ $limit     = GETPOST("limit")?GETPOST("limit","int"):$conf->liste_limit;
 $sortfield = GETPOST('sortfield','alpha');
 $sortorder = GETPOST('sortorder','alpha');
 $page      = GETPOST('page','int');
+
+if (GETPOST("button_removefilter_x") || GETPOST("button_removefilter")) // Both test are required to be compatible with all browsers
+{
+	$search_ref               ="";
+	$search_concept_advance   ="";
+	$search_import            ="";
+	$search_total_import      ="";
+	$search_note_public       ="";
+	$search_note_private      ="";
+	$search_statut            ="";
+	$search_fk_user_author    ="";
+	$search_fk_user_modif     ="";
+	$search_fk_user_valid     ="";
+	$search_fk_soc            ="";
+	$search_fk_user_applicant ="";
+	$search_fk_paymen         ="";
+	$search_fk_project        ="";
+	$search_fk_tva            ="";
+	$search_fk_mcurrency      ="";
+	$search_type_advance      ="";
+	$search_date_advance      ="";
+
+}
+
+
+
 
 if ($page == -1) { 
 	$page = 0; 
@@ -307,7 +333,15 @@ if ($search_import) $sql              .= natural_search("import",$search_import)
 if ($search_total_import) $sql        .= natural_search("total_import",$search_total_import);
 if ($search_note_public) $sql         .= natural_search("note_public",$search_note_public);
 if ($search_note_private) $sql        .= natural_search("note_private",$search_note_private);
-if (strlen($search_statut )>0) $sql   .= natural_search("statut",$search_statut);
+
+
+
+if (strlen($search_statut)>0 && $search_statut!=-1  ){ 
+	$sql.=' and t.statut='.$search_statut;
+}
+
+
+
 if ($search_fk_user_author>0) $sql    .= natural_search("fk_user_author",$search_fk_user_author);
 if ($search_fk_user_modif>0) $sql     .= natural_search("fk_user_modif",$search_fk_user_modif);
 if ($search_fk_user_valid>0) $sql     .= natural_search("fk_user_valid",$search_fk_user_valid);
@@ -666,7 +700,7 @@ if ($resql)
 			}
             if (! empty($arrayfields['t.statut']['checked'])){
 
-            	print '<td align="left">'.img_picto($langs->trans('ctrl_action_statut'.$obj->statut),'statut'.$obj->statut)." ".$langs->trans('ctrl_action_statut'.$obj->statut).'</td>';
+            	print '<td align="left">'.img_picto($langs->trans('ctrl_action_statut'.$obj->statut),'statut'.(($obj->statut==5)?7:$obj->statut))."  ".$langs->trans('ctrl_action_statut'.$obj->statut).'</td>';
     		    if (! $i) $totalarray['nbfield']++;
             }
             if (! empty($arrayfields['t.type_advance']['checked'])){

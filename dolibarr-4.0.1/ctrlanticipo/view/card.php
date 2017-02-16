@@ -100,7 +100,7 @@ $permissionedit=$user->rights->fournisseur->facture->creer; // Used by the inclu
 /*
  * Actions
  */
-
+/*
 if ($_GET["action2"]=="realizarcambio") {
 	$sql='SELECT
 		a.rowid,a.fk_source
@@ -132,7 +132,7 @@ if ($_GET["action2"]=="realizarcambio") {
         }
     }
 }
-
+*/
 if (isset($_POST["admin"]) ) {
     if ($_POST["credit"]==-1) {
         setEventMessages('Ingrese un crédito', null, 'errors');
@@ -2077,14 +2077,6 @@ else
 
             if ($object->paye == 0)
             {
-            	print '
-            	<tr>
-            		<td colspan="'.$nbcols.'" align="right">'.$langs->trans('ctrl_facture_alredypay').' :</td>
-            		<td align="right"><b>'.price($totalpaye).'</b></td>
-            		<td></td>
-            	</tr>';
-
-
             	$sql2="
 		    	SELECT
 					SUM(c.total_import) AS tot
@@ -2143,6 +2135,16 @@ else
 			            
 			        }
 			    }
+
+            	print '
+            	<tr>
+            		<td colspan="'.$nbcols.'" align="right">'.$langs->trans('ctrl_facture_alredypay').' :</td>
+            		<td align="right"><b>'.price($totalpaye+$tot_creditos).'</b></td>
+            		<td></td>
+            	</tr>';
+
+
+            	
 
 
                 print '<tr><td colspan="'.$nbcols.'" align="right">'.$langs->trans("Billed").' :</td><td align="right" style="border: 1px solid;">'.price($object->total_ttc).'</td><td></td></tr>';

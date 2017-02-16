@@ -434,13 +434,13 @@ class Ctrladvancecredit extends CommonObject
 			 $this->fk_advance = trim($this->fk_advance);
 		}
 		if (isset($this->import)) {
-			 $this->import = trim($this->import);
+			 $this->import = price2num($this->import);
 		}
 		if (isset($this->fk_tva)) {
 			 $this->fk_tva = trim($this->fk_tva);
 		}
 		if (isset($this->total_import)) {
-			 $this->total_import = trim($this->total_import);
+			 $this->total_import = price2num($this->total_import);
 		}
 		if (isset($this->fk_user_agree)) {
 			 $this->fk_user_agree = trim($this->fk_user_agree);
@@ -467,7 +467,7 @@ class Ctrladvancecredit extends CommonObject
         
 		$sql .= ' WHERE rowid=' . $this->id;
 		$this->db->begin();
-
+		//echo $sql;
 		$resql = $this->db->query($sql);
 		if (!$resql) {
 			$error ++;

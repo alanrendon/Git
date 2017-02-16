@@ -110,7 +110,7 @@ if (empty($reshook))
 	// Action to add record
 	if ($action == 'add_credit' && $confirm=="yes")
 	{
-
+		$tot_ammount=0;
 		if (GETPOST('cancel'))
 		{
 			$urltogo=$backtopage?$backtopage:dol_buildpath('/ctrlanticipo/view/ctrladvanceprovider_card.php?id='.$id,1);
@@ -120,11 +120,11 @@ if (empty($reshook))
 		$error=0;
 
 
-
+		$split->total_import =price($split->total_import );
 		//inputs split
 		$ammount_1=GETPOST("amount_1");
 		$ammount_2=GETPOST("amount_2");
-		$tot_ammount=$ammount_1+$ammount_2;
+		$tot_ammount=price($ammount_1+$ammount_2);
 
 
 		$credit_new1=new Ctrladvancecredit($db);
@@ -146,27 +146,32 @@ if (empty($reshook))
 
 		if ($ammount_1<=0)
 		{
+
 			$error++;
 			setEventMessages($langs->trans("ctrl_view_credit_amm_imp1_not"), null, 'errors');
 		}
 		if ($ammount_2<=0)
 		{
+
 			$error++;
 			setEventMessages($langs->trans("ctrl_view_credit_amm_imp2_not"), null, 'errors');
 		}
 
 		if ($tot_ammount>$split->total_import)
 		{
+
 			$error++;
 			setEventMessages($langs->trans("ctrl_view_credit_amm_over"), null, 'errors');
 		}
 		if ($tot_ammount<0)
 		{
+
 			$error++;
 			setEventMessages($langs->trans("ctrl_view_credit_amm_over"), null, 'errors');
 		}
 		if ($tot_ammount>0 && $tot_ammount<$split->total_import )
 		{
+
 			$error++;
 			setEventMessages($langs->trans("ctrl_view_credit_amm_noteq"), null, 'errors');
 		}
@@ -179,9 +184,6 @@ if (empty($reshook))
 			if ($result > 0 && $result2 > 0)
 			{
 				// Creation OK
-
-
-
 				$credit_new1->fk_brother_credit=$result2;
 				$credit_new2->fk_brother_credit=$result1;
 				$credit_new1->set_split_credit();
@@ -444,7 +446,7 @@ if ($id && (empty($action) || $action == 'view' || $action == 'delete' || $actio
 			}
 			print '</td>
 			<td>
-			'.$langs->trans("ctrl_view_statuts")." ".img_picto($langs->trans('ctrl_action_statut'.$anticipo->statut),'statut'.$anticipo->statut)."  ".$langs->trans('ctrl_action_statut'.$anticipo->statut).'
+			'.$langs->trans("ctrl_view_statuts")." ".img_picto($langs->trans('ctrl_action_statut'.$anticipo->statut),'statut'.(($anticipo->statut==5)?7:$anticipo->statut))."  ".$langs->trans('ctrl_action_statut'.$anticipo->statut).'
 			</td>';
 		print '
 		</tr>';
