@@ -90,16 +90,16 @@ if ($mod==3) {
 
 		$sql="
 		SELECT
-			c.codagr,c.descripcion,c.rowid
+			c.cta as codagr,c.descta as descripcion,c.rowid
 		FROM
-			llx_contab_polizasdet AS a
-		INNER JOIN llx_contab_polizas AS b ON b.rowid = a.fk_poliza
-		INNER JOIN llx_contab_sat_ctas as c on c.codagr=a.cuenta
+			".MAIN_DB_PREFIX."contab_polizasdet AS a
+		INNER JOIN ".MAIN_DB_PREFIX."contab_polizas AS b ON b.rowid = a.fk_poliza
+		INNER JOIN ".MAIN_DB_PREFIX."contab_cat_ctas as c on c.cta=a.cuenta
 		
-		GROUP BY c.codagr
+		GROUP BY c.cta
 
 		";
-
+//print $sql;
 		$resql=$db->query($sql);
 
 		if ($resql) {
@@ -109,15 +109,15 @@ if ($mod==3) {
 					$satc= new Contabsatctas($db);
 					$satc->fetch_by_CodAgr($obj->codagr);
 
-					if($satc->natur=='A'){
+					if( $satc->natur=='A'){
 					
 
 						$sql='
 							SELECT
 							b.mes,SUM(a.haber) as suma
 						FROM
-							llx_contab_polizasdet AS a
-						INNER JOIN llx_contab_polizas as b on b.rowid=a.fk_poliza
+							'.MAIN_DB_PREFIX.'contab_polizasdet AS a
+						INNER JOIN '.MAIN_DB_PREFIX.'contab_polizas as b on b.rowid=a.fk_poliza
 						WHERE
 							a.cuenta = "'.$obj->codagr.'" 
 						GROUP BY b.mes
@@ -180,18 +180,18 @@ if ($mod==3) {
 		<tbody>";
 		$num_2=0;
 
+		
 		$sql="
 		SELECT
-			c.codagr,c.descripcion,c.rowid
+			c.cta as codagr,c.descta as descripcion,c.rowid
 		FROM
-			llx_contab_polizasdet AS a
-		INNER JOIN llx_contab_polizas AS b ON b.rowid = a.fk_poliza
-		INNER JOIN llx_contab_sat_ctas as c on c.codagr=a.cuenta
+			".MAIN_DB_PREFIX."contab_polizasdet AS a
+		INNER JOIN ".MAIN_DB_PREFIX."contab_polizas AS b ON b.rowid = a.fk_poliza
+		INNER JOIN ".MAIN_DB_PREFIX."contab_cat_ctas as c on c.cta=a.cuenta
 		
-		GROUP BY c.codagr
-
+		GROUP BY c.cta
+		
 		";
-
 		$resql=$db->query($sql);
 
 		if ($resql) {
@@ -201,15 +201,15 @@ if ($mod==3) {
 					$satc= new Contabsatctas($db);
 					$satc->fetch_by_CodAgr($obj->codagr);
 
-					if($satc->natur!='A'){
+					if( $satc->natur!='A'){
 					
 
 						$sql='
 							SELECT
 							b.mes,SUM(a.haber) as suma
 						FROM
-							llx_contab_polizasdet AS a
-						INNER JOIN llx_contab_polizas as b on b.rowid=a.fk_poliza
+							'.MAIN_DB_PREFIX.'contab_polizasdet AS a
+						INNER JOIN '.MAIN_DB_PREFIX.'contab_polizas as b on b.rowid=a.fk_poliza
 						WHERE
 							a.cuenta = "'.$obj->codagr.'" 
 						GROUP BY b.mes

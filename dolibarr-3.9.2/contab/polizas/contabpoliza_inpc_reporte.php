@@ -1,4 +1,6 @@
 <?php
+//ini_set('memory_limit', '2048M');
+//ini_set('max_execution_time', 300);
 /* Copyright (C) 2007-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
  * Copyright (C) ---Put here your own copyright and developer email---
  *
@@ -133,16 +135,16 @@ if ($anio>0) {
 			<tbody>";
 				$num_2=0;
 
-				$sql="
+				$sql=$sql="
 				SELECT
-					c.codagr,c.descripcion,c.rowid
+					c.cta as codagr,c.descta as descripcion,c.rowid
 				FROM
-					llx_contab_polizasdet AS a
-				INNER JOIN llx_contab_polizas AS b ON b.rowid = a.fk_poliza
-				INNER JOIN llx_contab_sat_ctas as c on c.codagr=a.cuenta
+					".MAIN_DB_PREFIX."contab_polizasdet AS a
+				INNER JOIN ".MAIN_DB_PREFIX."contab_polizas AS b ON b.rowid = a.fk_poliza
+				INNER JOIN ".MAIN_DB_PREFIX."contab_cat_ctas as c on c.cta=a.cuenta
 				WHERE
 					b.anio = ".$anio."
-				GROUP BY c.codagr
+				GROUP BY c.cta
 
 				";
 
@@ -155,15 +157,15 @@ if ($anio>0) {
 							$satc= new Contabsatctas($db);
  							$satc->fetch_by_CodAgr($obj->codagr);
  							$varr="CODE_ACTIVE_".$obj->rowid;
- 							if($satc->natur=='A' && $conf->global->$varr!=1){
+ 							if($satc->natur=='A' &&  $conf->global->$varr!=1){
  							
 
  								$sql='
  									SELECT
 										b.mes,SUM(a.haber) as suma
 									FROM
-										llx_contab_polizasdet AS a
-									INNER JOIN llx_contab_polizas as b on b.rowid=a.fk_poliza
+										'.MAIN_DB_PREFIX.'contab_polizasdet AS a
+									INNER JOIN '.MAIN_DB_PREFIX.'contab_polizas as b on b.rowid=a.fk_poliza
 									WHERE
 										a.cuenta = "'.$obj->codagr.'" AND b.anio='.$anio.'
 									GROUP BY b.mes
@@ -270,18 +272,18 @@ if ($anio>0) {
 						";
 						$num_2=0;
 
-						$sql="
-						SELECT
-							c.codagr,c.descripcion,c.rowid
-						FROM
-							llx_contab_polizasdet AS a
-						INNER JOIN llx_contab_polizas AS b ON b.rowid = a.fk_poliza
-						INNER JOIN llx_contab_sat_ctas as c on c.codagr=a.cuenta
-						WHERE
-							b.anio = ".$anio."
-						GROUP BY c.codagr
-
-						";
+						$sql=$sql="
+				SELECT
+					c.cta as codagr,c.descta as descripcion,c.rowid
+				FROM
+					".MAIN_DB_PREFIX."contab_polizasdet AS a
+				INNER JOIN ".MAIN_DB_PREFIX."contab_polizas AS b ON b.rowid = a.fk_poliza
+				INNER JOIN ".MAIN_DB_PREFIX."contab_cat_ctas as c on c.cta=a.cuenta
+				WHERE
+					b.anio = ".$anio."
+				GROUP BY c.cta
+						
+				";
 						$sum_exp=$suma_tot;
 						$enero=0;
 						$febrero=0;
@@ -312,8 +314,8 @@ if ($anio>0) {
 		 									SELECT
 												b.mes,SUM(a.haber) as suma
 											FROM
-												llx_contab_polizasdet AS a
-											INNER JOIN llx_contab_polizas as b on b.rowid=a.fk_poliza
+												'.MAIN_DB_PREFIX.'contab_polizasdet AS a
+											INNER JOIN '.MAIN_DB_PREFIX.'contab_polizas as b on b.rowid=a.fk_poliza
 											WHERE
 												a.cuenta = "'.$obj->codagr.'" AND b.anio='.$anio.'
 											GROUP BY b.mes
@@ -405,7 +407,7 @@ if ($anio>0) {
 							";
 					
 				
-	$sql="SELECT a.noviembre,a.diciembre FROM llx_contab_inpc as a WHERE a.year=".$anio;
+	$sql="SELECT a.noviembre,a.diciembre FROM ".MAIN_DB_PREFIX."contab_inpc as a WHERE a.year=".$anio;
 	$res=$db->query($sql);
 	$mes1=0;
 	$mes2=0;
@@ -414,7 +416,7 @@ if ($anio>0) {
 		$mes1=$obj->diciembre;
 		$mes2=$obj->noviembre;
 	}
-	$tasa=$mes1/$mes2;
+	@$tasa=$mes1/$mes2;
 	$tasa2=$tasa-1;
 
 

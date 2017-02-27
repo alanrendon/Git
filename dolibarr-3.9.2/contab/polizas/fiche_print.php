@@ -258,7 +258,7 @@ $html.= "<br>Periodo contable: ".$per->anio." - ".$per->MesToStr($per->mes)."</h
 		$html.='
 		<table border="1"  style="border-collapse: collapse;width: 95%;font-size:9px" align="center" >
 		<tr class="liste_titre">
-			<td colspan="5">Encabezado de la Poliza</td>			
+			<td colspan="6">Encabezado de la Poliza</td>			
 		</tr>';
 		if ($tp !== $pol->tipo_pol || $c !== $pol->cons) {
 			$var = !$var;
@@ -304,7 +304,7 @@ $html.='
 $html.='				</strong>
 					
 				</td>
-				<td colspan = "1">Fecha: '.date("Y-m-d",$pol->fecha).'</td>
+				<td colspan = "2">Fecha: '.date("Y-m-d",$pol->fecha).'</td>
 				<td colspan = "2">
 					Documento Relacionado: '.$facnumber.'
 				</td>
@@ -312,7 +312,7 @@ $html.='				</strong>
 			
 			if($nomsoc!=''){
 				$html.='<tr>
-				<td colspan = "5">
+				<td colspan = "6">
 					Tercero: <strong>'.$nomsoc.'</strong>
 				</td>
 				</tr>';
@@ -320,14 +320,14 @@ $html.='				</strong>
 			}
 			
 			$html.='<tr >
-				<td colspan = "5">
+				<td colspan = "6">
 					Concepto: <strong>'.substr($pol->concepto,0,150).'</strong>
 					&nbsp;
 					Comentario: <strong>'.substr($pol->comentario,0,150).'</strong>
 				</td>
 			</tr>
 			<tr >
-				<td colspan = "5">
+				<td colspan = "6">
 					Cheque a Nombre: <strong>'.substr($pol->anombrede,0,150).'</strong>
 					&nbsp;
 					Num. Cheque: <strong>'.substr($pol->numcheque,0,150).'</strong>
@@ -335,7 +335,7 @@ $html.='				</strong>
 			</tr>';
 			if($pol->pol_ajuste==1){
 				$html .= '<tr>
-				<td colspan = "5">
+				<td colspan = "6">
 					<strong>Poliza del periodo de ajuste</strong>
 				</td>
 			</tr>';
@@ -346,6 +346,7 @@ $html.='				</strong>
 			<td width="15%">Asiento</td>
 			<td width="50%">Cuenta</td>
 			<td width="15%">Concepto</td>
+			<td width="15%">UUID</td>
 			<td style="text-align: right; width: 10%;">Debe</td>
 			<td style="text-align: right; width: 10%;">Haber</td> 
 		</tr>';
@@ -385,6 +386,7 @@ $html.='				</strong>
 					$tothaber+=$poldet->haber;
 					$html.='</td>
 					<td>'.$poldet->desc.'</td>
+					<td>'.$poldet->uuid.'</td>
 					<td style="text-align: right;">'.($poldet->debe > 0 ? $langs->getCurrencySymbol($conf->currency).' '.number_format($poldet->debe, 2) : "").'</td>
 					<td style="text-align: right;">'.($poldet->haber > 0 ? $langs->getCurrencySymbol($conf->currency).' '.number_format($poldet->haber, 2) : "").'</td>';
  
@@ -398,7 +400,7 @@ $html.='				</strong>
 			}
 			
 			$html.='<tr>
-				<td colspan="3" align="right">
+				<td colspan="4" align="right">
 				<strong>Total</strong>
 				</td>
 				<td style="text-align: right;">'.$langs->getCurrencySymbol($conf->currency).' '.number_format($totdebe, 2).'</td>
