@@ -972,7 +972,7 @@ if ($id && (empty($action) || $action == 'view' || $action == 'delete' || $actio
     //if ($object->statut==3) {
 	    require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
 	    $formfile = new FormFile($db);
-	    $modulepart = 'systemtools';
+	    $modulepart = 'export';
 	    $permission = $user->rights->ctrlanticipo->ctrlanticipo1->createmodify;
 
 
@@ -1004,7 +1004,7 @@ if ($id && (empty($action) || $action == 'view' || $action == 'delete' || $actio
 	        $object,
 	        $modulepart,
 	        '',
-	        0,
+	        1,
 	        '',        // relative path with no file. For example "moduledir/0/1"
 	        $permission
 	    );
