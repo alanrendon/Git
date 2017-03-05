@@ -445,6 +445,46 @@ class modContab extends DolibarrModules {
                 'target' => '',
                 'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
         $r++;
+
+        $this->menu[$r] = array('fk_menu' => 'fk_mainmenu=contabilidad,fk_leftmenu=Contab', // Put 0 if this is a top menu
+                'type' => 'left', // This is a Top menu entry
+                'titre' => 'Crear Proveedor',
+                'url' => '/contab/polizas/contabsociete_card.php?action=create',
+                'mainmenu'=>'contabilidad',
+                'leftmenu'=>'leftmenucatusuario',
+                'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+                'position' => 103,
+                'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
+                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'target' => '',
+                'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
+        $r++;
+        $this->menu[$r] = array('fk_menu' => 'fk_mainmenu=contabilidad,fk_leftmenu=Contab', // Put 0 if this is a top menu
+                'type' => 'left', // This is a Top menu entry
+                'titre' => 'Listar Proveedores',
+                'url' => '/contab/polizas/contabsociete_list.php',
+                'mainmenu'=>'contabilidad',
+                'leftmenu'=>'leftmenucatusuario',
+                'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+                'position' => 103,
+                'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
+                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'target' => '',
+                'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
+        $r++;
+        $this->menu[$r] = array('fk_menu' => 'fk_mainmenu=contabilidad,fk_leftmenu=Contab', // Put 0 if this is a top menu
+                'type' => 'left', // This is a Top menu entry
+                'titre' => 'DIOT',
+                'url' => '/contab/polizas/diot.php',
+                'mainmenu'=>'contabilidad',
+                'leftmenu'=>'leftmenucatusuario',
+                'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+                'position' => 103,
+                'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
+                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'target' => '',
+                'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
+        $r++;
         
         // Exports Example:
         // $this->export_code[$r]=$this->rights_class.'_'.$r;

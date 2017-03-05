@@ -20,8 +20,8 @@
  */
 
 /**
- * \file    Cclinico/antecedentes.class.php
- * \ingroup Cclinico
+ * \file    contab/contabsociete.class.php
+ * \ingroup contab
  * \brief   This file is an example for a CRUD class file (Create/Read/Update/Delete)
  *          Put some comments here
  */
@@ -32,37 +32,49 @@ require_once DOL_DOCUMENT_ROOT . '/core/class/commonobject.class.php';
 //require_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
 
 /**
- * Class Antecedentes
+ * Class Contabsociete
  *
  * Put here description of your class
  * @see CommonObject
  */
-class Antecedentes extends CommonObject
+class Contabsociete extends CommonObject
 {
 	/**
 	 * @var string Id to identify managed objects
 	 */
-	public $element = 'antecedentes';
+	public $element = 'contabsociete';
 	/**
 	 * @var string Name of table without prefix where object is stored
 	 */
-	public $table_element = 'antecedentes';
+	public $table_element = 'contab_societe';
 
 	/**
-	 * @var AntecedentesLine[] Lines
+	 * @var ContabsocieteLine[] Lines
 	 */
 	public $lines = array();
 
 	/**
 	 */
-	public $id;
-	public $titulo;
-	public $descripcion;
-	public $fk_user_create;
-	public $fk_user_update;
-	public $fk_pacientes;
+	
+	public $nom;
+	public $entity;
+	public $statut;
+	public $tms = '';
+	public $datec = '';
 	public $status;
-	public $fecha_creacion;
+	public $address;
+	public $zip;
+	public $town;
+	public $fk_departement;
+	public $fk_pays;
+	public $phone;
+	public $fax;
+	public $url;
+	public $email;
+	public $note_private;
+	public $note_public;
+	public $fk_user_creat;
+	public $fk_user_modif;
 
 	/**
 	 */
@@ -92,42 +104,124 @@ class Antecedentes extends CommonObject
 		dol_syslog(__METHOD__, LOG_DEBUG);
 
 		$error = 0;
-		$now=dol_now();
 
 		// Clean parameters
 		
-		if (isset($this->titulo)) {
-			 $this->titulo = trim($this->titulo);
+		if (isset($this->nom)) {
+			 $this->nom = trim($this->nom);
 		}
-		if (isset($this->descripcion)) {
-			 $this->descripcion = trim($this->descripcion);
+		if (isset($this->entity)) {
+			 $this->entity = trim($this->entity);
 		}
-		if (!isset($this->fk_user_create)) {
-			 $this->fk_user_create = $user->id;
+		if (isset($this->statut)) {
+			 $this->statut = trim($this->statut);
 		}
-		if (isset($this->fk_pacientes)) {
-			 $this->fk_pacientes = trim($this->fk_pacientes);
+
+		if (isset($this->address)) {
+			 $this->address = trim($this->address);
 		}
+		if (isset($this->zip)) {
+			 $this->zip = trim($this->zip);
+		}
+		if (isset($this->town)) {
+			 $this->town = trim($this->town);
+		}
+		if (isset($this->fk_departement)) {
+			 $this->fk_departement = trim($this->fk_departement);
+		}
+		if (isset($this->fk_pays)) {
+			 $this->fk_pays = trim($this->fk_pays);
+		}
+		if (isset($this->phone)) {
+			 $this->phone = trim($this->phone);
+		}
+		if (isset($this->fax)) {
+			 $this->fax = trim($this->fax);
+		}
+		if (isset($this->url)) {
+			 $this->url = trim($this->url);
+		}
+		if (isset($this->email)) {
+			 $this->email = trim($this->email);
+		}
+		if (isset($this->note_private)) {
+			 $this->note_private = trim($this->note_private);
+		}
+		if (isset($this->note_public)) {
+			 $this->note_public = trim($this->note_public);
+		}
+		if (isset($this->fk_user_creat)) {
+			 $this->fk_user_creat = trim($this->fk_user_creat);
+		}
+		if (isset($this->fk_user_modif)) {
+			 $this->fk_user_modif = trim($this->fk_user_modif);
+		}
+
 		
 
 		// Check parameters
 		// Put here code to add control on parameters values
 
 		// Insert request
-		$sql = 'INSERT INTO ' . MAIN_DB_PREFIX . 'antecedentes (';
-		$sql.= 'titulo,';
-		$sql.= 'fecha_creacion,';
-		$sql.= 'descripcion,';
-		$sql.= 'fk_user_create,';
-		$sql.= 'fk_pacientes,';
-		$sql.= 'status';
+		$sql = 'INSERT INTO ' . MAIN_DB_PREFIX . $this->table_element . '(';
+		
+		$sql.= 'nom,';
+		$sql.= 'tip_prov,';
+		$sql.= 'rfc,';
+		$sql.= 'id_fiscal,';
+		$sql.= 'tip_op,';
+
+		$sql.= 'entity,';
+		$sql.= 'statut,';
+		$sql.= 'datec,';
+		$sql.= 'address,';
+		$sql.= 'zip,';
+		$sql.= 'town,';
+		$sql.= 'fk_departement,';
+		$sql.= 'fk_pays,';
+		$sql.= 'phone,';
+		$sql.= 'fax,';
+		$sql.= 'url,';
+		$sql.= 'email,';
+		$sql.= 'note_private,';
+		$sql.= 'note_public,';
+		$sql.= 'fk_user_creat,';
+		$sql.= 'fk_user_modif';
+
+		
 		$sql .= ') VALUES (';
-		$sql .= ' '.(! isset($this->titulo)?'NULL':"'".$this->db->escape($this->titulo)."'").',';
-		$sql .= ' "'.$this->db->idate($now).'",';
-		$sql .= ' '.(! isset($this->descripcion)?'NULL':"'".$this->db->escape($this->descripcion)."'").',';
-		$sql .= ' '.(! isset($this->fk_user_create)?'NULL':$this->fk_user_create).',';
-		$sql .= ' '.(! isset($this->fk_pacientes)?'NULL':$this->fk_pacientes).',1';
-		$sql .= ');';
+		
+		$sql .= ' '.(! isset($this->nom)?'NULL':"'".$this->db->escape($this->nom)."'").',';
+		$sql .= ' '.(! isset($this->tip_prov)?'NULL':"'".$this->db->escape($this->tip_prov)."'").',';
+		
+		$sql .= ' '.(! isset($this->rfc)?'NULL':"'".$this->db->escape($this->rfc)."'").',';
+		$sql .= ' '.(! isset($this->id_fiscal)?'NULL':"'".$this->db->escape($this->id_fiscal)."'").',';
+		$sql .= ' '.(! isset($this->tip_op)?'NULL':"'".$this->db->escape($this->tip_op)."'").',';
+
+
+
+		$sql .= ' '.(! isset($this->entity)?'NULL':$this->entity).',';
+		$sql .= ' '.(! isset($this->statut)?'NULL':$this->statut).',';
+		$sql .= ' '."'".$this->db->idate(dol_now())."'".',';
+		$sql .= ' '.(! isset($this->address)?'NULL':"'".$this->db->escape($this->address)."'").',';
+		$sql .= ' '.(! isset($this->zip)?'NULL':"'".$this->db->escape($this->zip)."'").',';
+		$sql .= ' '.(! isset($this->town)?'NULL':"'".$this->db->escape($this->town)."'").',';
+		$sql .= ' '.(! isset($this->fk_departement)?'NULL':$this->fk_departement).',';
+		$sql .= ' '.(! isset($this->fk_pays)?'NULL':$this->fk_pays).',';
+		$sql .= ' '.(! isset($this->phone)?'NULL':"'".$this->db->escape($this->phone)."'").',';
+		$sql .= ' '.(! isset($this->fax)?'NULL':"'".$this->db->escape($this->fax)."'").',';
+		$sql .= ' '.(! isset($this->url)?'NULL':"'".$this->db->escape($this->url)."'").',';
+		$sql .= ' '.(! isset($this->email)?'NULL':"'".$this->db->escape($this->email)."'").',';
+		$sql .= ' NULL,';
+		$sql .= ' NULL,';
+		$sql .= ' '.$user->id.',';
+		$sql .= ' NULL';
+
+		
+		$sql .= ')';
+
+		$this->db->begin();
+
 		$resql = $this->db->query($sql);
 		if (!$resql) {
 			$error ++;
@@ -136,7 +230,7 @@ class Antecedentes extends CommonObject
 		}
 
 		if (!$error) {
-			$this->id = $this->db->last_insert_id(MAIN_DB_PREFIX .'antecedentes');
+			$this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . $this->table_element);
 
 			if (!$notrigger) {
 				// Uncomment this and change MYOBJECT to your own tag if you
@@ -152,9 +246,11 @@ class Antecedentes extends CommonObject
 		// Commit or rollback
 		if ($error) {
 			$this->db->rollback();
+
 			return - 1 * $error;
 		} else {
 			$this->db->commit();
+
 			return $this->id;
 		}
 	}
@@ -172,21 +268,38 @@ class Antecedentes extends CommonObject
 		dol_syslog(__METHOD__, LOG_DEBUG);
 
 		$sql = 'SELECT';
-		$sql .= " t.id,";
-		$sql .= " t.fecha_creacion,";
-		$sql .= " t.titulo,";
-		$sql .= " t.descripcion,";
-		$sql .= " t.fk_user_create,";
-		$sql .= " t.fk_user_update,";
-		$sql .= " t.fk_pacientes,";
-		$sql .= " t.status";
+		$sql .= ' t.rowid,';
+		$sql .= ' t.tip_prov,';	
+		$sql .= ' t.rfc,';	
+		$sql .= ' t.id_fiscal,';
+		$sql .= ' t.tip_op,';	
+		
+
+		$sql .= " t.nom,";
+		$sql .= " t.entity,";
+		$sql .= " t.statut,";
+		$sql .= " t.tms,";
+		$sql .= " t.datec,";
+		$sql .= " t.address,";
+		$sql .= " t.zip,";
+		$sql .= " t.town,";
+		$sql .= " t.fk_departement,";
+		$sql .= " t.fk_pays,";
+		$sql .= " t.phone,";
+		$sql .= " t.fax,";
+		$sql .= " t.url,";
+		$sql .= " t.email,";
+		$sql .= " t.note_private,";
+		$sql .= " t.note_public,";
+		$sql .= " t.fk_user_creat,";
+		$sql .= " t.fk_user_modif";
 
 		
 		$sql .= ' FROM ' . MAIN_DB_PREFIX . $this->table_element . ' as t';
 		if (null !== $ref) {
-			$sql .= ' WHERE t.fk_pacientes = '.$ref." and "."t.id = " . $id;
+			$sql .= ' WHERE t.ref = ' . '\'' . $ref . '\'';
 		} else {
-			$sql .= ' WHERE t.id = ' . $id;
+			$sql .= ' WHERE t.rowid = ' . $id;
 		}
 
 		$resql = $this->db->query($sql);
@@ -195,15 +308,35 @@ class Antecedentes extends CommonObject
 			if ($numrows) {
 				$obj = $this->db->fetch_object($resql);
 
-				$this->id = $obj->id;
-				
-				$this->titulo = $obj->titulo;
-				$this->fecha_creacion = $obj->fecha_creacion;
-				$this->descripcion = $obj->descripcion;
-				$this->fk_user_create = $obj->fk_user_create;
-				$this->fk_user_update = $obj->fk_user_update;
-				$this->fk_pacientes = $obj->fk_pacientes;
-				$this->status = $obj->status;
+				$this->id = $obj->rowid;
+				$this->rowid = $obj->rowid;
+
+				$this->tip_prov=$obj->tip_prov;	
+				$this->rfc=$obj->rfc;	
+				$this->id_fiscal=$obj->id_fiscal;
+				$this->tip_op=$obj->tip_op;	
+
+
+
+				$this->nom = $obj->nom;
+				$this->entity = $obj->entity;
+				$this->statut = $obj->statut;
+				$this->tms = $this->db->jdate($obj->tms);
+				$this->datec = $this->db->jdate($obj->datec);
+				$this->address = $obj->address;
+				$this->zip = $obj->zip;
+				$this->town = $obj->town;
+				$this->fk_departement = $obj->fk_departement;
+				$this->fk_pays = $obj->fk_pays;
+				$this->phone = $obj->phone;
+				$this->fax = $obj->fax;
+				$this->url = $obj->url;
+				$this->email = $obj->email;
+				$this->note_private = $obj->note_private;
+				$this->note_public = $obj->note_public;
+				$this->fk_user_creat = $obj->fk_user_creat;
+				$this->fk_user_modif = $obj->fk_user_modif;
+
 				
 			}
 			$this->db->free($resql);
@@ -220,81 +353,7 @@ class Antecedentes extends CommonObject
 			return - 1;
 		}
 	}
-	public function listar_antecedentes($id)
-	{
 
-		dol_syslog(__METHOD__, LOG_DEBUG);
-
-		$sql = 'SELECT
-			a.*,b.lastname,b.firstname
-		FROM
-			llx_antecedentes AS a
-		INNER JOIN llx_pacientes AS b ON a.fk_pacientes=b.rowid
-		WHERE
-			a.status=1 AND a.fk_pacientes= '.trim($id).'
-		ORDER BY a.fecha_creacion desc';
-		$resql = $this->db->query($sql);
-		if ($resql) {
-			$num = $this->db->num_rows($resql);
-			$i = 0;
-			if ($num)
-			{
-				while ($i < $num)
-				{
-					$obj = $this->db->fetch_object($resql);
-					if ($obj)
-					{
-					     $array[$i]=$obj;
-					}
-					$i++;
-				}
-			}
-			return $array;
-		}else{
-			$this->errors[] = 'Error ' . $this->db->lasterror();
-			dol_syslog(__METHOD__ . ' ' . join(',', $this->errors), LOG_ERR);
-			return array();
-		}
-
-	}
-	function setstatus($statut)
-	{
-		global $conf,$langs,$user;
-
-		$error=0;
-
-		// Check parameters
-		if ($this->status == $statut) return 0;
-		else $this->status = $statut;
-
-		$this->db->begin();
-
-		// Desactive utilisateur
-		$sql = "UPDATE llx_antecedentes";
-		$sql.= " SET status = ".$this->status;
-		$sql.= " WHERE id = ".$this->id;
-		$result = $this->db->query($sql);
-
-		dol_syslog(get_class($this)."::setstatus", LOG_DEBUG);
-		if ($result)
-		{
-            // Call trigger
-            //$result=$this->call_trigger('CONTACT_ENABLEDISABLE',$user);
-            //if ($result < 0) { $error++; }
-            // End call triggers
-		}
-
-		if ($error)
-		{
-			$this->db->rollback();
-			return -$error;
-		}
-		else
-		{
-			$this->db->commit();
-			return 1;
-		}
-	}
 	/**
 	 * Load object in memory from the database
 	 *
@@ -314,14 +373,24 @@ class Antecedentes extends CommonObject
 		$sql = 'SELECT';
 		$sql .= ' t.rowid,';
 		
-		$sql .= " t.id,";
-		$sql .= " t.titulo,";
-		$sql .= " t.fecha_creacion,";
-		$sql .= " t.descripcion,";
-		$sql .= " t.fk_user_create,";
-		$sql .= " t.fk_user_update,";
-		$sql .= " t.fk_pacientes,";
-		$sql .= " t.status";
+		$sql .= " t.nom,";
+		$sql .= " t.entity,";
+		$sql .= " t.statut,";
+		$sql .= " t.tms,";
+		$sql .= " t.datec,";
+		$sql .= " t.address,";
+		$sql .= " t.zip,";
+		$sql .= " t.town,";
+		$sql .= " t.fk_departement,";
+		$sql .= " t.fk_pays,";
+		$sql .= " t.phone,";
+		$sql .= " t.fax,";
+		$sql .= " t.url,";
+		$sql .= " t.email,";
+		$sql .= " t.note_private,";
+		$sql .= " t.note_public,";
+		$sql .= " t.fk_user_creat,";
+		$sql .= " t.fk_user_modif";
 
 		
 		$sql .= ' FROM ' . MAIN_DB_PREFIX . $this->table_element. ' as t';
@@ -350,17 +419,28 @@ class Antecedentes extends CommonObject
 			$num = $this->db->num_rows($resql);
 
 			while ($obj = $this->db->fetch_object($resql)) {
-				$line = new AntecedentesLine();
+				$line = new ContabsocieteLine();
 
 				$line->id = $obj->rowid;
 				
-				$line->titulo = $obj->titulo;
-				$this->fecha_creacion = $obj->fecha_creacion;
-				$line->descripcion = $obj->descripcion;
-				$line->fk_user_create = $obj->fk_user_create;
-				$line->fk_user_update = $obj->fk_user_update;
-				$line->fk_pacientes = $obj->fk_pacientes;
-				$line->status = $obj->status;
+				$line->nom = $obj->nom;
+				$line->entity = $obj->entity;
+				$line->statut = $obj->statut;
+				$line->tms = $this->db->jdate($obj->tms);
+				$line->datec = $this->db->jdate($obj->datec);
+				$line->address = $obj->address;
+				$line->zip = $obj->zip;
+				$line->town = $obj->town;
+				$line->fk_departement = $obj->fk_departement;
+				$line->fk_pays = $obj->fk_pays;
+				$line->phone = $obj->phone;
+				$line->fax = $obj->fax;
+				$line->url = $obj->url;
+				$line->email = $obj->email;
+				$line->note_private = $obj->note_private;
+				$line->note_public = $obj->note_public;
+				$line->fk_user_creat = $obj->fk_user_creat;
+				$line->fk_user_modif = $obj->fk_user_modif;
 
 				
 
@@ -385,7 +465,6 @@ class Antecedentes extends CommonObject
 	 *
 	 * @return int <0 if KO, >0 if OK
 	 */
-
 	public function update(User $user, $notrigger = false)
 	{
 		$error = 0;
@@ -394,30 +473,97 @@ class Antecedentes extends CommonObject
 
 		// Clean parameters
 		
-		if (isset($this->titulo)) {
-			 $this->titulo = trim($this->titulo);
+		if (isset($this->nom)) {
+			 $this->nom = trim($this->nom);
 		}
-		if (isset($this->descripcion)) {
-			 $this->descripcion = trim($this->descripcion);
+		if (isset($this->entity)) {
+			 $this->entity = trim($this->entity);
 		}
-		if (isset($this->fk_user_create)) {
-			 $this->fk_user_create = trim($this->fk_user_create);
+		if (isset($this->statut)) {
+			 $this->statut = trim($this->statut);
 		}
-		if (isset($this->fk_user_update)) {
-			 $this->fk_user_update = trim($this->fk_user_update);
+
+		if (isset($this->address)) {
+			 $this->address = trim($this->address);
 		}
+		if (isset($this->zip)) {
+			 $this->zip = trim($this->zip);
+		}
+		if (isset($this->town)) {
+			 $this->town = trim($this->town);
+		}
+		if (isset($this->fk_departement)) {
+			 $this->fk_departement = trim($this->fk_departement);
+		}
+		if (isset($this->fk_pays)) {
+			 $this->fk_pays = trim($this->fk_pays);
+		}
+		if (isset($this->phone)) {
+			 $this->phone = trim($this->phone);
+		}
+		if (isset($this->fax)) {
+			 $this->fax = trim($this->fax);
+		}
+		if (isset($this->url)) {
+			 $this->url = trim($this->url);
+		}
+		if (isset($this->email)) {
+			 $this->email = trim($this->email);
+		}
+		if (isset($this->note_private)) {
+			 $this->note_private = trim($this->note_private);
+		}
+		if (isset($this->note_public)) {
+			 $this->note_public = trim($this->note_public);
+		}
+		if (isset($this->fk_user_creat)) {
+			 $this->fk_user_creat = trim($this->fk_user_creat);
+		}
+		if (isset($this->fk_user_modif)) {
+			 $this->fk_user_modif = trim($this->fk_user_modif);
+		}
+
+		
+
 		// Check parameters
 		// Put here code to add a control on parameters values
 
 		// Update request
 		$sql = 'UPDATE ' . MAIN_DB_PREFIX . $this->table_element . ' SET';
 		
-		$sql .= ' titulo = '.(isset($this->titulo)?"'".$this->db->escape($this->titulo)."'":"null").',';
-		$sql .= ' descripcion = '.(isset($this->descripcion)?"'".$this->db->escape($this->descripcion)."'":"null").',';
-		$sql .= ' fk_user_update = '.(isset($user->id)?$user->id:"null");
-		$sql .= ' WHERE id=' . $this->id;
+		$sql .= ' nom = '.(isset($this->nom)?"'".$this->db->escape($this->nom)."'":"null").',';
+
+
+		$sql .= ' tip_prov = '.(isset($this->tip_prov)?"'".$this->db->escape($this->tip_prov)."'":"null").',';
+		$sql .= ' rfc = '.(isset($this->rfc)?"'".$this->db->escape($this->rfc)."'":"null").',';
+		$sql .= ' id_fiscal = '.(isset($this->id_fiscal)?"'".$this->db->escape($this->id_fiscal)."'":"null").',';
+		$sql .= ' tip_op = '.(isset($this->tip_op)?"'".$this->db->escape($this->tip_op)."'":"null").',';
+
+
+
+
+		$sql .= ' statut = '.(isset($this->statut)?$this->statut:"null").',';
+		$sql .= ' tms = '.(dol_strlen($this->tms) != 0 ? "'".$this->db->idate($this->tms)."'" : "'".$this->db->idate(dol_now())."'").',';
+		$sql .= ' datec = '.(! isset($this->datec) || dol_strlen($this->datec) != 0 ? "'".$this->db->idate($this->datec)."'" : 'null').',';
+		$sql .= ' address = '.(isset($this->address)?"'".$this->db->escape($this->address)."'":"null").',';
+		$sql .= ' zip = '.(isset($this->zip)?"'".$this->db->escape($this->zip)."'":"null").',';
+		$sql .= ' town = '.(isset($this->town)?"'".$this->db->escape($this->town)."'":"null").',';
+		$sql .= ' fk_departement = '.(isset($this->fk_departement)?$this->fk_departement:"null").',';
+		$sql .= ' fk_pays = '.(isset($this->fk_pays)?$this->fk_pays:"null").',';
+		$sql .= ' phone = '.(isset($this->phone)?"'".$this->db->escape($this->phone)."'":"null").',';
+		$sql .= ' fax = '.(isset($this->fax)?"'".$this->db->escape($this->fax)."'":"null").',';
+		$sql .= ' url = '.(isset($this->url)?"'".$this->db->escape($this->url)."'":"null").',';
+		$sql .= ' email = '.(isset($this->email)?"'".$this->db->escape($this->email)."'":"null").',';
+		$sql .= ' note_private = '.(isset($this->note_private)?"'".$this->db->escape($this->note_private)."'":"null").',';
+		$sql .= ' note_public = '.(isset($this->note_public)?"'".$this->db->escape($this->note_public)."'":"null").',';
+		$sql .= ' fk_user_creat = '.(isset($this->fk_user_creat)?$this->fk_user_creat:"null").',';
+		$sql .= ' fk_user_modif = '.(isset($this->fk_user_modif)?$this->fk_user_modif:"null");
+
+        
+		$sql .= ' WHERE rowid=' . $this->id;
 
 		$this->db->begin();
+
 		$resql = $this->db->query($sql);
 		if (!$resql) {
 			$error ++;
@@ -512,7 +658,7 @@ class Antecedentes extends CommonObject
 
 		global $user;
 		$error = 0;
-		$object = new Antecedentes($this->db);
+		$object = new Contabsociete($this->db);
 
 		$this->db->begin();
 
@@ -567,11 +713,11 @@ class Antecedentes extends CommonObject
         $result = '';
         $companylink = '';
 
-        $label = '<u>' . $langs->trans("MyModule") . '</u>';
+        $label = '<u>' . $langs->trans("Contab") . '</u>';
         $label.= '<div width="100%">';
-        $label.= '<b>' . $langs->trans('Ref') . ':</b> ' . $this->ref;
+        $label.= '<b>Nombre:</b> ' . $this->nom;
 
-        $link = '<a href="'.DOL_URL_ROOT.'/cclinico/card.php?id='.$this->id.'"';
+        $link = '<a href="'.DOL_URL_ROOT.'/contab/polizas/contabsociete_card.php?id='.$this->id.'"';
         $link.= ($notooltip?'':' title="'.dol_escape_htmltag($label, 1).'" class="classfortooltip'.($morecss?' '.$morecss:'').'"');
         $link.= '>';
 		$linkend='</a>';
@@ -581,7 +727,7 @@ class Antecedentes extends CommonObject
             $result.=($link.img_object(($notooltip?'':$label), 'label', ($notooltip?'':'class="classfortooltip"')).$linkend);
             if ($withpicto != 2) $result.=' ';
 		}
-		$result.= $link . $this->ref . $linkend;
+		$result.= $link . $this->nom . $linkend;
 		return $result;
 	}
 	
@@ -651,12 +797,25 @@ class Antecedentes extends CommonObject
 	{
 		$this->id = 0;
 		
-		$this->titulo = '';
-		$this->descripcion = '';
-		$this->fk_user_create = '';
-		$this->fk_user_update = '';
-		$this->fk_pacientes = '';
+		$this->nom = '';
+		$this->entity = '';
+		$this->statut = '';
+		$this->tms = '';
+		$this->datec = '';
 		$this->status = '';
+		$this->address = '';
+		$this->zip = '';
+		$this->town = '';
+		$this->fk_departement = '';
+		$this->fk_pays = '';
+		$this->phone = '';
+		$this->fax = '';
+		$this->url = '';
+		$this->email = '';
+		$this->note_private = '';
+		$this->note_public = '';
+		$this->fk_user_creat = '';
+		$this->fk_user_modif = '';
 
 		
 	}
@@ -664,9 +823,9 @@ class Antecedentes extends CommonObject
 }
 
 /**
- * Class AntecedentesLine
+ * Class ContabsocieteLine
  */
-class AntecedentesLine
+class ContabsocieteLine
 {
 	/**
 	 * @var int ID
@@ -676,12 +835,25 @@ class AntecedentesLine
 	 * @var mixed Sample line property 1
 	 */
 	
-	public $titulo;
-	public $descripcion;
-	public $fk_user_create;
-	public $fk_user_update;
-	public $fk_pacientes;
+	public $nom;
+	public $entity;
+	public $statut;
+	public $tms = '';
+	public $datec = '';
 	public $status;
+	public $address;
+	public $zip;
+	public $town;
+	public $fk_departement;
+	public $fk_pays;
+	public $phone;
+	public $fax;
+	public $url;
+	public $email;
+	public $note_private;
+	public $note_public;
+	public $fk_user_creat;
+	public $fk_user_modif;
 
 	/**
 	 * @var mixed Sample line property 2

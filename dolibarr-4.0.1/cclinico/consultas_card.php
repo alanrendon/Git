@@ -49,15 +49,14 @@ if ($action == 'edit' && ( $cid>0 || $aid>0) ) {
         $consultas->fetch($aid);
     }
     if ($consultas->statut==1) {
-        $consultas->Ref=mascara_referencia($conf,1,$consultas);
-        $consultas->update($user);
+
         $consultas->cambiar_statut(0,$user);
     }
-
 }
 
 // agregar consulta
 if ($action == 'add'){
+
     $tmpcode=mascara_referencia($conf,0);
     $consultas->Ref                    = $tmpcode;
     $consultas->fk_user_pacientes      = GETPOST("fk_user_pacientes");
@@ -569,6 +568,7 @@ if ($action=='create') {
 }
 //subir archivo al borrador
 if ($action=='create_upfile') {
+
     $tmpcode=mascara_referencia($conf,0);
     //$consultas->Ref                    = $tmpcode;
 
@@ -624,9 +624,13 @@ if ($action=='create_upfile') {
 
 }
 if ($action=='create_consulta') {
+
     $tmpcode=mascara_referencia($conf,0);
     $ref_ant=$consultas->Ref;
-    $consultas->Ref                    = $tmpcode;
+    if(stristr($ref_ant,"PROV") == TRUE){
+        $consultas->Ref                    = $tmpcode;
+    }
+    
     $consultas->weight                 = GETPOST("weight");
     $consultas->Type_consultation      = GETPOST("Type_consultation");
     $consultas->blood_pressure         = GETPOST("blood_pressure");
@@ -790,19 +794,26 @@ if ($action == 'create')
     print '<input type="hidden" id="doc" name="doc" value="">';
     print '<input type="hidden" id="doc2" name="doc2" value="">';
     print '<table class="border" style="width:1024px !important;">';
+
+
+    print '
+    <tr>';
+        print '<td   align="left" >  <b>'.$langs->trans("Code22").'</b>
+        </td><td colspan="7">';
+        print '<b>'.(empty($consultas->Ref)?"Borrador":str_replace("!","",$consultas->Ref) ).'</b>';
+    print '</td>';
+    print '
+    </tr>';       
     print '
     <tr>
         <td  >
             <label for="descripcion"><b>&nbsp;'.$langs->trans("Code14").'</b></label>
         </td>
-        <td  colspan="4" >';
+        <td  colspan="7" >';
             print $consultas->select_dolpacientes($consultas->fk_user_pacientes, 'fk_user_pacientes', 1, '', 0, '', 0, $conf->entity, 0, 0, '', 0, '', 'maxwidth300');
     print '
         </td>';
-        print '<td  colspan="2" align="right" >  <b>'.$langs->trans("Code22").'</b>
-        </td><td>';
-        print '<b>'.(empty($consultas->Ref)?"Borrador":str_replace("!","",$consultas->Ref) ).'</b>';
-    print '</td>
+    print '
     </tr>';
     print '
     <tr>
@@ -990,22 +1001,48 @@ if ($action == 'edit' && ! empty($aid))
     print '<input type="hidden" id="doc" name="doc" value="">';
     print '<input type="hidden" id="doc2" name="doc2" value="">';
     print '<table class="border" style="width:1024px !important;">';
+
+
+    print '
+    <tr>';
+    print '<td align="left" >  <b>'.$langs->trans("Code22").'</b>
+        </td>
+        <td align="left" colspan=7>';
+        print '<b>'.(empty($consultas->Ref)?dol_escape_htmltag(str_replace("!","",$tmpcode)):str_replace("!","",$consultas->Ref) ).'</b>';
+    print '</td>
+    </tr>';
+
+
     print '
     <tr>
         <td  >
             <label for="descripcion">&nbsp;<b>'.$langs->trans("Code14").'</b></label>
         </td>
-        <td  colspan="4"  >';
-            print $pacientes->getNomUrl(1);
+        <td  colspan="6"  >';
+            print $pacientes->getNomUrl(0, '', 0, 24, '',1);
     print '
         </td>';
-
-    print '<td  colspan="2" align="right" >  <b>'.$langs->trans("Code22").'</b>
-        </td><td>';
-
-        print '<b>'.(empty($consultas->Ref)?dol_escape_htmltag(str_replace("!","",$tmpcode)):str_replace("!","",$consultas->Ref) ).'</b>';
-
-    print '</td>
+        if ($consultas->statut==0) {
+            print '
+            <td colspan=3 align="center" >Estatus:&nbsp;&nbsp; <img src="../theme/eldy/img/statut0.png" border="0" alt="" title="Borrador (a validar)">&nbsp;&nbsp; Borrador</td>
+            ';
+        }
+        if ($consultas->statut==1) {
+            print '
+            <td colspan=3 align="center" >Estatus:&nbsp;&nbsp; <img src="../theme/eldy/img/statut4.png" border="0" alt="" title="Activado" >&nbsp;&nbsp; Validado</td>
+            ';
+        }
+        if ($consultas->statut==2) {
+            print '
+            <td colspan=3 align="center" >Estatus:&nbsp;&nbsp; <img src="../theme/eldy/img/statut6.png" border="0" alt="" title="Facturada" >&nbsp;&nbsp; (cerrado) Facturada</td>
+            ';
+        }
+        if ($consultas->statut==3) {
+            print '
+            <td colspan=3 align="center" >Estatus:&nbsp;&nbsp; <img src="../theme/eldy/img/statut6.png" border="0" alt="" title="Activado" >&nbsp;&nbsp; cerrada(consulta gratuita)</td>
+            ';
+        }
+    print '
     </tr>';
     print '
     <tr>
@@ -1292,20 +1329,26 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
     print '<input type="hidden" id="fact2" name="fact2" value="">';
     print '<table class="border" style="width:1024px !important;">';
     print '
+    <tr>';
+        print '
+        <td   align="left" >  <b>'.$langs->trans("Code22").'</b></td>
+        <td   colspan="8" align="left"><b>';
+        print (empty($consultas->Ref)?dol_escape_htmltag(str_replace("!","",$tmpcode)):str_replace("!","",$consultas->Ref ));
+
+    print '</b></td>';
+
+    print '
+    </tr>';
+
+    print '
     <tr>
         <td  >
             <label for="descripcion">&nbsp;'.$langs->trans("Code14").'</label>
         </td>
-        <td  >';
-            print $pacientes->getNomUrl(1);
+        <td colspan=5 >';
+            print $pacientes->getNomUrl(0, '', 0, 24, '',1);
     print '
         </td>';
-        print '
-        <td  colspan="2" align="right" >  <b>'.$langs->trans("Code22").'</b></td>
-            <td align="center"><b>';
-        print (empty($consultas->Ref)?dol_escape_htmltag(str_replace("!","",$tmpcode)):str_replace("!","",$consultas->Ref ));
-
-    print '</b></td>';
         if ($consultas->statut==0) {
             print '
             <td colspan=3 align="center" >Estatus:&nbsp;&nbsp; <img src="../theme/eldy/img/statut0.png" border="0" alt="" title="Borrador (a validar)">&nbsp;&nbsp; Borrador</td>
@@ -1333,7 +1376,7 @@ elseif ($action != 'edit' && $action != 'create' && ! empty($id) && ! empty($aid
             <label for="descripcion">&nbsp;'.$langs->trans("Code15").'</label>
         </td>
         <td  >';
-           print date("d/m/Y H:s",strtotime($consultas->date_consultation));
+           print dol_print_date($consultas->date_consultation,'%d/%m/%Y %H:%M:%S','tzuserrel');
     print '
         </td>
         <td  >

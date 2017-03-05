@@ -1327,9 +1327,9 @@ class Pacientes extends CommonObject
 				$out.='<td>';
 				$out.=$langs->trans("Type");
 				$out.='</td>';
-				$out.='<td colspan="4" align="right">';
+				$out.='<td colspan="3" align="right">';
 			} else {
-				$out.='<td colspan="5" align="right">';
+				$out.='<td colspan="4" align="right">';
 			}
 	        
 	        $out.='</td>';
@@ -1353,7 +1353,7 @@ class Pacientes extends CommonObject
 	        if (! empty($objcon->id)) $sql.= " AND a.fk_contact = ".$objcon->id;
 	        $sql.= " AND ((a.percent >= 0 AND a.percent < 100) OR (a.percent = -1 AND a.datep > '".$db->idate($now)."'))";
 	        $sql.= " ORDER BY a.datep DESC, a.id DESC";
-	        dol_syslog("company.lib::show_actions_todo", LOG_DEBUG);
+
 	        $result=$db->query($sql);
 	        if ($result)
 	        {
@@ -1422,13 +1422,6 @@ class Pacientes extends CommonObject
 	                        $out.='<td>&nbsp;</td>';
 	                    }
 
-	                    $out.='<td width="80" class="nowrap">';
-	                    //$userstatic->id=$obj->fk_user_author;
-	                    //$userstatic->login=$obj->login;
-	                    //$out.=$userstatic->getLoginUrl(1);
-	                    $userstatic->fetch($obj->fk_user_author);
-	                    $out.=$userstatic->getNomUrl(1);
-	                    $out.='</td>';
 
 	                    // Statut
 	                    $out.='<td class="nowrap" width="20">'.$actionstatic->LibStatut($obj->percent,3).'</td>';
@@ -1456,6 +1449,9 @@ class Pacientes extends CommonObject
 	    if ($noprint) return $out;
 	    else print $out;
 	}
+
+
+
 	function show_actions_done($conf,$langs,$db,$object,$objcon='',$noprint=0)
 	{
 	    global $bc,$user,$conf;
@@ -1581,7 +1577,7 @@ class Pacientes extends CommonObject
 	        require_once DOL_DOCUMENT_ROOT.'/commande/class/commande.class.php';
 	        require_once DOL_DOCUMENT_ROOT.'/compta/facture/class/facture.class.php';
 	        $actionstatic=new ActionComm($db);
-	        $userstatic=new User($db);
+	        
 	        $contactstatic = new Contact($db);
 
 	        // TODO uniformize
@@ -1722,6 +1718,7 @@ class Pacientes extends CommonObject
 	            //$userstatic->id=$histo[$key]['userid'];
 	            //$userstatic->login=$histo[$key]['login'];
 	            //$out.=$userstatic->getLoginUrl(1);
+	            $userstatic=new User($db);
 	            $userstatic->fetch($histo[$key]['userid']);
 	            $out.=$userstatic->getNomUrl(1);
 	            $out.='</td>';

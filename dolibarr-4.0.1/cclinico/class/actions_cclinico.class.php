@@ -54,7 +54,7 @@ class Actionscclinico
 			$paciente=new Pacientes($object->db);
 
 			$array=$consulta->listar_evento($object->id);
-			
+
 			if ($array->fk_consulta>0) {
 				$consulta->fetch($array->fk_consulta);
 				print '<tr><td class="tdtop">Consulta</td><td colspan="3">';
@@ -111,11 +111,12 @@ class Actionscclinico
 
 	function insertExtraFields($parameters, $object, $action, $hookmanager)
 	{
-		echo "string";
-		if ($parameters['actcomm']>0 && $_POST["paciente"]>0 && $action="create") {
+
+		if ($parameters['actcomm']>0 && $_POST["paciente"]>0 && $action=="create") {
+
 			$object->db->query("INSERT INTO llx_eventos_consultas (fk_paciente,fk_evento) values (".$_POST["paciente"].",".$parameters['actcomm'].");");
 		}
-		if ($parameters['actcomm']>0 && isset($_POST["paciente"]) && $action="update") {
+		if ($parameters['actcomm']>0 && isset($_POST["paciente"]) && $action=="update") {
 			$object->db->query("UPDATE llx_eventos_consultas as a SET a.fk_paciente=".$_POST["paciente"]." WHERE a.fk_evento=".$parameters['actcomm']);
 		}
 	}

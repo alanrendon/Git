@@ -114,6 +114,8 @@ $socid 		= GETPOST("socid","int");
 
 //print "Fecha: ".GETPOST("fecha")." == ".time(GETPOST("fecha"))." ///  ";
 
+
+
 $anio = 0; $mes = 0;
 if (GETPOST('anio')) {
 	$anio = GETPOST('anio');
@@ -275,6 +277,7 @@ if ($action == 'createpol') {
 				$np->anombrede = GETPOST("anombrede");
 				$np->numcheque = GETPOST("numcheque");
 				$np->fk_facture = GETPOST("fk_facture");
+				$np->fk_proveedor = GETPOST("proveedor");
 				$np->ant_ctes = "";
 				$np->societe_type = $soc_type;
 
@@ -509,6 +512,8 @@ if ($action == 'createpol') {
 		$cc->tipo_pol = $db->escape(GETPOST('tipo_pol'));
 		$cc->cons = GETPOST('cons');
 		
+		$cc->fk_proveedor=GETPOST('proveedor');
+
 		$cc->fecha = date("Y-m-d",$fecha);
 		$cc->anio = date("Y",$fecha);
 		$cc->mes = date("m",$fecha);
@@ -655,9 +660,9 @@ if ($action == 'createpol') {
 		$cc2->uuid = GETPOST('uuid');
 		//print $cc2->desc.'<---'; exit();
 		$sqm="SELECT count( * ) as cant
-									FROM ".MAIN_DB_PREFIX."contab_cat_ctas
-									WHERE cta LIKE '".GETPOST('cuenta').".%'
-									AND entity =".$conf->entity;
+		FROM ".MAIN_DB_PREFIX."contab_cat_ctas
+		WHERE cta LIKE '".GETPOST('cuenta').".%'
+		AND entity =".$conf->entity;
 		//print $sqm."<br>";
 		$rsm=$db->query($sqm);
 		$rmm=$db->fetch_object($rsm);
@@ -667,10 +672,12 @@ if ($action == 'createpol') {
 			$mrq=$db->query($sqm);
 			$mrs=$db->fetch_object($mrq);
 			if($mrs->existe==0){
+				
 				$sqm="INSERT INTO ".MAIN_DB_PREFIX."contab_polizas_log
 						(fk_user, fk_poliza, cantmodif, creador, fechahora)
   					VALUES('".$user->id."','".$id."','1','0',now())";
 				$mrq=$db->query($sqm);
+
 			}else{
 				$sqm="UPDATE ".MAIN_DB_PREFIX."contab_polizas_log
 						SET cantmodif=cantmodif+1, fechahora=now()
@@ -988,6 +995,7 @@ if ($action == "newpol") {
 					</td>
 				</tr>
 				<?php
+
 				$sqm="SELECT count(*) as existe
 						FROM ".MAIN_DB_PREFIX."contab_periodos
 						WHERE mes=13 AND entity=".$conf->entity;
@@ -1000,6 +1008,32 @@ if ($action == "newpol") {
 					<td colspan="7"><input type="checkbox" name="pol_ajuste" value="1" ></td>
 				</tr>
 				<?php 
+				}
+				$res=$db->query("SELECT a.nom,a.rowid FROM llx_contab_societe as a ");
+				if ($res) {
+					if ($db->num_rows($res)>0) {
+						print '
+							<tr>
+								<td>Proveedor</td>
+								<td>
+									<select name="proveedor">
+									';
+										print '<option value="-1"></option>';
+										while ($obj=$db->fetch_object($res)) {
+											if ($proveedor==$obj->rowid) {
+												print '<option value="'.$obj->rowid.'" selected>'.$obj->nom.'</option>';
+											}else{
+												print '<option value="'.$obj->rowid.'">'.$obj->nom.'</option>';
+											}
+											
+										}
+
+									print '
+									</select>
+								</td>
+							</tr>
+						';
+					}
 				}
 				?>
 				<tr>
@@ -1044,6 +1078,7 @@ if ($action == "newpol") {
 			$soc_type = $c->societe_type;
 			$ant_ctes = $c->ant_ctes;
 			$polajuste = $c->pol_ajuste;
+			$fk_proveedor = $c->fk_proveedor;
 		}
 
 		$var=$var;
@@ -1227,6 +1262,33 @@ if ($action == "newpol") {
 				</tr>
 				<?php 
 				}
+				$res=$db->query("SELECT a.nom,a.rowid FROM llx_contab_societe as a ");
+				if ($res) {
+					if ($db->num_rows($res)>0) {
+						print '
+							<tr>
+								<td>Proveedor</td>
+								<td>
+									<select name="proveedor">
+									';
+										print '<option value="-1"></option>';
+										while ($obj=$db->fetch_object($res)) {
+											if ($fk_proveedor==$obj->rowid) {
+												print '<option value="'.$obj->rowid.'" selected>'.$obj->nom.'</option>';
+											}else{
+												print '<option value="'.$obj->rowid.'">'.$obj->nom.'</option>';
+											}
+											
+										}
+
+									print '
+									</select>
+								</td>
+							</tr>
+						';
+					}
+				}
+
 				?>
 				<tr>
 					<td align="center" colspan="5">
@@ -1483,7 +1545,11 @@ if ($action == "newpol") {
 					<td>UUID: </td>
 					<td colspan="7"><input name="uuid" id="uuid" type="text" size="125" value="<?=$uuid; ?>" ></td>
 				</tr>
+<?php
 				
+
+				
+?>
 				<tr>
 					<td align="center" colspan="8">
 <?php

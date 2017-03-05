@@ -367,8 +367,9 @@ class Consultas extends CommonObject
 		FROM
 			llx_eventos_consultas AS a
 		WHERE 
-		b.entity='.$conf->entity.' AND
+		
 		a.fk_evento='.trim($evento);
+
 		$resql = $this->db->query($sql);
 		if ($resql) {
 			$num = $this->db->num_rows($resql);
@@ -477,7 +478,7 @@ class Consultas extends CommonObject
 		$sql .= ')';
 
 		$resql = $this->db->query($sql);
-
+	
 		if (!$resql) {
 			$error ++;
 			$this->errors[] = 'Error ' . $this->db->lasterror();
@@ -763,13 +764,8 @@ class Consultas extends CommonObject
 
         // On recherche les utilisateurs
         $sql = "SELECT DISTINCT u.rowid,  CONCAT(u.lastname,' ',u.firstname) as nombre, u.statut";
-        $sql.= " FROM ".MAIN_DB_PREFIX ."pacientes as u where u.statut=1";
+        $sql.= " FROM ".MAIN_DB_PREFIX ."pacientes as u where u.statut=1 AND u.entity=".$conf->entity;
        
-        /*if (! empty($user->societe_id)) $sql.= " AND u.fk_soc = ".$user->societe_id;
-        if (is_array($exclude) && $excludeUsers) $sql.= " AND u.rowid NOT IN ('".$excludeUsers."')";
-        if (is_array($include) && $includeUsers) $sql.= " AND u.rowid IN ('".$includeUsers."')";
-        if (! empty($conf->global->USER_HIDE_INACTIVE_IN_COMBOBOX) || $noactive) $sql.= " AND u.statut <> 0";
-        if (! empty($morefilter)) $sql.=" ".$morefilter;*/
         $sql.= " ORDER BY nombre ASC";
         dol_syslog(get_class($this)."::select_dolusers", LOG_DEBUG);
         $resql=$this->db->query($sql);
@@ -1250,6 +1246,7 @@ class Consultas extends CommonObject
 		$sql .= ' WHERE rowid=' . $this->rowid;
 
 		$this->db->begin();
+
 		$resql = $this->db->query($sql);
 		
 		if (!$resql) {
@@ -1318,7 +1315,7 @@ class Consultas extends CommonObject
 		
 		$sql .= ' statut = '.$status.'';
 		if ($status==1) {
-			$sql.= ',fk_user_close="",date_clos=""';
+			$sql.= ',fk_user_close=NULL,date_clos=NULL';
 		}
 		if ($status==3 || $status==2 ) {
 			$sql.= ',fk_user_close='.$user->id.",date_clos='".$this->db->idate(dol_now())."'";
@@ -1326,6 +1323,7 @@ class Consultas extends CommonObject
 		$sql .= ' WHERE rowid=' . $this->rowid;
 
 		$this->db->begin();
+
 		$resql = $this->db->query($sql);
 
 		if ($resql) {

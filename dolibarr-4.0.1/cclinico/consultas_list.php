@@ -66,36 +66,27 @@ $search_fk_user_pacientes=GETPOST('search_fk_user_pacientes','alpha');
 if (empty($_POST['search_date_consultation'])) {
 	$date="";
 }else{
-	$date=date('Y-m-d', strtotime(str_replace('/', '-', GETPOST('search_date_consultation','alpha') )));
+
+	$date=dol_mktime(0,0,0,GETPOST("search_date_consultationmonth"),GETPOST("search_date_consultationday"),GETPOST("search_date_consultationyear"));
 }
+
 $search_date_consultation=$date;
 
-$search_fk_user_creation=GETPOST('search_fk_user_creation','int');
-$search_fk_user_validation=GETPOST('search_fk_user_validation','int');
-$search_fk_user_close=GETPOST('search_fk_user_close','int');
-$search_Type_consultation=GETPOST('search_Type_consultation','int');
 
-$search_Type_consultation=GETPOST('search_Type_consultation','int');
-if ($search_Type_consultation==-1) {
-	$search_Type_consultation="";
-}
+
+$search_Type_consultation=GETPOST('search_Type_consultation','alpha');
 
 
 $search_weight=GETPOST('search_weight','alpha');
 $search_blood_pressure=GETPOST('search_blood_pressure','alpha');
-$search_fk_user_med=GETPOST('search_fk_user_med','int');
-if ($search_fk_user_med==-1) {
-	$search_fk_user_med="";
-}
+$search_fk_user_med=GETPOST('search_fk_user_med','alpha');
 
-$search_reason=GETPOST('search_reason','int');
-if ($search_reason==-1) {
-	$search_reason="";
-}
 
-$search_reason_detail=GETPOST('search_reason_detail','alpha');
-$search_diagnostics=GETPOST('search_diagnostics','int');
-$search_diagnostics_detail=GETPOST('search_diagnostics_detail','alpha');
+$search_reason=GETPOST('search_reason','alpha');
+
+$search_diagnostics=GETPOST('search_diagnostics','alpha');
+
+
 $search_treatments=GETPOST('search_treatments','alpha');
 $search_comments=GETPOST('search_comments','alpha');
 $search_statut=GETPOST('search_statut','int');
@@ -194,9 +185,9 @@ $parameters=array();
 
 include DOL_DOCUMENT_ROOT.'/core/actions_changeselectedfields.inc.php';
 
-if ($_POST["button_removefilter_x"] || $_POST["button_removefilter.x"] || $_POST["button_removefilter"]) // All test are required to be compatible with all browsers
+if (GETPOST("button_removefilter_x") || GETPOST("button_removefilter")) // Both test are required to be compatible with all browsers
 {
-	
+
 	$search_Ref='';
 	$search_code_client='';
 	$search_fk_user_pacientes='';
@@ -209,7 +200,6 @@ if ($_POST["button_removefilter_x"] || $_POST["button_removefilter.x"] || $_POST
 	$search_blood_pressure='';
 	$search_fk_user_med='';
 	$search_reason='';
-	$search_reason_detail='';
 	$search_diagnostics='';
 	$search_diagnostics_detail='';
 	$search_treatments='';
@@ -287,6 +277,26 @@ $parameters=array();
 $reshook=$hookmanager->executeHooks('printFieldListSelect',$parameters);    // Note that $action and $object may have been modified by hook
 $sql.=$hookmanager->resPrint;
 $sql.= " FROM ".MAIN_DB_PREFIX."consultas as t inner join llx_pacientes as u on u.rowid=t.fk_user_pacientes";
+
+if (!empty($search_fk_user_med)) {
+	$sql.= " LEFT JOIN ".MAIN_DB_PREFIX."user as fm on t.fk_user_med=fm.rowid";
+}
+
+if (!empty($search_Type_consultation)) {
+	$sql.= " LEFT JOIN llx_c_tipo_consulta as tc on t.Type_consultation=tc.rowid";
+}
+
+if (!empty($search_reason)) {
+	$sql.= " LEFT JOIN llx_c_motivo_consulta as mc on t.reason=mc.rowid";
+}
+if (!empty($search_reason)) {
+	$sql.= " LEFT JOIN llx_c_tipo_diagnostico as td on t.diagnostics=td.rowid";
+}
+
+
+
+
+
 if (is_array($extrafields->attribute_label) && count($extrafields->attribute_label)){
 	$sql.= " LEFT JOIN ".MAIN_DB_PREFIX."consultas_extrafields as ef on (u.rowid = ef.fk_object)";
 	$sql.= " WHERE 1 = 1  AND t.entity=".$conf->entity." AND u.entity=".$conf->entity." ";
@@ -301,28 +311,27 @@ if (is_array($extrafields->attribute_label) && count($extrafields->attribute_lab
 if ($search_Ref) $sql.= natural_search("Ref",$search_Ref);
 //if ($search_code_client) $sql.= natural_search("code_client",$search_code_client);
 if ($search_fk_user_pacientes) $sql.= natural_search("concat(u.lastname, ' ',u.firstname)",$search_fk_user_pacientes);
-if ($search_date_consultation) $sql.= natural_search("date_consultation",$search_date_consultation);
+if ($search_date_consultation) $sql.= natural_search("date_consultation",dol_print_date($search_date_consultation,'%Y-%m-%d'));
 
 //if ($search_fk_user_creation) $sql.= natural_search("fk_user_creation",$search_fk_user_creation);
 //if ($search_fk_user_validation) $sql.= natural_search("fk_user_validation",$search_fk_user_validation);
 //if ($search_fk_user_close) $sql.= natural_search("fk_user_close",$search_fk_user_close);
 if ($search_Type_consultation){
-	$sql.=" and (t.Type_consultation = ".$search_Type_consultation.")";
+	$sql.=" and tc.description like '%".$search_Type_consultation."%'";
 }
 //if ($search_weight) $sql.= natural_search("weight",$search_weight);
 //if ($search_blood_pressure) $sql.= natural_search("blood_pressure",$search_blood_pressure);
 if ($search_fk_user_med){
-	$sql.=" and (t.fk_user_med = ".$search_fk_user_med.")";
+	$sql.=" AND CONCAT(fm.lastname,' ',fm.firstname) LIKE '%".$search_fk_user_med."%'";
 } 
 if ($search_reason){
-	$sql.=" and (t.reason = ".$search_reason.")";
+	$sql.=" and mc.description LIKE '%".$search_reason."%'";
+}
+if ($search_diagnostics){
+	$sql.=" and td.description LIKE '%".$search_diagnostics."%'";
 }
 
-//if ($search_reason_detail) $sql.= natural_search("reason_detail",$search_reason_detail);
-if ($search_diagnostics) $sql.= natural_search("diagnostics",$search_diagnostics);
-//if ($search_diagnostics_detail) $sql.= natural_search("diagnostics_detail",$search_diagnostics_detail);
-//if ($search_treatments) $sql.= natural_search("treatments",$search_treatments);
-//if ($search_comments) $sql.= natural_search("comments",$search_comments);
+
 if ($search_statut) $sql.= natural_search("t.statut",$search_statut);
 if ($sall)          $sql.= natural_search(array_keys($fieldstosearchall), $sall);
 
@@ -356,7 +365,6 @@ if (empty($conf->global->MAIN_DISABLE_FULL_SCANLIST))
 }	
 
 $sql.= $db->plimit($conf->liste_limit+1, $offset);
-
 
 dol_syslog($script_file, LOG_DEBUG);
 $resql=$db->query($sql);
@@ -404,7 +412,7 @@ if ($search_statut != '') $params.= '&amp;search_statut='.urlencode($search_stat
     print_barre_liste('Listado de consultas', $page, $_SERVER["PHP_SELF"],$params,$sortfield,$sortorder,'',$num,$nbtotalofrecords,'title_generic');
     
 
-	print '<form method="GET" id="searchFormList" action="'.$_SERVER["PHP_SELF"].'">';
+	print '<form method="POST" id="searchFormList" action="'.$_SERVER["PHP_SELF"].'">';
     if ($optioncss != '') print '<input type="hidden" name="optioncss" value="'.$optioncss.'">';
 	print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 	print '<input type="hidden" name="formfilteraction" id="formfilteraction" value="list">';
@@ -485,14 +493,14 @@ if (! empty($arrayfields['t.Ref']['checked'])) print '<td class="liste_titre"><i
 //if (! empty($arrayfields['t.code_client']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_code_client" value="'.$search_code_client.'" size="10"></td>';
 if (! empty($arrayfields['t.fk_user_pacientes']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_fk_user_pacientes" value="'.$search_fk_user_pacientes.'" size="10"></td>';
 if (! empty($arrayfields['t.date_consultation']['checked'])){
-	echo $search_date_consultation;
+	
 	print '<td class="liste_titre">';
 	$form->select_date($search_date_consultation,'search_date_consultation',0,0,1,"form_date",1,1,0,0,'');
 	print '</td>';
 }
 if (! empty($arrayfields['t.fk_user_med']['checked'])){
 	print '<td class="liste_titre">';
-	print $object->select_dolusers($search_fk_user_med, 'search_fk_user_med', 1, '', $disable2, '', 0, $conf->entity, 0, 0, '', 0, '', 'maxwidth300');
+	print '<input type="text" class="flat" name="search_fk_user_med" value="'.$search_fk_user_med.'" size="10">';
 	print '</td>';
 } 
 //if (! empty($arrayfields['t.fk_user_creation']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_fk_user_creation" value="'.$search_fk_user_creation.'" size="10"></td>';
@@ -500,7 +508,8 @@ if (! empty($arrayfields['t.fk_user_med']['checked'])){
 //if (! empty($arrayfields['t.fk_user_close']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_fk_user_close" value="'.$search_fk_user_close.'" size="10"></td>';
 if (! empty($arrayfields['t.Type_consultation']['checked'])){
 	print '<td class="liste_titre">';
-	print $object->select_dol($search_Type_consultation, 'c_tipo_consulta' ,'search_Type_consultation', 1, '', 0, '', 0, $conf->entity, 0, 0, '', 0, '', 'maxwidth300');
+	print '<input type="text" class="flat" name="search_Type_consultation" value="'.$search_Type_consultation.'" size="10">';
+	
 	print '</td>';
 } 
 //if (! empty($arrayfields['t.weight']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_weight" value="'.$search_weight.'" size="10"></td>';
@@ -508,7 +517,7 @@ if (! empty($arrayfields['t.Type_consultation']['checked'])){
 
 if (! empty($arrayfields['t.reason']['checked'])){
 	print '<td class="liste_titre">';
-	print $object->select_dol($search_reason,'c_motivo_consulta' ,'search_reason', 1, '', 0, '', 0, $conf->entity, 0, 0, '', 0, '', 'maxwidth300');
+	print '<input type="text" class="flat" name="search_reason" value="'.$search_reason.'" size="10">';
 	print '</td>';
 } 
 
@@ -516,7 +525,7 @@ if (! empty($arrayfields['t.reason']['checked'])){
 //if (! empty($arrayfields['t.reason_detail']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_reason_detail" value="'.$search_reason_detail.'" size="10"></td>';
 if (! empty($arrayfields['t.diagnostics']['checked'])){
 	print '<td class="liste_titre">';
-	print $object->select_dol($search_diagnostics,'c_tipo_diagnostico' ,'diagnostics', 1, '', 0, '', 0, $conf->entity, 0, 0, '', 0, '', 'maxwidth300');
+	print '<input type="text" class="flat" name="search_diagnostics" value="'.$search_diagnostics.'" size="10">';
 	print '</td>';
 
 	
@@ -635,7 +644,7 @@ if (! empty($arrayfields['t.statut']['checked'])){
 			}
 
 
-			if (! empty($arrayfields['t.date_consultation']['checked'])) print '<td>'.$obj->date_consultation.'</td>';
+			if (! empty($arrayfields['t.date_consultation']['checked'])) print '<td>'.dol_print_date($obj->date_consultation,"%d/%m/%Y").'</td>';
 			if (! empty($arrayfields['t.fk_user_med']['checked'])){
 				$objsoc2 = new User($db);
 				if ($obj->fk_user_med<1) {
@@ -661,7 +670,9 @@ if (! empty($arrayfields['t.statut']['checked'])){
 			        if ($num2)
 			        {
 			            $obj2 = $db->fetch_object($resql1);
-			            print $obj2->description;
+
+			            $label=$obj2->description;
+			    		print '<a class="classfortooltip" style="text-decoration: none;" title="'.$label.'" >'.dol_trunc($obj2->description,10).'</a>';
 			            
 			        }
 			    }
@@ -676,8 +687,9 @@ if (! empty($arrayfields['t.statut']['checked'])){
 			        if ($num2)
 			        {
 			            $obj3 = $db->fetch_object($resql1);
-			            print $obj3->description;
-			            
+
+			            $label=$obj3->description;
+			    		print '<a class="classfortooltip" style="text-decoration: none;" title="'.$label.'" >'.dol_trunc($obj3->description,10).'</a>';
 			        }
 			    }
 
@@ -691,11 +703,18 @@ if (! empty($arrayfields['t.statut']['checked'])){
 			        $num2 = $db->num_rows($resql1);
 			        if ($num2)
 			        {
-			            $obj4 = $db->fetch_object($resql1);
-			            print $obj4->description;
+			        	$obj4 = $db->fetch_object($resql1);
+			            $label=$obj4->description;
+			    		print '<a class="classfortooltip" style="text-decoration: none;" title="'.$label.'" >'.dol_trunc($obj4->description,10).'</a>';
 			            
 			        }
 			    }
+
+
+
+
+
+
 				print '</td>';
 			}
 

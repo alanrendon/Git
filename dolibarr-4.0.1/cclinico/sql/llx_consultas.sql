@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `llx_consultas` (
   `rowid` int(11) NOT NULL AUTO_INCREMENT,
-  `Ref` varchar(255) NOT NULL,
+  `Ref` varchar(255) DEFAULT NULL,
   `date_consultation` datetime DEFAULT NULL,
   `date_creation` datetime NOT NULL,
   `fk_user_pacientes` int(11) NOT NULL,

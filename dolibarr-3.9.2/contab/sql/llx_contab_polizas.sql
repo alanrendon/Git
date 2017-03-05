@@ -15,3 +15,5 @@ CREATE TABLE IF NOT EXISTS `llx_contab_polizas` (
   `societe_type` smallint(6) DEFAULT '0',
   PRIMARY KEY (`rowid`)
 ) ;
+
+ALTER TABLE llx_contab_polizas ADD  `fk_proveedor` int(11);

@@ -119,12 +119,12 @@ $head2[$h2][1]="Agrupacion del Estado de Resultados"; // Titre de l'ongLet
 $head2[$h2][2]="Agrupacion del Estado de Resultados";
 $h2++;
 $head2[$h2][0]="reportes.php?mod=3"; // Url de la page affichée quand on clique sur l'onglet
-$head2[$h2][1]="Creditos o Activos"; // Titre de l'ongLet
-$head2[$h2][2]="Creditos o Activos";
+$head2[$h2][1]="Créditos a Cuentas de Activo"; // Titre de l'ongLet
+$head2[$h2][2]="Créditos a Cuentas de Activo";
 $h2++;
 $head2[$h2][0]="reportes.php?mod=4"; // Url de la page affichée quand on clique sur l'onglet
-$head2[$h2][1]="Deudas"; // Titre de l'ongLet
-$head2[$h2][2]="Deudas";
+$head2[$h2][1]="Deudas a Cuentas de Pasivo"; // Titre de l'ongLet
+$head2[$h2][2]="Deudas a Cuentas de Pasivo";
 
 $mod=GETPOST('mod');
 

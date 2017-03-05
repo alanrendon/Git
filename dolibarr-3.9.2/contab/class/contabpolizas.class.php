@@ -176,6 +176,7 @@ class Contabpolizas extends CommonObject
 		$sql.= "ant_ctes,";
 		$sql.= "societe_type,";
 		$sql.= "fechahora,";
+		$sql.= "fk_proveedor,";
 		$sql.= "perajuste";
 		
 		if (isset($this->fechahora) && $this->fechahora) {
@@ -200,6 +201,7 @@ class Contabpolizas extends CommonObject
 		$sql.= " ".(! isset($this->ant_ctes)?'NULL':"'".$this->ant_ctes."'").",";
 		$sql.= " ".(! isset($this->societe_type)?'NULL':"'".$this->societe_type."'");
 		$sql.= " ".(! isset($this->fechahora)?'':",'".date("Y-m-d H:m:s",$this->fechahora)."' ,");
+		$sql.= " ".(! isset($this->fk_proveedor)?'NULL':"'".$this->db->escape($this->fk_proveedor)."'").",";
 		$sql.= " ".$this->pol_ajuste;
 		$sql.= ")";
 
@@ -418,6 +420,8 @@ class Contabpolizas extends CommonObject
 		$sql.= " t.ant_ctes,";
 		$sql.= " t.fechahora,";
 		$sql.= "societe_type,";
+		$sql.= "fk_proveedor,";
+		
 		$sql.= "perajuste";
 		
         $sql.= " FROM ".MAIN_DB_PREFIX."contab_polizas as t";
@@ -441,6 +445,7 @@ class Contabpolizas extends CommonObject
                 $this->cons = $obj->cons;
                 $this->anio = $obj->anio;
                 $this->mes = $obj->mes;
+                $this->fk_proveedor = $obj->fk_proveedor;
                 
 				$this->fecha = $this->db->jdate($obj->fecha);
 				$this->concepto = $obj->concepto;
@@ -1677,6 +1682,7 @@ class Contabpolizas extends CommonObject
 		$sql.= " ant_ctes=".(isset($this->ant_ctes)?$this->ant_ctes:false).",";
 		$sql.= " societe_type=".(isset($this->societe_type)?$this->societe_type:"null");
 		$sql.= " ,perajuste=".$this->pol_ajuste." ";
+		$sql.= " ,fk_proveedor=".$this->fk_proveedor." ";
         $sql.= " WHERE rowid=".$this->id;
         $sql.= " AND entity = ".$conf->entity;
 

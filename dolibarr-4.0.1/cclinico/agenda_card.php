@@ -466,7 +466,7 @@ if ($action == 'create' && !empty($aid))
 		}
 	}
 	print '<div class="assignedtouser">';
-	print $form->select_dolusers_forevent(($action=='create'?'add':'update'), 'assignedtouser', 1, '', 0, '', '', 0, 0, 0, 'AND u.statut != 0');
+	print $form->select_dolusers_forevent(($action=='create'?'add':'update'), 'assignedtouser', 1, '', 0, '', '', 0, 0, 0, 'AND u.statut != 0 AND u.entity='.$conf->entity); 
 	print '</div>';
 
 	if (in_array($user->id,array_keys($listofuserid))) 

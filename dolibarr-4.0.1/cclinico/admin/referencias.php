@@ -312,6 +312,142 @@ if ($action == 'sethideinactivethirdparty')
  * 	View
  */
 
+
+function select_dol_products($selected='', $htmlname='prod', $show_empty=0, $exclude='', $disabled=0, $include='', $enableonly='', $force_entity=0, $maxlength=0, $showstatus=0, $morefilter='', $show_every=0, $enableonlytext='', $morecss='', $noactive=0)
+{
+    global $conf,$user,$langs,$db;
+
+    // If no preselected user defined, we take current user
+    if ((is_numeric($selected) && ($selected < -2 || empty($selected))) && empty($conf->global->SOCIETE_DISABLE_DEFAULT_SALESREPRESENTATIVE)) $selected=$user->id;
+
+    $excludeUsers=null;
+    $includeUsers=null;
+
+    // Permettre l'exclusion d'utilisateurs
+    if (is_array($exclude))	$excludeUsers = implode("','",$exclude);
+    // Permettre l'inclusion d'utilisateurs
+    if (is_array($include))	$includeUsers = implode("','",$include);
+	else if ($include == 'hierarchy')
+	{
+		// Build list includeUsers to have only hierarchy
+		$userid=$user->id;
+		$include=array();
+		if (empty($user->users) || ! is_array($user->users)) $user->get_full_tree();
+		foreach($user->users as $key => $val)
+		{
+			if (preg_match('/_'.$userid.'/',$val['fullpath'])) $include[]=$val['id'];
+		}
+		$includeUsers = implode("','",$include);
+		//var_dump($includeUsers);exit;
+		//var_dump($user->users);exit;
+	}
+
+    $out='';
+
+    // On recherche les utilisateurs
+    $sql = "SELECT DISTINCT u.rowid, u.ref, u.label,u.price_ttc,u.tva_tx,u.duration,u.fk_product_type";
+    /*if (! empty($conf->multicompany->enabled) && $conf->entity == 1 && $user->admin && ! $user->entity)
+    {
+        $sql.= ", e.label";
+    }*/
+    $sql.= " FROM ".MAIN_DB_PREFIX ."product as u";
+
+    $sql.="
+    WHERE
+     u.entity=".$conf->entity;
+
+    $sql.= " ORDER BY u.ref ASC";
+
+    $resql=$db->query($sql);
+
+    if ($resql)
+    {
+
+        $num = $db->num_rows($resql);
+        $i = 0;
+        if ($num)
+        {
+
+       		// Enhance with select2
+       		$nodatarole='';
+	        if ($conf->use_javascript_ajax)
+	        {
+	            include_once DOL_DOCUMENT_ROOT . '/core/lib/ajax.lib.php';
+	            $comboenhancement = ajax_combobox($htmlname);
+	            $out.=$comboenhancement;
+	            $nodatarole=($comboenhancement?' data-role="none"':'');
+	        }
+
+            $out.= '<select class="flat minwidth200'.($morecss?' '.$morecss:'').'" id="'.$htmlname.'" name="'.$htmlname.'"'.($disabled?' disabled':'').$nodatarole.'>';
+            if ($show_empty) $out.= '<option value="-1"'.((empty($selected) || $selected==-1)?' selected':'').'>&nbsp;</option>'."\n";
+			if ($show_every) $out.= '<option value="-2"'.(($selected==-2)?' selected':'').'>-- '.$langs->trans("Everybody").' --</option>'."\n";
+
+            $userstatic=new User($db);
+
+            while ($i < $num)
+            {
+                $obj = $db->fetch_object($resql);
+
+                $disableline='';
+                if (is_array($enableonly) && count($enableonly) && ! in_array($obj->rowid,$enableonly)) $disableline=($enableonlytext?$enableonlytext:'1');
+
+                if ((is_object($selected) && $selected->id == $obj->rowid) || (! is_object($selected) && $selected == $obj->rowid))
+                {
+                    $out.= '<option value="'.$obj->rowid.'"';
+                    if ($disableline) $out.= ' disabled';
+                    $out.= ' selected>';
+                }
+                else
+                {
+                    $out.= '<option value="'.$obj->rowid.'"';
+                    if ($disableline) $out.= ' disabled';
+                    $out.= '>';
+                }
+
+                $out.= $obj->ref." - ".$obj->label." - $".price($obj->price_ttc,0,'',0,0,0);
+
+                if (empty($obj->duration)) {
+                	if ($obj->tva_tx>0) {
+	                	$out.=" ".$langs->trans("TTC");
+	                }else{
+	                	$out.=" ".$langs->trans("HT");
+	                }
+                }else{
+                	$our_value=substr($obj->duration,0,dol_strlen($obj->duration)-1);
+                	$outdurationunit=substr($obj->duration,-1);
+                	
+                	$da=array("h"=>$langs->trans("Hour"),"d"=>$langs->trans("Day"),"w"=>$langs->trans("Week"),"m"=>$langs->trans("Month"),"y"=>$langs->trans("Year"));
+		            if (isset($da[$outdurationunit]))
+		            {
+		                $out.= " - ".$our_value." ".$langs->trans($da[$outdurationunit]);
+		            }
+                }
+                
+
+
+                $out.= '</option>';
+
+                $i++;
+            }
+        }
+        else
+        {
+            $out.= '<select class="flat" id="'.$htmlname.'" name="'.$htmlname.'" disabled>';
+            $out.= '<option value="">'.$langs->trans("None").'</option>';
+        }
+        $out.= '</select>';
+    }
+    else
+    {
+        dol_print_error($db);
+    }
+    return $out;
+}
+
+
+
+
+
 clearstatcache();
 
 $form=new Form($db);
@@ -456,7 +592,7 @@ print '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
 	if ($conf->global->CLINICO_PROD>0) {
 		print '<td><fieldset disabled>Productos/Servicio:  '.$form->select_produits_list((GETPOST("prod")?GETPOST("prod"):$conf->global->CLINICO_PROD),'prod').'</fieldset></td>';
 	}else{
-		print '<td>Productos/Servicio:  '.$form->select_produits_list((GETPOST("prod")?GETPOST("prod"):$conf->global->CLINICO_PROD),'prod').'</td>';
+		print '<td>Productos/Servicio:  '.select_dol_products(GETPOST("prod")).'</td>';
 	}
 
 	print '<td align="center" width="20">';

@@ -89,15 +89,12 @@ if ($mod==3) {
 		$num_2=0;
 
 		$sql="
-		SELECT
-			c.cta as codagr,c.descta as descripcion,c.rowid
-		FROM
-			".MAIN_DB_PREFIX."contab_polizasdet AS a
-		INNER JOIN ".MAIN_DB_PREFIX."contab_polizas AS b ON b.rowid = a.fk_poliza
-		INNER JOIN ".MAIN_DB_PREFIX."contab_cat_ctas as c on c.cta=a.cuenta
-		
-		GROUP BY c.cta
-
+			SELECT
+				a.cta as codagr,a.descta as descripcion,a.rowid
+			FROM
+				llx_contab_cat_ctas AS a
+			WHERE
+				a.cta NOT LIKE '%.%'
 		";
 //print $sql;
 		$resql=$db->query($sql);
@@ -109,7 +106,7 @@ if ($mod==3) {
 					$satc= new Contabsatctas($db);
 					$satc->fetch_by_CodAgr($obj->codagr);
 
-					if( $satc->natur=='A'){
+					//if( $satc->natur=='A'){
 					
 
 						$sql='
@@ -138,19 +135,16 @@ if ($mod==3) {
 									<td align='left' >".$obj->codagr."</td>
 									<td align='left' >".$obj->descripcion."</td>
 									<td align='center'>";
-									$varr="CODE_ACTIVE_".$obj->rowid;
+									$varr="CODE_ACTIVE_".$obj->rowid."_a";
 									
 									if ( $conf->global->$varr!=1) {
-										$html.= '<a href="'.$_SERVER['PHP_SELF'].'?mod='.$mod.'&change='.$obj->rowid.'">';
-					                    
-					                    
-					                    $html.= img_picto($langs->trans("Activated"),'switch_on');
+										$html.= '<a href="'.$_SERVER['PHP_SELF'].'?mod='.$mod.'&change='.$obj->rowid.'_a">';
+					                    $html.= img_picto($langs->trans("Activated"),'switch_off');
 					                    $html.= '</a>';
 									}
 									if ($conf->global->$varr==1) {
-										$html.= '<a href="'.$_SERVER['PHP_SELF'].'?mod='.$mod.'&change='.$obj->rowid.'">';
-					                   
-					                    $html.= img_picto($langs->trans("Disabled"),'switch_off');
+										$html.= '<a href="'.$_SERVER['PHP_SELF'].'?mod='.$mod.'&change='.$obj->rowid.'_a">';
+					                    $html.= img_picto($langs->trans("Disabled"),'switch_on');
 					                    $html.= '</a>';
 									}
 
@@ -159,7 +153,7 @@ if ($mod==3) {
 								</tr>
 							";
 						}
-					}
+					//}
 				}
 			}
 		}
@@ -183,13 +177,11 @@ if ($mod==3) {
 		
 		$sql="
 		SELECT
-			c.cta as codagr,c.descta as descripcion,c.rowid
+			a.cta as codagr,a.descta as descripcion,a.rowid
 		FROM
-			".MAIN_DB_PREFIX."contab_polizasdet AS a
-		INNER JOIN ".MAIN_DB_PREFIX."contab_polizas AS b ON b.rowid = a.fk_poliza
-		INNER JOIN ".MAIN_DB_PREFIX."contab_cat_ctas as c on c.cta=a.cuenta
-		
-		GROUP BY c.cta
+			llx_contab_cat_ctas AS a
+		WHERE
+			a.cta NOT LIKE '%.%'
 		
 		";
 		$resql=$db->query($sql);
@@ -200,58 +192,54 @@ if ($mod==3) {
 				while ($obj=$db->fetch_object($resql)) {
 					$satc= new Contabsatctas($db);
 					$satc->fetch_by_CodAgr($obj->codagr);
-
-					if( $satc->natur!='A'){
+					$sql='
+						SELECT
+						b.mes,SUM(a.haber) as suma
+					FROM
+						'.MAIN_DB_PREFIX.'contab_polizasdet AS a
+					INNER JOIN '.MAIN_DB_PREFIX.'contab_polizas as b on b.rowid=a.fk_poliza
+					WHERE
+						a.cuenta = "'.$obj->codagr.'" 
+					GROUP BY b.mes
+					';
 					
 
-						$sql='
-							SELECT
-							b.mes,SUM(a.haber) as suma
-						FROM
-							'.MAIN_DB_PREFIX.'contab_polizasdet AS a
-						INNER JOIN '.MAIN_DB_PREFIX.'contab_polizas as b on b.rowid=a.fk_poliza
-						WHERE
-							a.cuenta = "'.$obj->codagr.'" 
-						GROUP BY b.mes
-						';
-						
-
-						$re=$db->query($sql);
-						$meses=array();
-						if ($re) {
-							$suma=0;
-							while ( $obj_2=$db->fetch_object($re)  ) {
-								$meses[$obj_2->mes]=$obj_2->suma;
-								$suma+=$obj_2->suma;
-							}
-							$num_2++;
-							$html.="
-								<tr>
-									<td align='left' >".$obj->codagr."</td>
-									<td align='left' >".$obj->descripcion."</td>
-									<td align='center'>";
-									$varr="CODE_ACTIVE_".$obj->rowid;
-									
-									if ( $conf->global->$varr!=1) {
-										$html.= '<a href="'.$_SERVER['PHP_SELF'].'?mod='.$mod.'&change='.$obj->rowid.'">';
-					                    
-					                    
-					                    $html.= img_picto($langs->trans("Activated"),'switch_on');
-					                    $html.= '</a>';
-									}
-									if ($conf->global->$varr==1) {
-										$html.= '<a href="'.$_SERVER['PHP_SELF'].'?mod='.$mod.'&change='.$obj->rowid.'">';
-					                   
-					                    $html.= img_picto($langs->trans("Disabled"),'switch_off');
-					                    $html.= '</a>';
-									}
-
-									
-							$html.="</td>
-								</tr>
-							";
+					$re=$db->query($sql);
+					$meses=array();
+					if ($re) {
+						$suma=0;
+						while ( $obj_2=$db->fetch_object($re)  ) {
+							$meses[$obj_2->mes]=$obj_2->suma;
+							$suma+=$obj_2->suma;
 						}
+						$num_2++;
+						$html.="
+							<tr>
+								<td align='left' >".$obj->codagr."</td>
+								<td align='left' >".$obj->descripcion."</td>
+								<td align='center'>";
+								$varr="CODE_ACTIVE_".$obj->rowid."_b";
+								
+								if ( $conf->global->$varr!=1) {
+									$html.= '<a href="'.$_SERVER['PHP_SELF'].'?mod='.$mod.'&change='.$obj->rowid.'_b">';
+				                    
+				                    
+				                    $html.= img_picto($langs->trans("Activated"),'switch_off');
+				                    $html.= '</a>';
+								}
+								if ($conf->global->$varr==1) {
+									$html.= '<a href="'.$_SERVER['PHP_SELF'].'?mod='.$mod.'&change='.$obj->rowid.'_b">';
+				                   
+				                    $html.= img_picto($langs->trans("Disabled"),'switch_on');
+				                    $html.= '</a>';
+								}
+
+								
+						$html.="</td>
+							</tr>
+						";
 					}
+					
 				}
 			}
 		}

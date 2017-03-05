@@ -268,6 +268,7 @@ class Contabpolizasdet extends CommonObject
 				$this->cuenta = $obj->cuenta;
 				$this->debe = $obj->debe;
 				$this->haber = $obj->haber;
+                
                 $this->desc = $obj->descripcion;
                 $this->uuid = $obj->uuid;
 				$this->fk_poliza = $obj->fk_poliza;
@@ -531,9 +532,13 @@ class Contabpolizasdet extends CommonObject
 		$sql.= " haber=".(isset($this->haber)?str_replace(",", "", number_format($this->haber,2)):"null").",";
         $sql.= " descripcion='".(isset($this->desc)?$this->desc:"null")."',";
         $sql.= " uuid='".(isset($this->uuid)?$this->uuid:"null")."',";
+
 		$sql.= " fk_poliza=".(isset($this->fk_poliza)?$this->fk_poliza:"null")."";
+        
 
         $sql.= " WHERE rowid=".$this->id;
+
+
 
 		$this->db->begin();
 
@@ -574,6 +579,8 @@ class Contabpolizasdet extends CommonObject
 			return 1;
 		}
     }
+
+
 
  	/**
 	 *  Delete object in database

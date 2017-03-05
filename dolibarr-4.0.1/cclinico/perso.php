@@ -511,11 +511,8 @@ if (! empty($id) )
                                     if ($key->reason > 0){
 
                                         $reason=$consultas->listar_motivo_consulta($key->reason);
-                                        if (strlen ( $reason)>15) {
-                                            print substr($reason,0,15)."...";
-                                        }else{
-                                            print $reason;
-                                        } 
+                                        
+                                        print '<a class="classfortooltip" style="text-decoration: none;" title="'.$reason.'" >'.dol_trunc($reason,15).'</a>';
                                     }
                                     else
                                     {
@@ -526,11 +523,9 @@ if (! empty($id) )
                                 <td>';
                                     if ($key->diagnostics > 0){
                                         $diagnostic=$consultas->listar_diagnosticos($key->diagnostics);
-                                        if (strlen ( $diagnostic)>15) {
-                                            print substr($diagnostic,0,15)."...";
-                                        }else{
-                                            print $diagnostic;
-                                        } 
+
+                                        print '<a class="classfortooltip" style="text-decoration: none;" title="'.$diagnostic.'" >'.dol_trunc($diagnostic,15).'</a>';
+
                                     }
                                     else
                                     {
@@ -540,11 +535,8 @@ if (! empty($id) )
                                 </td>
                                 <td>';
                                     if (!empty($key->treatments)){
-                                        if (strlen ( $key->treatments)>15) {
-                                            print substr($key->treatments,0,15)."...";
-                                        }else{
-                                            print $key->treatments;
-                                        }
+
+                                        print '<a class="classfortooltip" style="text-decoration: none;" title="'.$key->treatments.'" >'.dol_trunc($key->treatments,15).'</a>';
                                         
                                     }
                                     else
@@ -640,12 +632,21 @@ if (! empty($id) )
             if ($rest) {
                 $i=count($rest);
                 foreach ($rest as $key) {
+                    $user_pac=new User($db,'','',1,1);
+                    $tem=$user->entity;
+                    $user->entity="";
+                    if ($key->fk_user_update>0) {
+                        $user_pac->fetch($key->fk_user_update);
+                    }else{
+                        $user_pac->fetch($key->fk_user_create);
+                    }
+                    $user->entity=$tem;
                     print '
                     <div class="box-panel">
                         
                         <label class="inputlabel" var='.$i.'  >
                         <img class="imgalign" id="img-'.$i.'" src="img/2down.png" rot=1 />
-                        n°'.$i.' - '.$key->fecha_creacion.' - '.$key->lastname.' '.$key->firstname.' : '.$key->titulo.'</label>
+                        n°'.$i.' - '.$key->fecha_creacion.' - '.$user_pac->lastname.' '.$user_pac->firstname.' : '.$key->titulo.'</label>
                         <div id="fade-'.$i.'" class="fader">
                             <div >
                                 <a href="antecedentes.php?id='.$id.'&aid='.$key->id.'&action=edit"><img class="imgalign" src="img/edit.png"  /></a>
@@ -762,11 +763,7 @@ if (! empty($id) )
                             if ($key->reason > 0){
 
                                 $reason=$consultas->listar_motivo_consulta($key->reason);
-                                if (strlen ( $reason)>22) {
-                                    print substr($reason,0,22)."...";
-                                }else{
-                                    print $reason;
-                                } 
+                                print '<a class="classfortooltip" style="text-decoration: none;" title="'.$reason.'" >'.dol_trunc($reason,15).'</a>';
                             }
                             else
                             {
@@ -777,11 +774,7 @@ if (! empty($id) )
                         <td>';
                             if ($key->diagnostics > 0){
                                 $diagnostic=$consultas->listar_diagnosticos($key->diagnostics);
-                                if (strlen ( $diagnostic)>22) {
-                                    print substr($diagnostic,0,22)."...";
-                                }else{
-                                    print $diagnostic;
-                                } 
+                                print '<a class="classfortooltip" style="text-decoration: none;" title="'.$diagnostic.'" >'.dol_trunc($diagnostic,15).'</a>';
                             }
                             else
                             {
@@ -791,11 +784,7 @@ if (! empty($id) )
                         </td>
                         <td>';
                             if (!empty($key->treatments)){
-                                if (strlen ( $key->treatments)>22) {
-                                    print substr($key->treatments,0,22)."...";
-                                }else{
-                                    print $key->treatments;
-                                }
+                                print '<a class="classfortooltip" style="text-decoration: none;" title="'.$key->treatments.'" >'.dol_trunc($key->treatments,15).'</a>';
                                 
                             }
                             else
@@ -991,20 +980,26 @@ if (! empty($id) )
         print '<input type="hidden" id="doc2" name="doc2" value="">';
         print '<table class="border"  style="width:1024px !important;">';
         print '
+        <tr>';
+            print '<td align="left" >  Folio:
+            </td><td colspan="7">';
+
+            print '<b>'.(empty($consultas->Ref)?dol_escape_htmltag($tmpcode):$consultas->Ref ).'</b>';
+        print '</td>';
+
+
+        print '
+        </tr>';    
+        print '
         <tr>
             <td  >
                 <label for="descripcion">&nbsp;<b>'.$langs->trans("Code14").'</b></label>
             </td>
-            <td  colspan="4" >';
+            <td  colspan="7" >';
                 print $pacientes->getNomUrl(1);
         print '
             </td>';
-
-            print '<td  colspan="2" align="right" >  Folio:
-            </td><td>';
-
-            print '<b>'.(empty($consultas->Ref)?dol_escape_htmltag($tmpcode):$consultas->Ref ).'</b>';
-        print '</td>
+        print '
         </tr>';
         print '
         <tr>

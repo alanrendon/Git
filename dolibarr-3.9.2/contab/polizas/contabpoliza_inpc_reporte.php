@@ -72,8 +72,6 @@ $anio	= GETPOST('anio','alpha');
 
 if ($anio>0) {
 
-
-
 	$html.="
 		<table style='margin-left:50px; margin-top:65px; border-collapse: collapse;width: 70%;font-size:6px' align='left' >
 			<tr>
@@ -135,39 +133,37 @@ if ($anio>0) {
 			<tbody>";
 				$num_2=0;
 
-				$sql=$sql="
+				$sql="
 				SELECT
-					c.cta as codagr,c.descta as descripcion,c.rowid
+					a.cta as codagr,a.descta as descripcion,a.rowid
 				FROM
-					".MAIN_DB_PREFIX."contab_polizasdet AS a
-				INNER JOIN ".MAIN_DB_PREFIX."contab_polizas AS b ON b.rowid = a.fk_poliza
-				INNER JOIN ".MAIN_DB_PREFIX."contab_cat_ctas as c on c.cta=a.cuenta
+					llx_contab_cat_ctas AS a
 				WHERE
-					b.anio = ".$anio."
-				GROUP BY c.cta
-
+					a.cta NOT LIKE '%.%'
 				";
 
 				$resql=$db->query($sql);
 
 				if ($resql) {
+
 					$num=$db->num_rows($resql);
 					if ($num>0) {
+
 						while ($obj=$db->fetch_object($resql)) {
 							$satc= new Contabsatctas($db);
  							$satc->fetch_by_CodAgr($obj->codagr);
- 							$varr="CODE_ACTIVE_".$obj->rowid;
- 							if($satc->natur=='A' &&  $conf->global->$varr!=1){
+ 							$varr="CODE_ACTIVE_".$obj->rowid."_a";
+ 							if( $conf->global->$varr==1){
  							
-
+ 								
  								$sql='
  									SELECT
 										b.mes,SUM(a.haber) as suma
 									FROM
-										'.MAIN_DB_PREFIX.'contab_polizasdet AS a
-									INNER JOIN '.MAIN_DB_PREFIX.'contab_polizas as b on b.rowid=a.fk_poliza
+										llx_contab_polizasdet AS a
+									INNER JOIN llx_contab_polizas as b on b.rowid=a.fk_poliza
 									WHERE
-										a.cuenta = "'.$obj->codagr.'" AND b.anio='.$anio.'
+										a.cuenta like "%'.$obj->codagr.'%" AND b.anio='.$anio.'
 									GROUP BY b.mes
  								';
  								
@@ -272,18 +268,15 @@ if ($anio>0) {
 						";
 						$num_2=0;
 
-						$sql=$sql="
-				SELECT
-					c.cta as codagr,c.descta as descripcion,c.rowid
-				FROM
-					".MAIN_DB_PREFIX."contab_polizasdet AS a
-				INNER JOIN ".MAIN_DB_PREFIX."contab_polizas AS b ON b.rowid = a.fk_poliza
-				INNER JOIN ".MAIN_DB_PREFIX."contab_cat_ctas as c on c.cta=a.cuenta
-				WHERE
-					b.anio = ".$anio."
-				GROUP BY c.cta
-						
-				";
+						$sql="
+						SELECT
+							a.cta as codagr,a.descta as descripcion,a.rowid
+						FROM
+							llx_contab_cat_ctas AS a
+						WHERE
+							a.cta NOT LIKE '%.%'
+								
+						";
 						$sum_exp=$suma_tot;
 						$enero=0;
 						$febrero=0;
@@ -306,18 +299,18 @@ if ($anio>0) {
 								while ($obj=$db->fetch_object($resql)) {
 									$satc= new Contabsatctas($db);
 		 							$satc->fetch_by_CodAgr($obj->codagr);
-		 							$varr="CODE_ACTIVE_".$obj->rowid;
-		 							if($satc->natur!='A' && $conf->global->$varr!=1){
+		 							$varr="CODE_ACTIVE_".$obj->rowid."_b";
+		 							if( $conf->global->$varr==1){
 		 							
 
 		 								$sql='
 		 									SELECT
 												b.mes,SUM(a.haber) as suma
 											FROM
-												'.MAIN_DB_PREFIX.'contab_polizasdet AS a
-											INNER JOIN '.MAIN_DB_PREFIX.'contab_polizas as b on b.rowid=a.fk_poliza
+												llx_contab_polizasdet AS a
+											INNER JOIN llx_contab_polizas as b on b.rowid=a.fk_poliza
 											WHERE
-												a.cuenta = "'.$obj->codagr.'" AND b.anio='.$anio.'
+												a.cuenta like "%'.$obj->codagr.'%" AND b.anio='.$anio.'
 											GROUP BY b.mes
 		 								';
 		 								
@@ -422,18 +415,26 @@ if ($anio>0) {
 
 	$dif_deu_cred=$sum_exp-$suma_tot;
 	$dif_cred_deu=$suma_tot-$sum_exp;
-
+	$acred=0;
 	if ($dif_deu_cred<0) {
+		$title="Ajuste Anual por Inflación Deducible:";
 		$dif_deu_cred=0;
+	}else{
+		$acred=$dif_deu_cred;
 	}
 
 	if ($dif_cred_deu<0) {
+		$title="Ajuste Anual por Inflación Acumulable:";
 		$dif_cred_deu=0;
+	}else{
+		$acred=$dif_cred_deu;
 	}
+
 	$html.="
 			</tbody>
 		</table>
 		<br><br>
+		<div style='page-break-before: always;' ></div>
 		<table  style='margin-left:40px; border-collapse: collapse;width: 30%;font-size:6px' align='left' >
 			<tr>
 				<td colspan=2 style='border:0.5px solid; background-color:#c0c0c0;' align='left'><b>Saldo Promedio Anual:</b></td>
@@ -460,8 +461,8 @@ if ($anio>0) {
 				<td style='border:0.5px solid;' align='right'><b>".round($tasa2,4)."</b></td>
 			</tr>
 			<tr>
-				<td style='border:0.5px solid; background-color:#c0c0c0;' align='left'><b>Ajuste Anual por Inflación: </b></td>
-				<td style='border:0.5px solid;' align='left'><b></b></td>
+				<td style='border:0.5px solid; background-color:#c0c0c0;' align='left'><b>".$title."</b></td>
+				<td style='border:0.5px solid;' align='right'><b>".round($tasa2*$acred,0)."</b></td>
 			</tr>
 			<tr>
 				<td style='border:0.5px solid; background-color:#666699;' align='left'><b>Deducible</b></td>
