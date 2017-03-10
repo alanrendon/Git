@@ -47,33 +47,33 @@ $finFecha = $fechaUltimo->mes.'/'.$finFecha.'/'.$fechaUltimo->anio;
 ?>
 <!DOCTYPE html>
 <html lang="es">
-	<!-- Select2 -->
-	<link href="<?php echo $url[0].'../vendors/select2/dist/css/select2.min.css'?>" rel="stylesheet">
+    <!-- Select2 -->
+    <link href="<?php echo $url[0].'../vendors/select2/dist/css/select2.min.css'?>" rel="stylesheet">
 
-	<!-- Datatables -->
-	<link href="<?php echo $url[0].'../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css'?>" rel="stylesheet">
-	<link href="<?php echo $url[0].'../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css'?>" rel="stylesheet">
-	<link href="<?php echo $url[0].'../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css'?>" rel="stylesheet">
-	<link href="<?php echo $url[0].'../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css'?>" rel="stylesheet">
-	<link href="<?php echo $url[0].'../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css'?>" rel="stylesheet">
-	<?php
-		include_once($url[0]."base/head.php");
-	?>
-	<input type="hidden" id="tmoneda" value="<?=$moneda?>">
-	<div class="right_col" role="main">
-		<div class="x_title">
-			<h2>Movimientos de stock pendientes de contabilizarr</h2>
-			<div class="clearfix"></div>
-		</div>
-		<div class="x_content" >
-			<br />
-			<div id="dv_tabla">
+    <!-- Datatables -->
+    <link href="<?php echo $url[0].'../vendors/datatables.net-bs/css/dataTables.bootstrap.min.css'?>" rel="stylesheet">
+    <link href="<?php echo $url[0].'../vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css'?>" rel="stylesheet">
+    <link href="<?php echo $url[0].'../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css'?>" rel="stylesheet">
+    <link href="<?php echo $url[0].'../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css'?>" rel="stylesheet">
+    <link href="<?php echo $url[0].'../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css'?>" rel="stylesheet">
+    <?php
+        include_once($url[0]."base/head.php");
+    ?>
+    <input type="hidden" id="tmoneda" value="<?=$moneda?>">
+    <div class="right_col" role="main">
+        <div class="x_title">
+            <h2>Movimientos de stock pendientes de contabilizarr</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content" >
+            <br />
+            <div id="dv_tabla">
                 <form id="frm_AsignarPoliza" data-parsley-validate class="form-horizontal form-label-left">
                     <div class="form-group pull-right">
                         <div class="col-md-6 col-sm-6 col-xs-12 ">
-						  <button type="submit" class="btn btn-success btn-sm">Contabilizar</button>
-				        </div>
-					</div>
+                          <button type="submit" class="btn btn-success btn-sm">Contabilizar</button>
+                        </div>
+                    </div>
                     <table class="table table-striped" id="datatable">
                         <thead>
                             <th>Fecha</th>
@@ -90,26 +90,26 @@ $finFecha = $fechaUltimo->mes.'/'.$finFecha.'/'.$fechaUltimo->anio;
                            <?php 
                            //print "<pre>";print_r($movs);print "</pre>";
                            foreach ($movs as $tr){
-                           	?>
-                           	<tr>
-	                           	<td><?=$tr['fechamov']?></td>
-	                            <td><?=$tr['ref']." - ".$tr['label']?></td>
-	                            <td><?=$tr['almacen']?></td>
-	                            <!--<td><?=($tr['inventorycode'])?></td>-->
-	                            <td><?=($tr['etiqmov'])?></td>
-	                            <td align="right"><?=$tr['unidades']?></td>
-	                            <td align="right"><?=$moneda."".number_format($tr['price'],2)?></td>
-	                            <td align="right"><?=$moneda."".number_format($tr['price']*$tr['unidades'],2)?></td>
-	                            <td><input name='transid[]' type='checkbox' value='<?php echo $tr['idmov']?>'></td>
-	                        </tr>
-                           	<?php 
+                            ?>
+                            <tr>
+                                <td><?=$tr['fechamov']?></td>
+                                <td><?=$tr['ref']." - ".$tr['label']?></td>
+                                <td><?=$tr['almacen']?></td>
+                                <!--<td><?=($tr['inventorycode'])?></td>-->
+                                <td><?=($tr['etiqmov'])?></td>
+                                <td align="right"><?=$tr['unidades']?></td>
+                                <td align="right"><?=$moneda."".number_format($tr['price'],2)?></td>
+                                <td align="right"><?=$moneda."".number_format($tr['price']*$tr['unidades'],2)?></td>
+                                <td><input name='transid[]' type='checkbox' value='<?php echo $tr['idmov']?>'></td>
+                            </tr>
+                            <?php 
                            }
                            ?>
                         </tbody>
                     </table>
                 </form>
-			</div>
-			       <div id="dv_datos" style="display: none;" >
+            </div>
+                   <div id="dv_datos" style="display: none;" >
                 <div class="row">
                     <div class=" col-md-12 col-lg-12 ">
                         <button type="button" class="btn btn-success" id="btn_back">Volver</button>
@@ -257,7 +257,7 @@ $finFecha = $fechaUltimo->mes.'/'.$finFecha.'/'.$fechaUltimo->anio;
                                                         <input id="txt_haberTotalI" type="hidden">
                                                   
                                                     </div>
-                                                </div>	 
+                                                </div>   
                                             </div>
                                         </div>
                                         <div class="ln_solid"></div>
@@ -276,15 +276,15 @@ $finFecha = $fechaUltimo->mes.'/'.$finFecha.'/'.$fechaUltimo->anio;
                 </div>
             </div>
 
-	<br />
+    <br />
 </div>
-	
+    
 <!-- footer content -->
 <footer>
-	<div class="pull-right">
-		Contab PRO 1.0 | Dolibarr ERP by <a href="http://www.auriboxconsulting.com/">Auribox Consulting</a>
-	</div>
-	<div class="clearfix"></div>
+    <div class="pull-right">
+        Contab PRO 1.0 | Dolibarr ERP by <a href="http://www.auriboxconsulting.com/">Auribox Consulting</a>
+    </div>
+    <div class="clearfix"></div>
 </footer>
 <!-- /footer content -->
 </div>
@@ -305,9 +305,9 @@ $finFecha = $fechaUltimo->mes.'/'.$finFecha.'/'.$fechaUltimo->anio;
 <script src="<?php echo $url[0].'../build/js/custom.min.js'?>"></script>
 <script src="<?php echo $url[0].'js/app_select.js'?>"></script>
 
-	 <!-- bootstrap-daterangepicker -->
-	<script src="<?php echo $url[0].'js/moment/moment.min.js'?>"></script>
-	<script src="<?php echo $url[0].'js/datepicker/daterangepicker.js'?>"></script>
+     <!-- bootstrap-daterangepicker -->
+    <script src="<?php echo $url[0].'js/moment/moment.min.js'?>"></script>
+    <script src="<?php echo $url[0].'js/datepicker/daterangepicker.js'?>"></script>
 
 <!-- Datatables -->
 <script src="<?php echo $url[0].'../vendors/datatables.net/js/jquery.dataTables.min.js'?>"></script>
@@ -448,6 +448,7 @@ $finFecha = $fechaUltimo->mes.'/'.$finFecha.'/'.$fechaUltimo->anio;
     }
 
     function f_get_partidas_facture(facturasid){
+
             $.ajax({
                 url: "../get/get_asientos_stock.php",
                 type: 'POST',
@@ -470,6 +471,15 @@ $finFecha = $fechaUltimo->mes.'/'.$finFecha.'/'.$fechaUltimo->anio;
 
                     if ($("#pss_haber").length ) {
                         $("#pss_haber").val($("#total").val());
+                    }
+
+        
+                    
+
+                    //PSS
+
+                    if ($("#pss2_haber").length ) {
+                        $("#pss2_haber").val($("#total").val());
                     }
 
 

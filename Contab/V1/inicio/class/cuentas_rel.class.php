@@ -2,62 +2,95 @@
 require_once $url[0]."conex/conexion.php";
 
 class Rel_Cuenta extends conexion {     
-	public function __construct() { 
-		parent::__construct(); 
-	} 
+  public function __construct() { 
+    parent::__construct(); 
+  } 
 
-	public function get_cuentasRelFact($tipo,$cuentaObj) { 
+  public function get_cuentasRelFact($tipo,$cuentaObj) { 
 
-		$row = array();
+    $row = array();
         
-		$sql ="SELECT
+    $sql ="SELECT
                     cuenta_rel.fk_object,
                     cuenta_rel.fk_type,
                     cuentas.descripcion,
                     cuentas.codagr
-				FROM
-					".PREFIX."contab_cuentas_rel AS cuenta_rel 
-				INNER JOIN ".PREFIX."contab_cat_ctas AS cuentas ON cuentas.rowid=cuenta_rel.fk_cuenta
-				WHERE
+        FROM
+          ".PREFIX."contab_cuentas_rel AS cuenta_rel 
+        INNER JOIN ".PREFIX."contab_cat_ctas AS cuentas ON cuentas.rowid=cuenta_rel.fk_cuenta
+        WHERE
                     cuenta_rel.fk_type = ".$tipo."
                 AND
-					cuenta_rel.fk_object =".$cuentaObj."			    
+          cuenta_rel.fk_object =".$cuentaObj."          
                 LIMIT 1
-				";
+        ";
 
-		$query= $this->db->query($sql); 
+    $query= $this->db->query($sql); 
     if ($query) {
       $row = mysqli_fetch_array($query, MYSQLI_ASSOC);
     }
-		 return  $row;
-		
-	}
+     return  $row;
+    
+  }
 
-	public function get_cuentasNotRelFact($tipo,$cuentaObj) { 
-		$rows = false;
-		$sql ="SELECT
-				cuenta_rel.fk_object,
-				cuenta_rel.fk_type,
-				cuentas.descripcion,
-				cuentas.codagr
-				FROM
-					".PREFIX."contab_cuentas_rel AS cuenta_rel 
-				INNER JOIN ".PREFIX."contab_cat_ctas AS cuentas ON cuentas.rowid=cuenta_rel.fk_cuenta
-				WHERE
-					cuenta_rel.fk_type = ".$tipo."
-				AND 
-					cuenta_rel.fk_object=".$cuentaObj."
-				";
-		$query= $this->db->query($sql); 
-		if ($query) {
-			$rows = array();
-			while($row = $query->fetch_assoc())
-			{
-				$rows[] = $row;
-			}		
-		}
-		return $rows;
-	}
+  public function get_cuentasNotRelFact($tipo,$cuentaObj) { 
+    $rows = false;
+    $sql ="SELECT
+        cuenta_rel.fk_object,
+        cuenta_rel.fk_type,
+        cuentas.descripcion,
+        cuentas.codagr
+        FROM
+          ".PREFIX."contab_cuentas_rel AS cuenta_rel 
+        INNER JOIN ".PREFIX."contab_cat_ctas AS cuentas ON cuentas.rowid=cuenta_rel.fk_cuenta
+        WHERE
+          cuenta_rel.fk_type = ".$tipo."
+        AND 
+          cuenta_rel.fk_object=".$cuentaObj."
+        ";
+    $query= $this->db->query($sql); 
+    if ($query) {
+      $rows = array();
+      while($row = $query->fetch_assoc())
+      {
+        $rows[] = $row;
+      }   
+    }
+    return $rows;
+  }
+
+  public function get_cuentasRelBank($tipo,$cuentaObj) { 
+    $rows = false;
+
+    $sql="
+        SELECT
+          cuenta_rel.fk_object,
+          cuenta_rel.fk_type,
+          cuentas.descripcion,
+          cuentas.codagr,
+          c.ref
+        FROM
+          ".PREFIX."contab_cuentas_rel AS cuenta_rel
+        INNER JOIN ".PREFIX."contab_cat_ctas AS cuentas ON cuenta_rel.fk_cuenta=cuentas.rowid
+        INNER JOIN ".PREFIX."bank_account as c on c.rowid=cuenta_rel.fk_object
+        WHERE
+          cuenta_rel.fk_type = ".$tipo."
+        AND cuentas.codagr = '".$cuentaObj."'
+        LIMIT 1
+    ";
+
+   
+
+    $query= $this->db->query($sql); 
+    if ($query) {
+      $rows = array();
+      while($row = $query->fetch_assoc())
+      {
+        $rows[] = $row;
+      }   
+    }
+    return $rows;
+  }
     
     public function get_cuenta_iva(){
         $sql = 'SELECT
@@ -73,12 +106,12 @@ class Rel_Cuenta extends conexion {
                             rel.fk_type = 10';
         $query= $this->db->query($sql); 
          $row = $query->fetch_assoc();
-		if (count($row)>0) {
+    if (count($row)>0) {
            
             $row['descripcion']= ($row['descripcion']);
             return $row;
-		}
-		return false;
+    }
+    return false;
     }
     
     
@@ -103,12 +136,12 @@ class Rel_Cuenta extends conexion {
         $query= $this->db->query($sql); 
         if ($query) {
             while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
-			    $cuenta[$row['codagr']] = $row['codagr'].' - '. ($row['descripcion']);
-			}
+          $cuenta[$row['codagr']] = $row['codagr'].' - '. ($row['descripcion']);
+      }
            
-		}
+    }
        
-		return $cuenta;
+    return $cuenta;
     } 
     
     public function get_cuenta_bancos(){
@@ -127,20 +160,20 @@ class Rel_Cuenta extends conexion {
         $query= $this->db->query($sql); 
 
     
-		if ($query) {
+    if ($query) {
             while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
-			    $cuenta[$row['codagr']] = $row['codagr'].' - '. ($row['descripcion']);
-			}
+          $cuenta[$row['codagr']] = $row['codagr'].' - '. ($row['descripcion']);
+      }
            
-		}
+    }
        
-		return $cuenta;
+    return $cuenta;
     }
  
     
     public function delete_not_rel_ctas(){
         $sql = 'TRUNCATE '.PREFIX.'contab_cat_ctas';
-		if ($this->db->query($sql)) {
+    if ($this->db->query($sql)) {
            $sql = 'TRUNCATE '.PREFIX.'contab_cuentas_rel';
             if($this->db->query($sql)){
                  $sql = 'TRUNCATE '.PREFIX.'contab_grupos';
@@ -160,27 +193,27 @@ class Rel_Cuenta extends conexion {
                         }
                  }
             }
-            return true;		
-		}
-		return false;
+            return true;    
+    }
+    return false;
     }
     
     public function insert($fk_producto, $fk_cuenta,$tipo) { 
-		  $result = $this->db->query("INSERT INTO ".PREFIX."contab_cuentas_rel ( entity, fk_type, fk_object, fk_cuenta ) 
-						VALUES(".ENTITY.",".$tipo.",".$fk_producto.",".$fk_cuenta.")");
-		return ( $result ) ? 1: 0;
-	 }
+      $result = $this->db->query("INSERT INTO ".PREFIX."contab_cuentas_rel ( entity, fk_type, fk_object, fk_cuenta ) 
+            VALUES(".ENTITY.",".$tipo.",".$fk_producto.",".$fk_cuenta.")");
+    return ( $result ) ? 1: 0;
+   }
 
     function update_cuenta_rel($id,$cuenta){
         $sql = 'UPDATE '.PREFIX.'contab_cuentas_rel SET `fk_cuenta`='.$cuenta.' WHERE (`rowid`='.$id.')';
         $query= $this->db->query($sql); 
 
-		if ($query) {
+    if ($query) {
           
             return true;
-		}
-		return false;
+    }
+    return false;
     }
 
-	
+  
 }

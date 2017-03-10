@@ -34,10 +34,10 @@ function get_partidas($vfac){
 
 	if ($s_code_counts != 'default') {
 		$ctas = $cta->get_cuentas_poliza($s_code_counts);
-
 		  foreach($ctas as $key => $value){
 		  		$M_row =  $cta->get_cuentas_agrupacion_obj($value->codagr);
 		  		$count++;
+
 		  		if ($M_row) {
 						print ('<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12" style="padding-top: 0px !important;">');
 							print ('<div class="form-group">');
@@ -80,11 +80,18 @@ function get_partidas($vfac){
 										
 									print ('</div>');
 							}else{
+									if ($count==2) {
+										$id1=" id='prs2_debe' ";
+										$id2=" id='pss2_haber' ";
+									}else{
+										$id1="";
+										$id2="";
+									}
 									print ('<div class="col-sm-2">');
-										print ('<input type="text" placeholder="Debe" name="txt_debe[]" value="0.0" class="form-control col-md-7 col-xs-12 txt_debe">');
+										print ('<input type="text" '.$id1.' placeholder="Debe" name="txt_debe[]" value="0.0" class="form-control col-md-7 col-xs-12 txt_debe">');
 									print ('</div>');
 									print ('<div class="col-sm-2">');
-										print ('<input type="text" placeholder="Haber" name="txt_haber[]" value="0.0" class="form-control col-md-7 col-xs-12 txt_haber">');
+										print ('<input type="text" '.$id2.' placeholder="Haber" name="txt_haber[]" value="0.0" class="form-control col-md-7 col-xs-12 txt_haber">');
 									print ('</div>');
 							}
 							

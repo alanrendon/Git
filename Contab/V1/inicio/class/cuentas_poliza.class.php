@@ -21,6 +21,94 @@ class Cuentas_Poliza extends conexion {
 		return false;
 	}
 
+	public function get_cuentas_bancos($fk_factura) {
+		$rows = array();
+		$sql ="
+			SELECT
+				r.codagr,w.fk_tipo
+			FROM
+				llx_c_paiement AS c
+			INNER JOIN llx_paiement AS p ON p.fk_paiement = c.id
+			INNER JOIN llx_paiement_facture AS pf ON pf.fk_paiement = p.rowid
+			LEFT JOIN llx_bank AS b ON p.fk_bank = b.rowid
+			LEFT JOIN llx_bank_account AS ba ON b.fk_account = ba.rowid
+			LEFT JOIN llx_contab_cuentas_rel AS a ON a.fk_object = b.fk_account
+			LEFT JOIN llx_contab_cat_ctas AS r ON r.rowid = a.fk_cuenta
+			LEFT JOIN llx_contab_cuentas_poliza AS w ON w.codagr = r.codagr
+			WHERE
+				pf.fk_facture = ".$fk_factura."
+			AND a.fk_type=5
+			GROUP BY
+				ba.rowid
+			ORDER BY
+				p.datep,
+				p.tms
+		";
+		
+		$query= $this->db->query($sql);
+      
+		if ($query) {
+			while($row = $query->fetch_object())
+			{
+				$rows[] = $row;
+			}
+		}
+		return $rows;
+	}
+
+	public function get_cuentas_prov($fk_prov) {
+		$rows = array();
+		$sql ="
+			SELECT
+			r.codagr,
+			w.fk_tipo
+		FROM
+			llx_contab_cuentas_rel AS a 
+		LEFT JOIN llx_contab_cat_ctas AS r ON r.rowid = a.fk_cuenta
+		LEFT JOIN llx_contab_cuentas_poliza AS w ON w.codagr = r.codagr
+		WHERE
+			a.fk_object=".$fk_prov."
+		AND a.fk_type = 2
+		";
+		
+		$query= $this->db->query($sql);
+      
+		if ($query) {
+			while($row = $query->fetch_object())
+			{
+				$rows[] = $row;
+			}
+		}
+		return $rows;
+	}
+
+	public function get_cuentas_clien($fk_prov) {
+		$rows = array();
+		$sql ="
+			SELECT
+			r.codagr,
+			w.fk_tipo
+		FROM
+			llx_contab_cuentas_rel AS a 
+		LEFT JOIN llx_contab_cat_ctas AS r ON r.rowid = a.fk_cuenta
+		LEFT JOIN llx_contab_cuentas_poliza AS w ON w.codagr = r.codagr
+		WHERE
+			a.fk_object=".$fk_prov."
+		AND a.fk_type = 1
+		";
+
+		
+		$query= $this->db->query($sql);
+      
+		if ($query) {
+			while($row = $query->fetch_object())
+			{
+				$rows[] = $row;
+			}
+		}
+		return $rows;
+	}
+
 
 	public function get_cuentas_poliza($fk_tipo) {
 		$rows = array();
@@ -34,7 +122,7 @@ class Cuentas_Poliza extends conexion {
                ORDER BY id ASC";
 
 		$query= $this->db->query($sql);
-       
+      
 		if ($query) {
 			while($row = $query->fetch_object())
 			{
@@ -65,7 +153,7 @@ class Cuentas_Poliza extends conexion {
 		return $cuenta;
 	}
 
-	 public function get_cuentas_agrupacion_obj($agr) { 
+	public function get_cuentas_agrupacion_obj($agr) { 
 		$row = false;
 		$sql = 'SELECT 
                             * 

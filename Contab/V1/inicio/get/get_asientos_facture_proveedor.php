@@ -80,6 +80,20 @@ function get_partidas($vfac){
 	if ($s_code_counts != 'default') {
 		$ctas = $cta->get_cuentas_poliza($s_code_counts);
 
+		if (empty($ctas)) {
+			$ctas=$cta->get_cuentas_bancos($vfac->rowid);
+		}else{
+			$ctas2=$cta->get_cuentas_bancos($vfac->rowid);
+			$ctas=array_replace($ctas,$ctas2);
+		}
+
+		if (empty($ctas)) {
+			$ctas=$cta->get_cuentas_prov($vfac->fk_soc);
+		}else{
+			$ctas3=$cta->get_cuentas_prov($vfac->fk_soc);
+			$ctas=array_replace($ctas,$ctas3);
+		}
+
 		  foreach($ctas as $key => $value){
 		  		$M_row =  $cta->get_cuentas_agrupacion_obj($value->codagr);
 		  		$count++;

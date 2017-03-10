@@ -44,6 +44,7 @@ function get_partidas($s_code_counts = 'default', $vfac){
     $name           = (is_object($fac)) ? 'cond_pago_'.$fac->fk_cond_reglement : null ;
     $cp             =(isset($a_payment_term[$name])) ? $a_payment_term[$name] : 0 ;  
 
+
     switch ($cp) {
         case 1:
 				$tipo                 = 'Contado';
@@ -78,6 +79,21 @@ function get_partidas($s_code_counts = 'default', $vfac){
 
 	if ($s_code_counts != 'default') {
 		$ctas = $cta->get_cuentas_poliza($s_code_counts);
+
+		if (empty($ctas)) {
+			$ctas=$cta->get_cuentas_bancos($vfac->rowid);
+		}else{
+			$ctas2=$cta->get_cuentas_bancos($vfac->rowid);
+			$ctas=array_replace($ctas,$ctas2);
+		}
+		if (empty($ctas)) {
+			$ctas=$cta->get_cuentas_clien($vfac->fk_soc);
+		}else{
+			$ctas3=$cta->get_cuentas_clien($vfac->fk_soc);
+			$ctas=array_replace($ctas,$ctas3);
+		}
+
+
 		  foreach($ctas as $key => $value){
 		  		$M_row =  $cta->get_cuentas_agrupacion_obj($value->codagr);
 		  		$count++;
@@ -90,6 +106,10 @@ function get_partidas($s_code_counts = 'default', $vfac){
 								print ('<div class="col-sm-3">');
 										print ('<select class="select2_single form-control slc_cuenta" >');
 											foreach ($ctas_registradas as $key => $value){
+
+												
+
+
 												if ( $poliza_facture->type == 11 && count($aux)>0 &&  $aux['codagr'] == $key && $count==1) {
 													$M_row->codagr = $key;
 													print ($cuenta->existe($key) <= 0) ? '<option value="'.$key.'" selected="selected">'.$value.'</option>' : ''; 
