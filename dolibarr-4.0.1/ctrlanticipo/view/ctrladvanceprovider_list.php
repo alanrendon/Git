@@ -129,11 +129,6 @@ if (! $sortorder) $sortorder="ASC";
 
 // Protection if external user
 $socid=0;
-if ($user->societe_id > 0)
-{
-    $socid = $user->societe_id;
-	accessforbidden();
-}
 
 if ($user->rights->ctrlanticipo->ctrlanticipo2->read <>1)
 	accessforbidden();
@@ -673,7 +668,7 @@ if ($resql)
             }
             if (! empty($arrayfields['t.date_advance']['checked'])){
 
-            	print '<td>'.(empty($obj->date_advance)?"S/F":dol_print_date($obj->date_advance,"%d/%m/%Y")).'</td>';
+            	print '<td>'.(empty($obj->date_advance)?"S/F":dol_print_date($obj->date_advance,"%d/%m/%Y",'tzuserrel')).'</td>';
     		    if (! $i) $totalarray['nbfield']++;
             }
             if (! empty($arrayfields['t.fk_soc']['checked'])){

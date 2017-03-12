@@ -133,6 +133,7 @@ if ($_GET["action2"]=="realizarcambio") {
     }
 }
 */
+
 if (isset($_POST["admin"]) ) {
     if ($_POST["credit"]==-1) {
         setEventMessages('Ingrese un crédito', null, 'errors');
@@ -156,7 +157,9 @@ if (isset($_POST["add_credit"]) ) {
 			llx_element_element AS a
 		INNER JOIN llx_paiementfourn_facturefourn as b on a.fk_target=b.rowid
 		INNER JOIN llx_ctrl_advance_credit as c on c.rowid=a.fk_source
-		WHERE b.fk_facturefourn=".$object->id;
+		WHERE 
+			a.sourcetype='ctrladvancecredit' AND
+		b.fk_facturefourn=".$object->id;
 
 		$total=0;
 		$resql=$db->query($sql);
@@ -2002,76 +2005,6 @@ else
                     $totalpaye += $objp->amount;
                     $i++;
                 }
-                $sql='
-            	SELECT
-					a.rowid,a.fk_source,b.total_import,c.ref,b.fk_advance
-				FROM
-					llx_element_element AS a
-				INNER JOIN llx_ctrl_advance_credit as b on a.fk_source=b.rowid
-				INNER JOIN llx_ctrl_advance_provider as c on c.rowid=b.fk_advance
-				WHERE
-					a.fk_target = '.$object->id;
-
-            	$result = $db->query($sql);
-
-		        if ($result)
-		        {
-		            $num = $db->num_rows($result);
-		            $i=0;
-		            if ($num>0) {
-		            	while ($i<$num) {
-		            		$objp = $db->fetch_object($result);
-		            		$anticipo=new Ctrladvanceprovider($db);
-		            		$anticipo->fetch($objp->fk_advance);
-		            		print '
-			            	<tr>
-			            		<td colspan="'.$nbcols.'" align="right">'.$langs->trans('ctrl_note_advance').' '.$anticipo->getNomUrl(1).'</td>
-			            		<td align="right"><b>'.price($objp->total_import).'</b></td>
-			            		<td></td>
-			            	</tr>';
-			            	$i++;
-		            	}
-		            }
-		            
-		        }
-            }
-            else
-            {
-                 print '<tr '.$bc[$var].'><td colspan="'.$nbcols.'" class="opacitymedium">'.$langs->trans("None").'</td><td></td><td></td></tr>';
-                 if ($object->fk_statut==2) {
-                 	$sql='
-	            	SELECT
-						a.rowid,a.fk_source,b.total_import,c.ref,b.fk_advance
-					FROM
-						llx_element_element AS a
-					INNER JOIN llx_ctrl_advance_credit as b on a.fk_source=b.rowid
-					INNER JOIN llx_ctrl_advance_provider as c on c.rowid=b.fk_advance
-					WHERE
-						a.fk_target = '.$object->id;
-
-	            	$result = $db->query($sql);
-
-			        if ($result)
-			        {
-			            $num = $db->num_rows($result);
-			            $i=0;
-			            if ($num>0) {
-			            	while ($i<$num) {
-			            		$objp = $db->fetch_object($result);
-			            		$anticipo=new Ctrladvanceprovider($db);
-			            		$anticipo->fetch($objp->fk_advance);
-			            		print '
-				            	<tr>
-				            		<td colspan="'.$nbcols.'" align="right">'.$langs->trans('ctrl_note_advance').' '.$anticipo->getNomUrl(1).'</td>
-				            		<td align="right"><b>'.price($objp->total_import).'</b></td>
-				            		<td></td>
-				            	</tr>';
-				            	$i++;
-			            	}
-			            }
-			            
-			        }
-                 }
                 
             }
 
@@ -2084,7 +2017,9 @@ else
 					llx_element_element AS a
 				INNER JOIN llx_paiementfourn_facturefourn as b on a.fk_target=b.rowid
 				INNER JOIN llx_ctrl_advance_credit as c on c.rowid=a.fk_source
-				WHERE b.fk_facturefourn=".$object->id;
+				WHERE 
+					a.sourcetype='ctrladvancecredit' AND
+					b.fk_facturefourn=".$object->id;
 				$total=0;
 				$resql2=$db->query($sql2);
 		        if ($resql2){
@@ -2109,6 +2044,7 @@ else
 					INNER JOIN llx_ctrl_advance_provider AS c ON c.rowid = b.fk_advance
 					INNER JOIN llx_paiementfourn_facturefourn as d on a.fk_target=d.rowid
 					WHERE
+						a.sourcetype="ctrladvancecredit" AND
 						d.fk_facturefourn = '.$object->id;
 
 	            	$result = $db->query($sql);
@@ -2167,6 +2103,7 @@ else
 					INNER JOIN llx_ctrl_advance_provider AS c ON c.rowid = b.fk_advance
 					INNER JOIN llx_paiementfourn_facturefourn as d on a.fk_target=d.rowid
 					WHERE
+						a.sourcetype="ctrladvancecredit" AND
 						d.fk_facturefourn = '.$object->id;
 
 	            	$result = $db->query($sql);

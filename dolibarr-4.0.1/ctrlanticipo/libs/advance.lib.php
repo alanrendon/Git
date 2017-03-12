@@ -362,7 +362,7 @@ function advance_prepare_head(Ctrladvanceprovider $object) {
 
 
 
-function numtoletras($xcifra,$divisa=" M.N.")
+function numtoletras($xcifra,$divisa=" MN")
 { 
     global $db;
     $xarray = array(0 => "Cero",
@@ -390,7 +390,7 @@ function numtoletras($xcifra,$divisa=" M.N.")
      
     $XAUX = str_pad($xaux_int, 18, " ", STR_PAD_LEFT); // ajusto la longitud de la cifra, para que sea divisible por centenas de miles (grupos de 6)
 
-    if (strpos($divisa,"MXN")!==false ) {
+    if (strpos($divisa,"MN")!==false ) {
         $moneda="PESO";
     }
     if (strpos($divisa,"USD")!==false  ) {
@@ -526,7 +526,7 @@ function numtoletras($xcifra,$divisa=" M.N.")
                         if ($xcifra < 1 )
                             {
                                 if ($var!=1) {
-                                    if ($divisa=="MXN") {
+                                    if ($divisa=="MN") {
                                         $moneda="PESOS";
                                     }elseif ($divisa=="USD") {
                                         $moneda="DOLARES";
@@ -543,7 +543,7 @@ function numtoletras($xcifra,$divisa=" M.N.")
                         if ($xcifra >= 2)
                             {
                                 if ($var!=1) {
-                                    if (strpos($divisa," MXN")!==false  ) {
+                                    if (strpos($divisa," MN")!==false  ) {
                                         $moneda="PESOS";
                                     }elseif (strpos($divisa,"USD")!==false ) {
                                         $moneda="DOLARES";
@@ -796,7 +796,7 @@ function list_of_documents($filearray,$object,$modulepart,$param='',$forcedownlo
             print '</td></tr>';
         }
         print "</table>";
-
+        
         return $nboffiles;
     }
 }

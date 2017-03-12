@@ -55,7 +55,7 @@ if ($id > 0) $object->fetch($id);
 $permission=$user->rights->ctrlanticipo->ctrlanticipo1->createmodify;  // Used by the include of actions_setnotes.inc.php
 $permissionnote=$user->rights->ctrlanticipo->ctrlanticipo1->createmodify;
 
-$upload_dir=$conf->admin->dir_output."/".$object->ref;
+$upload_dir=$conf->user->dir_output."/".$object->ref;
 
 include DOL_DOCUMENT_ROOT.'/core/actions_setnotes.inc.php'; // Must be include, not includ_once
 
@@ -196,7 +196,7 @@ if ($id > 0)
             print '</div>';
         print '</div>';
         
-        $modulepart = 'systemtools';
+        $modulepart = 'userphoto';
         $permission = $user->rights->ctrlanticipo->ctrlanticipo1->createmodify;
         include DOL_DOCUMENT_ROOT . '/core/tpl/document_actions_post_headers.tpl.php';
     }

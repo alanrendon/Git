@@ -62,13 +62,11 @@
 
         }
         table.cocepto{
-        	font-style: italic;
         	width: 100%;
         }
 
         table.concepto-descripcion-title th {
         	height: 10px;
-
         	font-weight: normal;
         	color: #ffffff;
         	padding: 0.3mm;
@@ -104,7 +102,7 @@
         }
 
         table.cheque{
-			font-style: italic;
+			
 			width: 180mm;
 			height: 76mm;
         }
@@ -135,7 +133,7 @@
         }
 
         .text-num{
-        	font-size: 12px;
+        	font-size: 14px;
         	font-style: oblique;
         	font-weight: bold;
         }
@@ -165,7 +163,10 @@
 
    
 		print '
-			<table class="cheque" align="center">
+			<div style="position: absolute; left: 82%; top:5%; font-size: 14px;">
+				<b>'.dol_print_date($object->date_asign,'daytext','tzuserrel').'</b>
+			</div>
+			<table class="cheque" align="center" style="margin-top:48px;">
 				<tbody>
 					<tr >
 						<td class="td-20">
@@ -175,35 +176,35 @@
 							
 						</td>
 						<td class="td-30 text-right">
-							<h5>'.dol_print_date($object->date_asign,'%d de %B %Y').'</h5>
+							<h5>&nbsp;</h5>
 						</td>
 					</tr>
 					<tr >
-						<td class="td-70" COLSPAN=2>
-							<h5>'.$object->receptor.'</h5>
+						<td COLSPAN=2 style="font-size: 14px;"> <H5>
+							'.$object->receptor.' </H5>
 						</td>
-						<td class="td-30 text-right">
-							<h5><strong>$</strong> '.price($advance->total_import).'</h5>
+						<td class="td-30 text-right" style="font-size: 14px;">
+							<strong> '.price($advance->total_import).'</strong> 
 						</td>
 					</tr>
 					<tr >
-						<td class="td-70" COLSPAN=2><h5>';
+						<td class="td-70" COLSPAN=2 style="font-size: 14px;"><H5>';
 
 						$sql="SELECT a.code FROM llx_multidivisa_divisas as a WHERE a.rowid=".$advance->fk_mcurrency;
-						$divisa=" M.N.";
+						$divisa=" MN";
 						$resql=$db->query($sql);
 			            if ($resql){
 			                $num = $db->num_rows($resql);
 			                if ($num>0) {
 		                        $objp = $db->fetch_object($resql);
 		                        $divisa= " ".$objp->code;
-
+		                        $divisa=str_replace("MXN"," MN",$divisa);
 			                }
 			            }
 			            
 			            print numtoletras($advance->total_import,$divisa);
 					print '
-						</h5>
+						</H5>
 						</td>
 
 						<td class="td-30 text-right">
@@ -261,8 +262,8 @@
 		   		<strong></strong>
 		   </legend>
 			   <p align="left">
-			   		<div style="word-wrap: break-word; width:90%; float: left;" >
-			   	 	'.$object->concept.'
+			   		<div style="word-wrap: break-word; width:90%; float: left;" ><b>
+			   	 	'.$object->concept.'</b>
 			   	 	</div>
 			   </p>
 		<br><br>

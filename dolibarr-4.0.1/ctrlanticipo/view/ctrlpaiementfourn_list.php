@@ -44,7 +44,6 @@ $month  = GETPOST('month','int');
 $year   = GETPOST('year','int');
 
 if ($user->societe_id) $socid=$user->societe_id;
-$result = restrictedArea($user, 'facture',$facid,'');
 
 $paymentstatic=new PaiementAdvance($db);
 $accountstatic=new Account($db);

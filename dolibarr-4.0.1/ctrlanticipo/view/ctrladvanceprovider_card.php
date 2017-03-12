@@ -103,7 +103,7 @@ $object = new Ctrladvanceprovider($db);
 if ($id > 0  && $action != 'add') {
     $result = $object->fetch($id);
 }
-$upload_dir=$conf->admin->dir_output."/".$object->ref;
+$upload_dir=$conf->user->dir_output."/".$object->ref;
 if ($idprovider > 0 && $action == 'create') {
     $object->ref               = advance_mask($conf,1,$object);
     $object->fk_soc            = $idprovider;
@@ -801,13 +801,13 @@ if ($id && (empty($action) || $action == 'view' || $action == 'delete' || $actio
             print '<td rowspan="12" style="vertical-align: top;" >';
             $sql = '
             SELECT
-                a.*, b.datec,b.fk_bank_account as acc
+                a.*, b.datec,b.datep,b.fk_bank_account as acc
             FROM
                 llx_ctrl_paiementfourn_facturefourn AS a
             INNER JOIN llx_ctrl_paiementfourn AS b ON a.fk_paiementfourn = b.rowid
             LEFT JOIN llx_bank as c on c.rowid=b.fk_bank_account
             WHERE
-                a.fk_facturefourn = '.$object->id." order by b.datec";
+                a.fk_facturefourn = '.$object->id." order by b.datep";
 
             $resql=$db->query($sql);
             $tot_ammot_rest=0;
@@ -843,7 +843,7 @@ if ($id && (empty($action) || $action == 'view' || $action == 'delete' || $actio
 
                         // Third party
                         print '<td>';
-                        print dol_print_date($db->jdate($objp->datec),'%d/%m/%Y');
+                        print dol_print_date($db->jdate($objp->datep),'%d/%m/%Y');
                         print '</td>';
 
                         // type payment
@@ -972,15 +972,13 @@ if ($id && (empty($action) || $action == 'view' || $action == 'delete' || $actio
     //if ($object->statut==3) {
 	    require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
 	    $formfile = new FormFile($db);
-	    $modulepart = 'export';
+	    $modulepart = 'userphoto';
 	    $permission = $user->rights->ctrlanticipo->ctrlanticipo1->createmodify;
 
 
+	    $carpeta=$conf->user->dir_output."/".$object->ref;
 
-
-	    $carpeta=$conf->admin->dir_output."/".$object->ref;
 	    $filearray=dol_dir_list($carpeta,"files",0,'','(\.meta|_preview\.png)$',$sortfield,(strtolower($sortorder)=='desc'?SORT_DESC:SORT_ASC),1);
-
 
 
 	    print '
@@ -1004,7 +1002,7 @@ if ($id && (empty($action) || $action == 'view' || $action == 'delete' || $actio
 	        $object,
 	        $modulepart,
 	        '',
-	        1,
+	        0,
 	        '',        // relative path with no file. For example "moduledir/0/1"
 	        $permission
 	    );

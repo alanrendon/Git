@@ -392,22 +392,15 @@ llxHeader();
 
 	if ($user->societe_id == 0 )
 	{
-		if ($user->rights->facture->paiement)
-		{
+		if ($user->rights->ctrlanticipo->ctrlanticipo6->emitpayment) {
+			print '<a class="butActionDelete" href="'.$_SERVER['PHP_SELF'].'?id='.$id.'&amp;action=delete">'.$langs->trans('Delete').'</a>';
 			
-			if ($user->rights->ctrlanticipo->ctrlanticipo7->deletepayment) {
-				print '<a class="butActionDelete" href="'.$_SERVER['PHP_SELF'].'?id='.$id.'&amp;action=delete">'.$langs->trans('Delete').'</a>';
-				
-			}else
-			{
-
-				print '<a class="butActionRefused" href="#" title="'.$title_button.'">'.$langs->trans('Delete').'</a>';
-			}
 		}else
 		{
 
 			print '<a class="butActionRefused" href="#" title="'.$title_button.'">'.$langs->trans('Delete').'</a>';
 		}
+		
 	}
 
 

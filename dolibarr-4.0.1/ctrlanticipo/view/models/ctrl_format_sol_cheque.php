@@ -80,7 +80,39 @@
         	font-style: italic;
         	width: 100%;
         }
-        table.concepto-descripcion-title th {
+        
+		table.conta{
+        	border-radius:8px;
+			spacing: 0;
+			padding: 0mm;
+        	width: 200mm;
+			border-collapse: collapse;
+			border: 1px solid rgb(16,120,179);
+        }
+		
+		tr.contatr{
+			spacing: 0;
+			padding: 0mm;
+			border: 1px solid rgb(16,120,179);
+		}
+		
+		td.contatd{
+			spacing: 0;
+			padding: 0mm;
+			border: 1px solid rgb(16,120,179);
+			height: 20px;
+		}
+		
+		
+		th.contath{
+			text-align: center;
+			spacing: 0;
+			padding: 0mm;
+			border: 1px solid rgb(16,120,179);
+			height: 18px;
+		}
+		
+		table.concepto-descripcion-title th {
         	height: 10px;
         	background-repeat: no-repeat;
         	background-position: center center;
@@ -202,7 +234,12 @@
         	text-align: center;
         	color:black;
         }
-        .div_titre2{
+        
+		.div_firma{
+        	color:black;
+        }
+		
+		.div_titre2{
         	width: 100%;
         	border-radius:8px;
         	background-color:rgb(16,120,179);
@@ -230,8 +267,9 @@
 		$labeltype=$langs->trans("PaymentType".$obb->type_code)!=("PaymentType".$obb->type_code)?$langs->trans("PaymentType".$obb->type_code):$obb->paiement_type;
 	}
 	
-	
-
+	$conDivisa = "SELECT code, unicode FROM llx_multidivisa_divisas WHERE rowid = $advance->fk_mcurrency";
+	$resDivisa = $db->query($conDivisa);
+	$objDivisa = $db->fetch_object($resDivisa);
 
 	print '
 	<table align="center">
@@ -256,12 +294,11 @@
 				</td>
 				<td class="td-20">
 					<table align="center">
+						<tr><td align="center" class="date_td">CODIGO</td></tr>
+						<tr><td align="center">RE-ADM-04</td></tr>
 						<tr><td></td></tr>
-						<tr><td align="center" class="date_td">Fecha</td></tr>
-						<tr>
-							<td>'.dol_print_date(dol_now(),'%d/%m/%Y').'
-							</td>
-						</tr>
+						<tr><td align="center" class="date_td">FECHA REQUISICION</td></tr>
+						<tr><td align="center">'.dol_print_date($advance->date_advance,'%d/%m/%Y').'	</td></tr>
 					</table>
 				</td>
 			</tr>
@@ -270,7 +307,7 @@
 
 
 	<div class="div_titre" >
-	'.$langs->trans("ctrl_titre_label_format")."  ".$advance->ref.' 
+	'.$langs->trans("ctrl_titre_label_format")."      ".$advance->ref.' 
 	</div><br>
 	<div style="padding-top:5px; padding-left:5px; width: 40%; border:1px solid rgb(16,120,179); border-radius:8px; display: inline; " >
 		<b>'.$langs->trans("ctrl_format_labels").'</b><br>
@@ -284,9 +321,9 @@
 	<div >
 	</div>
 	<div style="width: 40%; border:1px solid rgb(16,120,179); border-radius:8px; position:absolute; top:110px; left:60%;  " >
-		 <b>Solicita:</b><br>'.$solicitante->firstname.'
-		 '.$solicitante->lastname.'<br>
-		 '.$solicitante->email.' <br>'.$langs->trans("ctrl_titre_proyect").': <br>'.$projectstatic->title.'
+		 <b>&nbsp;Solicita:</b><br> &nbsp;'.$solicitante->firstname.'
+		 '.$solicitante->lastname.'<br> &nbsp;
+		 '.$solicitante->email.'<br> &nbsp;'.$langs->trans("ctrl_titre_proyect").': <br> &nbsp;'.$projectstatic->title.'
 		 <br><br>
 	</div>
 	<br><br><br><br>
@@ -298,26 +335,71 @@
 	</div>
 	<br>
 	<div class="div_titre"  style=" text-align:right;" >
-	<label class="tot_td">SUB-TOTAL          '.price($advance->import).'</label><br>	
-	TOTAL-IVA '.(    empty($advance->fk_tva)?0:$advance->fk_tva ).'%      '.price($advance->total_import-$advance->import).'<br>	
-	<label class="tot_td">TOTAL              '.price($advance->total_import).'</label><br>	
+		
+	
+	<label class="tot_td">TOTAL              '.price($advance->total_import).' '.$objDivisa->code.'</label><br>	
 	</div>
 	<br>
-	<div class="div_titre"  style="text-align:left; padding-top:5px;  border:1px solid #6666ff; border-radius:8px; height:100px; word-wrap: break-word;" >&nbsp;&nbsp;Notas: 
+	<div class="div_titre"  style="text-align:left; padding-top:5px;  border:1px solid rgb(16,120,179); border-radius:8px; height:100px; word-wrap: break-word;" >&nbsp;&nbsp;Notas: 
 	'.$advance->note_public.'	
 	</div>
 
-	<br><br><br><br><br><br><br><br><br><br>
+	<br><br>
+	<table class="conta">
+		<tr class="contatr">
+			<th class="contath"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CUENTA CONTABLE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </th>
+			<th class="contath"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CARGO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </th>
+			<th class="contath"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ABONO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </th>
+		</tr>
+		<tr class="contatr">
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+		</tr>
+		<tr class="contatr">
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+		</tr>
+		<tr class="contatr">
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+		</tr>
+		<tr class="contatr">
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+		</tr>
+		<tr class="contatr">
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+		</tr>
+		<tr class="contatr">
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+			<td class="contatd">&nbsp;</td>
+		</tr>
+	</table>
+	
+	<br><br><br><br><br><br>
 	<table align="center" >
 		<tr>
-			<td  style="border-top:1px solid blue; text-align:center;" >
-				Nombre y firma de quien Solicita
+			<td  style="border-top:1px solid rgb(16,120,179); text-align:center; width: 180px;" >
+				<p style="font-size:9pt;"> SOLICITO </p>
 			</td>
-			<td  class="td-30"  >
+			<td  class="td-10"  >
 				
 			</td>
-			<td style="border-top:1px solid blue; text-align:center;" >
-				Nombre y firma de quien Autoriza
+			<td  style="border-top:1px solid rgb(16,120,179); text-align:center; width: 180px;" >
+				<p style="font-size:9pt;"> REVISO </p>
+			</td>
+			<td  class="td-10"  >
+				
+			</td>
+			<td style="border-top:1px solid rgb(16,120,179); text-align:center; width: 180px;" >
+				<p style="font-size:9pt;"> AUTORIZO </p>
 			</td>
 		</tr>
 	</table>
@@ -325,7 +407,7 @@
 	';
 
 	
-	$upload_dir=$conf->admin->dir_output."/".$advance->ref;
+	$upload_dir=$conf->user->dir_output."/".$advance->ref;
  	if (!is_dir($upload_dir)) {
  		dol_mkdir($upload_dir);
  	}

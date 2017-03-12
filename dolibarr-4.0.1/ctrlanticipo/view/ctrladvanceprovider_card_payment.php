@@ -43,6 +43,11 @@ $extrafields = new ExtraFields($db);
 $accountid   = GETPOST('accountid');
 $selectfk_paymen= GETPOST('fk_paymen');
 
+$mont=GETPOST('remonth');
+$day=GETPOST('reday');
+$year=GETPOST('reyear');
+$datepaye = dol_mktime(0, 0, 0, $mont, $day, $year);
+
 if ($id>0) {
     $advance = new Ctrladvanceprovider($db);
     $result  =$advance->fetch($id);
@@ -81,11 +86,11 @@ if ($id>0) {
                 $formquestion[$i++]=array('type' => 'hidden','name' => $key,  'value' => $_POST[$key]);
             }
         }
-        $mont=GETPOST('remonth');
-        $day=GETPOST('reday');
-        $year=GETPOST('reyear');
+        
 
-        $datepaye = dol_mktime(0, 0, 0, $mont, $day, $year);
+
+
+
 
         $db->begin();
 
@@ -218,7 +223,7 @@ if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paie
 
     // Date payment
     print '<tr><td><span class="fieldrequired">'.$langs->trans('Date').'</span></td><td>';
-    $form->select_date($advance->date_advance,'','','',0,"date_advance",1,1,0,0,'','');
+    $form->select_date($datepaye,'','','',0,"date_advance",1,1,0,0,'','');
     print '</td>';
     print '<td>'.$langs->trans('Comments').'</td></tr>';
 
