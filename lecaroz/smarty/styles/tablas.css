@@ -1,0 +1,79 @@
+/**
+ * Estilos de tablas de captura
+ *
+ * @version 1.0.0
+ * @author Carlos A. Candelario Corona <carlos.candelario@live.com.mx>
+ * @access public
+ *
+ */
+
+/**
+ * Clase aplicada a la etiqueta <table>
+ *
+ */
+.tabla_captura
+{
+	border-top: 2px solid #73a8b7;
+	border-bottom: 2px solid #73a8b7;
+	padding: 3px 0px 3px 0px;
+	margin: 10px 0px 10px 0px;
+	font: 10pt Arial, Helvetica, sans-serif;
+	background-color: #ecfffc;
+}
+
+/**
+ * Clase aplicada a la etiqueta <th> para lineas impares y con etiquetas <td>
+ *
+ */
+.tabla_captura th
+{
+	background: #73a8b7;
+	padding: 2px 4px 2px 4px;
+}
+
+.tabla_captura td
+{
+	padding: 2px 2px 2px 2px;
+}
+
+/**
+ * Clase aplicada a la etiqueta <tr> para lineas impares y con etiquetas <td>
+ *
+ */
+.linea_off
+{
+	background: #ecfffc;
+	border-top: 1px none;
+	border-bottom: 1px none;
+}
+
+/**
+ * Clase aplicada a la etiqueta <tr> para lineas pares y con etiquetas <td>
+ *
+ */
+.linea_on
+{
+	background: #e1f0f0;
+	border-top: 1px none;
+	border-bottom: 1px none;
+}
+
+.linea_red
+{
+	background-color: #FFC6C6;
+	border-top: 1px none;
+	border-bottom: 1px none;
+}
+
+.linea_off_highlight .linea_on_highlight
+{
+	background: #b7d7dd;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+}
+
+.highlight {
+	background: #b7d7dd;
+	border-top: 1px solid #000;
+	border-bottom: 1px solid #000;
+}

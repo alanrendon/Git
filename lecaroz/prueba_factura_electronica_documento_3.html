@@ -1,0 +1,365 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Factura Electrónica</title>
+		<style>
+			body, button, input, textarea {
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: 10pt;
+			}
+
+			/********************************************************/
+			/*                    Typography                        */
+			/********************************************************/
+
+			.bold { font-weight: bold; }
+
+			.italic { font-style: italic; }
+
+			.underline {
+				padding-bottom: 0.15em;
+				border-bottom: 1px solid;
+			}
+
+			.wrapped {
+				display: block;
+				border-width: 3px;
+				border-style: solid;
+				border-color: #8f8f8f;
+				/*padding: 10px;*/
+				-webkit-border-radius: 7px;
+				-moz-border-radius: 7px;
+				border-radius: 7px;
+			}
+
+			.monospace {
+				font-family: "Courier New", Courier, monospace;
+			}
+
+			.wordwrap {
+				white-space: pre-wrap;		/* CSS3 */
+				white-space: -moz-pre-wrap;	/* Firefox */
+				white-space: -pre-wrap;		/* Opera <7 */
+				white-space: -o-pre-wrap;	/* Opera 7 */
+				word-wrap: break-word;		/* IE */
+			}
+
+			/********************************************************/
+			/*                   Generic colors                     */
+			/********************************************************/
+
+			.silver,
+			.silver-color .color {
+				color: #cccccc !important;
+				}
+				.icon-silver:before {
+					color: #cccccc;
+				}
+			.black,
+			.black-color .color {
+				color: black !important;
+				}
+				.icon-black:before {
+					color: black;
+				}
+			.anthracite,
+			.anthracite-color .color {
+				color: #4c4c4c !important;
+				}
+				.icon-anthracite:before {
+					color: #4c4c4c;
+				}
+			.grey,
+			.grey-color .color {
+				color: #a5a5a5 !important;
+				}
+				.icon-grey:before {
+					color: #a5a5a5;
+				}
+			.white,
+			.white-color .color {
+				color: white !important;
+				}
+				.icon-white:before {
+					color: white;
+				}
+			.red,
+			.red-color .color {
+				color: #dd380d !important;
+				}
+				.icon-red:before {
+					color: #dd380d;
+				}
+			.orange,
+			.orange-color .color {
+				color: #ffae00 !important;
+				}
+				.icon-orange:before {
+					color: #ffae00;
+				}
+			.green,
+			.green-color .color {
+				color: #99c624 !important;
+				}
+				.icon-green:before {
+					color: #99c624;
+				}
+			.blue,
+			.blue-color .color {
+				color: #0059a0 !important;
+				}
+				.icon-blue:before {
+					color: #0059a0;
+				}
+
+			/********************************************************/
+			/*                  Utility classes                     */
+			/********************************************************/
+
+			/* Align */
+			.align-left		{ text-align: left; }
+			.align-center	{ text-align: center; }
+			.align-right	{ text-align: right; }
+
+			/* Floating elements */
+			.float-left		{ float: left; }
+			.float-right	{ float: right; }
+			.clear-left		{ clear: left; }
+			.clear-right	{ clear: right; }
+			.clear-both		{ clear: both; }
+
+			/* Padding */
+			.with-padding			{ padding: 20px !important; }
+			.with-mid-padding		{ padding: 10px !important; }
+			.with-small-padding		{ padding: 5px !important; }
+			.no-padding				{ padding: 0 !important; }
+
+			/* Margins */
+			.large-margin-top		{ margin-top: 30px !important; }
+			.margin-top				{ margin-top: 16px !important; }
+			.mid-margin-top			{ margin-top: 8px !important; }
+			.small-margin-top		{ margin-top: 4px !important; }
+			.no-margin-top			{ margin-top: 0 !important; }
+			.large-margin-right		{ margin-right: 30px !important; }
+			.margin-right			{ margin-right: 16px !important; }
+			.mid-margin-right		{ margin-right: 8px !important; }
+			.small-margin-right		{ margin-right: 4px !important; }
+			.no-margin-right		{ margin-right: 0 !important; }
+			.large-margin-left		{ margin-left: 30px !important; }
+			.margin-left			{ margin-left: 16px !important; }
+			.mid-margin-left		{ margin-left: 8px !important; }
+			.small-margin-left		{ margin-left: 4px !important; }
+			.no-margin-left			{ margin-left: 0 !important; }
+			.large-margin-bottom	{ margin-bottom: 30px !important; }
+			.margin-bottom			{ margin-bottom: 16px !important; }
+			.mid-margin-bottom		{ margin-bottom: 8px !important; }
+			.small-margin-bottom	{ margin-bottom: 4px !important; }
+			.no-margin-bottom		{ margin-bottom: 0 !important; }
+
+			/********************************************************/
+			/*                        Tables                        */
+			/********************************************************/
+
+			table {
+				*border-collapse: collapse;	/* IE7 and lower */
+				border-spacing: 0;
+				width: 100%;
+				border: 3px solid #8f8f8f;
+				-moz-border-radius: 7px;
+				-webkit-border-radius: 7px;
+				border-radius: 7px;
+			}
+
+			td, th {
+				padding: 2px 5px;
+				vertical-align: text-top;
+			}
+
+			th {
+				background-color: #f0eeef;
+			}
+
+			th:first-child {
+				-moz-border-radius: 4px 0 0 0;
+				-webkit-border-radius: 4px 0 0 0;
+				border-radius: 4px 0 0 0;
+			}
+
+			th:last-child {
+				-moz-border-radius: 0 4px 0 0;
+				-webkit-border-radius: 0 4px 0 0;
+				border-radius: 0 4px 0 0;
+			}
+
+			th:only-child {
+				-moz-border-radius: 4px 4px 0 0;
+				-webkit-border-radius: 4px 4px 0 0;
+				border-radius: 4px 4px 0 0;
+			}
+
+			tbody tr:nth-child(even) {
+				background: #ebf0f6;
+			}
+		</style>
+	</head>
+	<body>
+		<div style="overflow:hidden;">
+			<div class="float-left" style="width:22%;">
+				<img src="imagenes/logos_cfds/logo_lecaroz_nuevo.png" />
+			</div>
+			<div class="float-left" style="width:48%;">
+				<div class="with-padding">
+					<div class="bold">PANIFICADORA TLALCOLIGIA, S.A. DE C.V.</div>
+					<div class="bold">PTL040611815</div>
+					<div class="small-margin-top">YAQUIS 84, COL. TLALCOLIGIA, TLALPAN, DISTRITO FEDERAL, MEXICO, CP: 14430</div>
+					<div class="bold italic small-margin-top">REGIMEN GENERAL DE LEY PERSONAS MORALES</div>
+					<div class="bold blue mid-margin-top">Matriz</div>
+					<div class="small-margin-top">YAQUIS 84, COL. TLALCOLIGIA, TLALPAN, DISTRITO FEDERAL, MEXICO, CP: 14430</div>
+				</div>
+			</div>
+			<div class="float-left align-center" style="width:30%;">
+				<div class="wrapped with-mid-padding">
+					<div class="bold red">FACTURA</div>
+					<div class="bold blue small-margin-top">Serie y folio</div>
+					<div>1368</div>
+					<div class="bold blue small-margin-top">Fecha y hora de emisión</div>
+					<div>2014-02-07T12:02:00</div>
+					<div class="bold blue small-margin-top">Fecha y hora de certificación</div>
+					<div>2014-02-07T12:55:27</div>
+					<div class="bold blue small-margin-top">Lugar de expedición</div>
+					<div>TLALPAN, DISTRITO FEDERAL, MEXICO</div>
+				</div>
+			</div>
+		</div>
+		<div class="wrapped with-mid-padding mid-margin-top" style="overflow:hidden;">
+			<div class="float-left" style="width:60%;">
+				<div class="bold blue">Receptor del comprobante fiscal</div>
+				<div class="bold small-margin-top">SHOW CATERING S.A DE CV</div>
+				<div class="bold">SCA091208CM1</div>
+				<div class="small-margin-top">FRANCISCO VILLA 76, MIGUEL HIDALGO 2A SECCION AMPLIACION, TLALPAN, DISTRITO FEDERAL, MEXICO, CP: 14250</div>
+			</div>
+			<div class="float-left" style="width:10%;">
+				&nbsp;
+			</div>
+			<div class="float-left align-center" style="width:30%;">
+				<div class="bold blue">Folio fiscal</div>
+				<div>DDE6FF69-FD7E-4FD8-A97A-1A6876E9B1DB</div>
+				<div class="bold blue small-margin-top">No. certificado digital</div>
+				<div>00001000000202229463</div>
+				<div class="bold blue small-margin-top">Serie certificado SAT</div>
+				<div>00001000000201614141</div>
+			</div>
+		</div>
+		<div class="mid-margin-top">
+			<table>
+				<thead>
+					<tr>
+						<th class="blue align-right" style="width:10%">Cantidad</th>
+						<th class="blue align-left" style="width:12%">Unidad</th>
+						<th class="blue align-left" style="width:48%">Descripción</th>
+						<th class="blue align-right" style="width:15%">Precio</th>
+						<th class="blue align-right" style="width:15%">Importe</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- START BLOCK : concepto -->
+					<tr>
+						<td class="align-right">640.00</td>
+						<td>PZA</td>
+						<td>BOLILLOS</td>
+						<td class="align-right">$1.20</td>
+						<td class="align-right">$768.00</td>
+					</tr>
+					<!-- END BLOCK : concepto -->
+					<tr>
+						<td class="align-right">600.00</td>
+						<td>PZA</td>
+						<td>BISCOCHOS</td>
+						<td class="align-right">$4.40</td>
+						<td class="align-right">$2,640.00</td>
+					</tr>
+					<tr>
+						<td class="align-right">280.00</td>
+						<td>PZA</td>
+						<td>REPOSTERIA</td>
+						<td class="align-right">$5.20</td>
+						<td class="align-right">$1,456.00</td>
+					</tr>
+					<tr>
+						<td class="align-right">255.00</td>
+						<td>PZA</td>
+						<td>CUERNOS MEDIANO</td>
+						<td class="align-right">$4.00</td>
+						<td class="align-right">$1,020.00</td>
+					</tr>
+					<tr>
+						<td class="align-right">53.00</td>
+						<td>PZA</td>
+						<td>BARRITAS</td>
+						<td class="align-right">$1.60</td>
+						<td class="align-right">$84.80</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="wrapped with-mid-padding mid-margin-top" style="overflow:hidden;">
+			<div class="float-left" style="width:60%;">
+				<div><strong>Forma de pago:</strong> PAGO EN UNA SOLA EXHIBICIÓN</div>
+				<div><strong>Método de pago:</strong> TRANSFERENCIA ELECTRÓNICA</div>
+				<div><strong>Cuenta de pago:</strong> 0000</div>
+				<div><strong>Condiciones de pago:</strong> CONTADO</div>
+				<div><strong>Importe con letra:</strong> DOS MIL CUATROCIENTOS OCHENTA PESOS 00/100 M.N.</div>
+			</div>
+			<div class="float-left" style="width:40%;">
+				<div style="border-left:2px dotted  #8f8f8f;">
+					<!-- <div class="bold blue align-center margin-left">Importe</div> -->
+					<div class="bold small-margin-top margin-left" style="overflow:hidden;">
+						<div class="float-left" style="width:60%;">Subtotal</div>
+						<div class="float-left align-right" style="width:40%;">$5,968.80</div>
+					</div>
+					<!-- START BLOCK : ieps -->
+					<div class="bold margin-left" style="overflow:hidden;">
+						<div class="float-left" style="width:60%;">IEPS 0%</div>
+						<div class="float-left align-right" style="width:40%;">$0.00</div>
+					</div>
+					<!-- END BLOCK : ieps -->
+					<div class="bold margin-left" style="overflow:hidden;">
+						<div class="float-left" style="width:60%;">IVA 0%</div>
+						<div class="float-left align-right" style="width:40%;">$0.00</div>
+					</div>
+					<div class="bold mid-margin-top margin-left" style="border-top:3px solid #8f8f8f; overflow:hidden;">
+						<div class="float-left" style="width:60%;">Total</div>
+						<div class="float-left align-right" style="width:40%;">$5,968.80</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bold red align-center mid-margin-top">Este documento es una representación impresa de un CFDI</div>
+		<div class="wrapped with-mid-padding mid-margin-top">
+			<div class="bold blue">Cadena original del complemento de certificación digital del SAT</div>
+			<div class="monospace wordwrap small-margin-top" style="font-size:8pt;">||3.2|2014-02-07T12:30:11|ingreso|Pago en una sola exhibicion|No identificado|5968.80|5968.80|PTL040611815|(1) PANIFICADORA TLALCOLIGIA, S.A. DE C.V.|YAQUIS|84|TLALCOLIGIA|TLALPAN|DISTRITO FEDERAL|MEXICO|14430|Regimen General de Ley Personas Morales|SCA091208CM1|SHOW CATERING S.A DE CV|FRANCISCO VILLA|76|MIGUEL HIDALGO 2A SECCION AMPLIACION|TLALPAN|DISTRITO FEDERAL|MEXICO|14250|640|PZA|BOLILLOS|1.20|768.00|600|PZA|BISCOCHOS|4.40|2640.00|280|PZA|REPOSTERIA|5.20|1456.00|255|PZA|CUERNO MEDIANO|4.00|1020.00|53|PZA|BARRITAS|1.60|84.80|IVA|0|0.00|1||00|255|PZA|CUERNO MEDIANO|4.00|1020.00|53|PZA|BARRITAS|1.60|84.80|IVA|0|0.00|1||</div>
+		</div>
+		<div class="mid-margin-top" style="overflow:hidden;">
+			<div class="float-left" style="width:25%;">
+				<img src="imagenes/logos_cfds/codigo_qr.jpg" />
+			</div>
+			<div class="float-left" style="width:75%;">
+				<div class="wrapped with-mid-padding">
+					<div class="bold blue">Sello digital del CFDI</div>
+					<div class="monospace wordwrap small-margin-top" style="font-size:8pt;">plpapk5xlxK6np241DfYmClCcsUbdOLxk/UCLF3X4ncYtyFfxIe83QlqLb36yq/Qg1pRob0kNo3dW6nEUr8VvcFFgPcTejyg9eqfMuUEQAvXc0flU0AmI8HFPV0tYz2KVn7QQdk7K9UMxzAPA3aUN0CKR04ImB4QkvLLolOBqfo=</div>
+				</div>
+				<div class="wrapped with-mid-padding mid-margin-top">
+					<div class="bold blue">Sello digital del SAT</div>
+					<div class="monospace wordwrap small-margin-top" style="font-size:8pt;">OOWAr54eMovKoXg+IBdvesUYapLKgnj1BtE4QWNKTtpMXNOA1glzqCzEPS4QnrZ1RpS0rmVeo3lUzccjByPFoM2Y/rHmsYXXrus4+SNZLnIf3Ncd+PyPXZTiraZfQ8riZyStGlLoqXeOTUnQYWUScjz11xhnobKWtrs4C9wF+Kc=</div>
+				</div>
+			</div>
+		</div>
+		<!-- START BLOCK : observaciones -->
+		<div class="wrapped with-mid-padding mid-margin-top">
+			<div class="bold blue">Observaciones</div>
+			<div class="small-margin-top">PRUEBA DE FACTURA ELECTRONICA</div>
+		</div>
+		<!-- END BLOCK : observaciones -->
+	</body>
+</html>

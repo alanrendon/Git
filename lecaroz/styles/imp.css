@@ -1,0 +1,62 @@
+table.print2 { border: 1px solid Black ; }
+
+caption.print2 	{ text-align: center;  font-family: Arial, Helvetica, sans-serif;  font-size: 8pt;  font-style: italic;  font-weight: bold;  text-decoration: underline;      }
+
+th.print2 { background-color: #73A8B7; border: 1px ;  font-family: Arial, Helvetica, sans-serif;  color: White;  text-align: center;  vertical-align: middle;  font-size: 8pt;        }
+
+th.print_cia2 { background-color: #73A8B7; border: 1px ;  font-family: Arial, Helvetica, sans-serif;  color: White;  text-align: center;  vertical-align: middle;  font-size: 10pt;        }
+
+th.vprint2 { background-color: #73A8B7; border: 1px ;  font-family: Arial, Helvetica, sans-serif;  color: White;  text-align: left;  vertical-align: middle;  font-size: 8pt;        }
+
+th.rprint2 { background-color: #73A8B7; border: 1px ;  font-family: Arial, Helvetica, sans-serif;  color: White;  text-align: right;  vertical-align: middle;  font-size: 8pt;        }
+
+td.print2 { border: 1px ;  font-family: Arial, Helvetica, sans-serif;  text-align: center;  font-size: 8pt;     }
+
+td.print_cia2 { border: 1px ;  font-family: Arial, Helvetica, sans-serif;  text-align: center;  font-size: 10pt;     }
+
+td.vprint2 { border: 1px ;  font-family: Arial, Helvetica, sans-serif;  text-align: left;  vertical-align: middle;  font-size: 8pt;       }
+
+td.vprint3 { border: 1px ;  font-family: Arial, Helvetica, sans-serif;  text-align: left;  vertical-align: middle;  font-size: 8pt; border-right-color:#000000; border-right-style:solid;       }
+
+td.rprint2 { border: 1px ;  font-family: Arial, Helvetica, sans-serif;  text-align: right;  vertical-align: middle;  font-size: 8pt;      }
+
+td.rprint3 { border: 1px ;  font-family: Arial, Helvetica, sans-serif;  text-align: right;  vertical-align: middle;  font-size: 8pt;  border-right-color:#000000; border-right-style:solid;    }
+
+th.print_total2 { background-color: #73A8B7; border: 1px ;  font-family: Arial, Helvetica, sans-serif;  color: Black;  text-align: center;  vertical-align: middle;  font-size: 10pt;  font-weight: bolder;         }
+
+th.vprint_total2 {
+	background-color: #73A8B7;
+	border: 1px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: Black;
+	text-align: left;
+	vertical-align: middle;
+	font-size: 10pt;
+	font-weight: bolder;
+}
+
+th.rprint_total2 {
+	background-color: #73A8B7;
+	border: 1px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: Black;
+	text-align: right;
+	vertical-align: middle;
+	font-size: 10pt;
+	font-weight: bolder;
+}
+
+td.print_encabezado2 {
+	color: Black;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bolder;
+}
+
+td.rprint_encabezado2 {
+	color: Black;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bolder;
+	text-align: right;
+}

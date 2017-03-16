@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Documento sin t&iacute;tulo</title>
+</head>
+
+<body>
+<form id="form1" name="form1" method="post" action="">
+  <input name="fecha" type="text" id="fecha" value="31/01/2008" />
+</form>
+</body>
+<script language="javascript">
+var fecha = '31/01/2008';
+var patron = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/;
+
+alert('Por campo de formulario arroja: ' + patron.exec(document.forms[0].fecha.value));
+alert('Por variable normal arroja: ' + patron.exec(fecha));
+var otro = prompt('Fecha', '31/01/2008');
+alert('Por prompt arroja: ' + patron.exec(otro));
+</script>
+</html>

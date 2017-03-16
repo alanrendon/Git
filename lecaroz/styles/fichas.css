@@ -1,0 +1,145 @@
+td.ficha_original {
+	height: 8.6cm;
+	width: 19.1cm;
+}
+
+/* Linea 1. Dia, Mes, Año, Concepto Compañía */
+td.space {
+	width: 0.5cm;
+}
+
+td.c11 {
+	height: 1cm;
+	width: 8.5cm;
+}
+
+td.c12 {
+	height: 1cm;
+	width: 2.2cm;
+}
+
+td.c13 {
+	width: 0.6cm;
+	height: 1cm;
+}
+
+td.c14 {
+	height: 1cm;
+	width: 0.6cm;
+}
+
+td.c15 {
+	height: 1cm;
+	width: 1.3cm;
+}
+
+/* Linea 1bis. Dia, Mes, Año, Concepto Compañía copia */
+td.c11bis {
+	height: 1.3cm;
+	width: 8.5cm;
+}
+
+td.c12bis {
+	height: 1.3cm;
+	width: 2.2cm;
+}
+
+td.c13bis {
+	width: 0.6cm;
+	height: 1.3cm;
+}
+
+td.c14bis {
+	height: 1.3cm;
+	width: 0.6cm;
+}
+
+td.c15bis {
+	height: 1.3cm;
+	width: 1.3cm;
+}
+
+/* Linea 2. Numero de cuenta x 16 casillas */
+td.c21 {
+	height: 3.2cm;
+}
+
+td.c22 {
+	height: 3.2cm;
+	width: 2.2cm;
+}
+
+td.c23 {
+	width: 0.6cm;
+	height: 3.2cm;
+}
+
+td.c24 {
+	height: 3.2cm;
+	width: 0.6cm;
+}
+
+td.c25 {
+	height: 3.2cm;
+	width: 1.3cm;
+}
+
+td.c26 {
+	height: 3.2cm;
+	width: 1.5cm;
+}
+
+td.c27 {
+	height: 3.2cm;
+	width: 4.5cm;
+}
+
+td.c28 {
+	height: 3.2cm;
+	width: 0.8cm;
+}
+
+/* Linea 3. Importe */
+td.c31 {
+	height: 0.5cm;
+}
+
+td.c32 {
+	height: 0.5cm;
+	width: 2.2cm;
+}
+
+td.c33 {
+	width: 0.6cm;
+	height: 0.5cm;
+}
+
+td.c34 {
+	height: 0.5cm;
+	width: 0.6cm;
+}
+
+td.c35 {
+	height: 0.5cm;
+	width: 1.3cm;
+}
+
+td.c36 {
+	height: 0.5cm;
+	width: 1.5cm;
+}
+
+td.c37 {
+	height: 0.5cm;
+	width: 4.5cm;
+}
+
+/* Linea 4. Nombre del cliente */
+td.c41 {
+	height: 0.4cm;
+}
+
+/* Linea 5. Firma, cia */
+td.c51 {
+	height: 1.4cm;
+}

@@ -1,0 +1,315 @@
+/* CSS Document */
+
+body {
+	margin-left: 0mm;
+	margin-top: 0mm;
+	margin-right: 0mm;
+	margin-bottom: 0mm;
+}
+
+.hoja_oficio {
+	/* Area de impresión de una hoja de balance */
+	width: 230mm;
+	/*height: 317mm;*/
+	/* Fuente default */
+	font: 8pt Arial, Helvetica, sans-serif;
+	
+	margin-bottom: 50px;
+}
+
+.hoja_blanca_oficio {
+	display: none;
+}
+
+.hoja_carta {
+	/* Area de impresión de una hoja de balance */
+	width: 202mm;
+	height: 265mm;
+	/* Fuente default */
+	font: 8pt Arial, Helvetica, sans-serif;
+	/* Marca de agua */
+	/*background: url(./imagenes/lecaroz.png) no-repeat center;*/
+	/* No cambiar tamaño de area */
+	overflow: hidden;
+}
+
+.hoja_blanca_carta {
+	display: none;
+}
+
+.EncabezadoIzquierdo {
+	width: 15mm;
+	float: left;
+	overflow: hidden;
+	text-align: left;
+}
+
+.EncabezadoDerecho {
+	width: 15mm;
+	float: right;
+	overflow: hidden;
+	text-align: right;
+}
+
+.EncabezadoCentral {
+	width: 170mm;
+	margin-left: 16mm;
+	text-align: center;
+}
+
+.Red {
+	color: #C00;
+}
+
+.Blue {
+	color: #00C;
+}
+
+.Green {
+	color: #060;
+}
+
+.Orange {
+	color: #F60;
+	font-weight: bold;
+}
+
+.Purple {
+	color: #63F;
+}
+
+.RowHeader {
+	background-color: #999;
+}
+
+.RowData {
+	background-color: #CCC;
+}
+
+.Border {
+	border: #000 solid 1px;
+}
+
+.Bold {
+	font-weight: bold;
+}
+
+.TextAlignLeft {
+	text-align: left;
+}
+
+.TextAlignRight {
+	text-align: right;
+}
+
+.TextAlignCenter {
+	text-align: center;
+}
+
+.Font6 {
+	font-size: 6pt;
+}
+
+.Font8 {
+	font-size: 8pt;
+}
+
+.Font10 {
+	font-size: 10pt;
+}
+
+.Font11 {
+	font-size: 11pt;
+}
+
+.Font12 {
+	font-size: 12pt;
+}
+
+.Font14 {
+	font-size: 14pt;
+}
+
+.Hidden {
+	visibility: hidden;
+}
+
+.Visible {
+	visibility: visible;
+}
+
+.DisplayNone {
+	display: none;
+}
+
+.Seccion {
+	margin-top: 2mm;
+}
+
+.BorderBottom {
+	border-bottom: #000 solid 1px;
+}
+
+.Concepto {
+	width: 50mm;
+	float: left;
+	overflow: hidden;
+}
+
+.Nivel1 {
+	width: 30mm;
+	margin-left: 50mm;
+	text-align: right;
+}
+
+.Nivel2 {
+	width: 30mm;
+	margin-left: 80mm;
+	text-align: right;
+}
+
+.Nivel3 {
+	width: 30mm;
+	margin-left: 140mm;
+	text-align: right;
+}
+
+.Anexo1 {
+	font-size: 6pt;
+	width: 30mm;
+	margin-right: 62mm;
+	float: right;
+	overflow: hidden;
+	position: relative;
+	top: 0.5mm;
+}
+
+.Anexo2 {
+	font-size: 6pt;
+	width: 30mm;
+	margin-right: 2mm;
+	float: right;
+	overflow: hidden;
+	position: relative;
+	top: 1.5mm;
+}
+
+.Anexo3 {
+	font-size: 8pt;
+	width: 30mm;
+	margin-right: 1mm;
+	float: right;
+	overflow: hidden;
+	position: relative;
+	top: 1mm;
+}
+
+/*
+@@ Estilos para sección de promedios
+*/
+
+.ColumnaIzquierdaNivel1 {
+	width: 107mm;
+}
+
+.ColumnaDerechaNivel1 {
+	width: 94mm;
+	float: right;
+}
+
+.ColumnaIzquierdaNivel2 {
+	width: 70mm;
+}
+
+.ColumnaDerechaNivel2 {
+	width: 36mm;
+	float: right;
+}
+
+.ConceptoTipo1 {
+	width: 40mm;
+	float: left;
+}
+
+.ValorTipo1 {
+	width: 25mm;
+	margin-left: 40mm;
+	text-align: right;
+}
+
+.ConceptoTipo2 {
+	width: 40mm;
+	float: left;
+}
+
+.ValorTipo2 {
+	width: 40mm;
+	margin-left: 40mm;
+	text-align: right;
+}
+
+.ConceptoTipo3 {
+	width: 20mm;
+	float: left;
+}
+
+.ValorTipo3 {
+	margin-left: 20mm;
+}
+
+.ConceptoTipo4 {
+	width: 35mm;
+	float: left;
+}
+
+.ValorTipo4 {
+	width: 25mm;
+	margin-left: 35mm;
+}
+
+/*
+@@ Estilos para sección de estadisticas
+*/
+
+.ColumnaIzquierda {
+	width: 50%;
+	overflow: hidden;
+}
+
+.ColumnaDerecha {
+	width: 50%;
+	float: right;
+	overflow: hidden;
+}
+
+.SubColumnaIzquierda {
+	width: 50%;
+	overflow: hidden;
+}
+
+.SubColumnaDerecha {
+	width: 50%;
+	float: right;
+	overflow: hidden;
+}
+
+.MesConcepto {
+	width: 10mm;
+	float: left;
+	/*overflow: hidden;*/
+}
+
+.MesValor1 {
+	width: 20mm;
+	margin-left: 10mm;
+	text-align: right;
+	/*overflow: hidden;*/
+}
+
+.MesValor2 {
+	width: 18mm;
+	float: right;
+	margin-right: 2mm;
+	text-align: right;
+	/*overflow: hidden;*/
+}

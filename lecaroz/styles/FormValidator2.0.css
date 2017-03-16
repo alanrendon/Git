@@ -1,0 +1,164 @@
+@charset "utf-8";
+/* CSS Document */
+
+form.FormValidator {}
+
+form.FormValidator .validate {}
+
+form.FormValidator .focus {}
+form.FormValidator .toText {}
+form.FormValidator .onlyText {}
+form.FormValidator .onlyLetters {}
+form.FormValidator .onlyNumbers {}
+form.FormValidator .onlyNumbersAndLetters {}
+form.FormValidator .toDate {}
+form.FormValidator .toNumber {}
+form.FormValidator .toInterval {}
+form.FormValidator .toIntervalChars {}
+form.FormValidator .toInt {}
+form.FormValidator .toPosInt {}
+form.FormValidator .toColorInt {}
+form.FormValidator .toFloat {}
+form.FormValidator .toPosFloat {}
+form.FormValidator .toColorFloat {}
+form.FormValidator .numberFormat {}
+form.FormValidator .numberPosFormat {}
+form.FormValidator .numberColorFormat {}
+form.FormValidator .toPhoneNumber {}
+form.FormValidator .toEmail {}
+form.FormValidator .toRFC {}
+form.FormValidator .toRFCopcional {}
+form.FormValidator .toCURP {}
+form.FormValidator .toUpper {}
+form.FormValidator .toLower {}
+form.FormValidator .cleanText {}
+
+form.FormValidator {}
+
+form.FormValidator input[type="text"],
+form.FormValidator input[type="password"],
+form.FormValidator input[type="file"],
+form.FormValidator textarea,
+form.FormValidator select {
+	font: 10pt Arial, Helvetica, sans-serif;
+	border: 2px solid #CCC;
+	background-color: transparent;
+	color: #000;
+}
+
+form.FormValidator input[type="text"]:hover,
+form.FormValidator input[type="password"]:hover,
+form.FormValidator input[type="file"]:hover,
+form.FormValidator textarea:hover,
+form.FormValidator select:hover {
+	border: 2px solid #000;
+}
+
+form.FormValidator input[type="text"]:focus,
+form.FormValidator input[type="password"]:focus,
+form.FormValidator input[type="file"]:focus,
+form.FormValidator textarea:focus,
+form.FormValidator select:focus {
+	border: 2px solid #000;
+	background-color: #FFF;
+}
+
+form.FormValidator input.bold {
+	font-weight: bold;
+}
+
+form.FormValidator input.font6 {
+	font-size: 6pt;
+}
+
+form.FormValidator input.font8 {
+	font-size: 8pt;
+}
+
+form.FormValidator input.font10 {
+	font-size: 10pt;
+}
+
+form.FormValidator input.font12 {
+	font-size: 12pt;
+}
+
+form.FormValidator input.font14 {
+	font-size: 14pt;
+}
+
+form.FormValidator input.font16 {
+	font-size: 16pt;
+}
+
+form.FormValidator input.font18 {
+	font-size: 18pt;
+}
+
+form.FormValidator input.font20 {
+	font-size: 20pt;
+}
+
+form.FormValidator input.green {
+	color: #060;
+}
+
+form.FormValidator input.blue {
+	color: #00C;
+}
+
+form.FormValidator input.red {
+	color: #C00;
+}
+
+form.FormValidator input.yellow {
+	color: #FC0;
+}
+
+form.FormValidator input.purple {
+	color: #306;
+}
+
+form.FormValidator input.orange {
+	color: #F30;
+}
+
+form.FormValidator input.black {
+	color: #000;
+}
+
+form.FormValidator input.gray {
+	color: #999;
+}
+
+form.FormValidator input.aqua {
+	color: #0CC;
+}
+
+form.FormValidator input.bold {
+	font-weight: bold;
+}
+
+form.FormValidator input.italic {
+	font-style: italic;
+}
+
+form.FormValidator input.overline {
+	text-decoration: overline;
+}
+
+form.FormValidator input.underline {
+	text-decoration: underline;
+}
+
+form.FormValidator input.line-through {
+	text-decoration: line-through;
+}
+
+form.FormValidator input.right {
+	text-align: right;
+}
+
+form.FormValidator input.center {
+	text-align: center;
+}

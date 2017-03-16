@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<DesglosePagos>
+	<Titulos>
+		<FAC>
+			<X unit="mm">0.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>FAC</Leyenda>
+		</FAC>
+		<SUB>
+			<X unit="mm">10.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>SUB</Leyenda>
+		</SUB>
+		<FAL>
+			<X unit="mm">20.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>FAL</Leyenda>
+		</FAL>
+		<DEV>
+			<X unit="mm">30.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>DEV</Leyenda>
+		</DEV>
+		<DESC>
+			<X unit="mm">40.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>DESC</Leyenda>
+		</DESC>
+		<IVA>
+			<X unit="mm">50.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>IVA</Leyenda>
+		</IVA>
+		<RET>
+			<X unit="mm">60.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>RET</Leyenda>
+		</RET>
+		<ISR>
+			<X unit="mm">70.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>ISR</Leyenda>
+		</ISR>
+		<FLETES>
+			<X unit="mm">80.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>FLETES</Leyenda>
+		</FLETES>
+		<OTROS>
+			<X unit="mm">90.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>OTROS</Leyenda>
+		</OTROS>
+		<TOTAL>
+			<X unit="mm">100.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>TOTAL</Leyenda>
+		</TOTAL>
+	</Titulos>
+	<Datos incrementoV="3.50">
+		<FAC>
+			<X unit="mm">0.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo>num_fact</Campo>
+		</FAC>
+		<SUB>
+			<X unit="mm">10.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo numberFormat="2">importe</Campo>
+		</SUB>
+		<FAL>
+			<X unit="mm">20.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo numberFormat="2">fal</Campo>
+		</FAL>
+		<DEV>
+			<X unit="mm">30.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo numberFormat="2">dev</Campo>
+		</DEV>
+		<DESC>
+			<X unit="mm">40.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo numberFormat="2">desc</Campo>
+		</DESC>
+		<IVA>
+			<X unit="mm">50.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo numberFormat="2">iva</Campo>
+		</IVA>
+		<RET>
+			<X unit="mm">60.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo numberFormat="2">ret</Campo>
+		</RET>
+		<ISR>
+			<X unit="mm">70.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo numberFormat="2">isr</Campo>
+		</ISR>
+		<FLETES>
+			<X unit="mm">80.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo numberFormat="2">fletes</Campo>
+		</FLETES>
+		<OTROS>
+			<X unit="mm">90.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo numberFormat="2">otros</Campo>
+		</OTROS>
+		<TOTAL>
+			<X unit="mm">100.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo numberFormat="2">total</Campo>
+		</TOTAL>
+	</Datos>
+</DesglosePagos>

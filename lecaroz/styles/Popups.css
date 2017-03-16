@@ -1,0 +1,43 @@
+/* CSS Document */
+
+#shadowLayer {
+	background-color: #000;
+	cursor: wait;
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	text-align: center;
+}
+
+#popupLayer {
+	background-color: #ECFFFC;
+	border-top: 2px solid #73A8B7;
+	border-bottom: 2px solid #73A8B7;
+	position: absolute;
+	left: 50%;
+	width: 4px;
+	height: 5px;
+	padding: 4px;
+	overflow: hidden;
+	text-align: left;
+}
+
+#popupCloseIcon {
+	cursor: pointer;
+	float: right;
+}
+
+#popupTitle {
+	background: #73A8B7;
+	font-weight: bold;
+	margin-bottom: 3px;
+	overflow: hidden;
+	padding: 2px 3px 0 10px;
+	text-align: left;
+}
+
+#popupWrapper {
+	display: none;
+	opacity: 0;
+}
