@@ -1,0 +1,22 @@
+html {
+  margin: 30px;
+}
+
+body {
+	font-family: "Helvetica";
+	font-size: 14px;
+}
+
+div#cabecera  {
+	font-size: 11px;
+}
+
+div#cuerpo {
+	font-size: 10px;	
+	margin-top: 10px;
+}
+
+div#cuerpo table tr th {
+	border-top:1px solid #000;
+	border-bottom:1px solid #000;
+}

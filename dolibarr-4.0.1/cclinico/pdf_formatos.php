@@ -40,30 +40,34 @@ if ($user->rights->cclinico->crear){
 
 
 		$pdf=new mPDF('c','A4','','',5,5,13.5,8);
+
+		//$pdf->debug = true;
+		//$pdf->showImageErrors = true;
+
+
 		$mysoc->logo_mini=$conf->global->MAIN_INFO_SOCIETE_LOGO_MINI;
 		if (! empty($mysoc->logo_mini) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_mini))
 		{
-			$urllogo=DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=companylogo&amp;file='.urlencode('thumbs/'.$mysoc->logo_mini);
+			$urllogo= $conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_mini;
 		}
 		else
 		{
-			$urllogo=DOL_URL_ROOT.'/theme/dolibarr_logo.png';
+			$urllogo='../theme/dolibarr_logo.png';
 		}
-		
 
-		$urllogo= $_SERVER['DOCUMENT_ROOT'].$urllogo;
-		$html.= '
+
+		$html.= ' 
 
 			<table class="noborder" style="font-size:13px;" >
 			 	<tr >
-				 	<td rowspan=3><img src="'.$urllogo.'" style="width:200px; height:50px;"></td>
-				 	<td align="center" style="width:350px;">
+				 	<td rowspan=3 style="width:200px;" ><img src="'.$urllogo.'" style="max-width:200px; height:50px;"></td>
+				 	<td align="center" style="width:400px;" >
 				 		<strong>'.(($medico->gender=='man')?'Dr.':'Dr(a).').$medico->firstname.' '.$medico->lastname.'</strong>
 				 	</td>
 				 	<td align="center"></td>
 			 	</tr>
 			 	<tr >
-				 	<td align="center" style="width:410px;">';
+				 	<td align="center" >';
 					 	if ($medico->array_options["options_cedula_prof"]) {
 					 		$html.='Cédula Profesional: '.$medico->array_options["options_cedula_prof"];
 					 	}
@@ -72,8 +76,8 @@ if ($user->rights->cclinico->crear){
 				 	<td align="center"></td>
 			 	</tr>
 			 	<tr >
-				 	<td align="center" style="width:350px;">'.$medico->job.'</td>
-				 	<td align="right" style="padding-left:46px;"><strong>Folio:</strong>'.str_replace('!', '',$consulta->Ref).'</td>
+				 	<td align="center" >'.$medico->job.'</td>
+				 	<td align="right" style="padding-left:10px;"><strong>Folio:</strong>'.str_replace('!', '',$consulta->Ref).'</td>
 			 	</tr>
 			</table>
 			<div style="border:1px solid rgb(83,155,193);"></div>
@@ -84,10 +88,10 @@ if ($user->rights->cclinico->crear){
 		<div  style="border:1px solid rgb(83,155,193);">
 			<div  style="border:1px solid rgb(83,155,193); font-size:13px; ">
 				<div >
-					<div style="word-wrap: break-word; width:76%; float: left; " >
+					<div style="word-wrap: break-word; width:65%; float: left; " >
 						Nombre del Paciente: <strong>'.$paciente->firstname.' '.$paciente->lastname.'</strong>
 					</div>
-					<div style="word-wrap: break-word; width:23%; float: left; " >
+					<div style="word-wrap: break-word; width:33%; float: left;  " >
 						Fecha de consulta: <strong>'.dol_print_date($consulta->date_consultation,'%d/%m/%Y').'</strong>
 					</div>
 					<div style="word-wrap: break-word; width:100px; float: left; " >&nbsp;&nbsp;
@@ -117,30 +121,35 @@ if ($user->rights->cclinico->crear){
 
 				$html.= '
 				</div>
-			</div>
+			</div> 
 		</div>
 		<br>
-		<div style=" height:185px; text-align : justify; font-size:13px;" >
+		<div style=" height:155px; text-align : justify; font-size:13px;" >
 			<div style="word-wrap: break-word; width:100%; float: left; " >
 				Receta:
 			</div>
-			<div style="text-align: justify; height:162px; padding-left:10px; word-wrap: break-word; font-size:12px; width:100%; float: left; " ><pre>'.$consulta->treatments.'</pre></div>
+			<div style="text-align: justify; height:102px; padding-left:10px; word-wrap: break-word; font-size:11px; width:100%; float: left; " ><pre>'.$consulta->treatments.'</pre></div>
 		</div>';
 		if ($conf->global->CONSULTA_REQUIRED) {
 			$html.='
 			<div style="word-wrap: break-word; width:100%; float: left; font-size:13px;" >
 				Notas Médicas:
 			</div>
-			<div style="height:162px; text-align: justify; padding-left:10px; word-wrap: break-word; font-size:13px; width:63%; float: left; " ><pre>'.$consulta->comments.'</pre></div>
+			<div style="height:162px; text-align: justify; padding-left:10px; word-wrap: break-word; font-size:11px; width:65%; float: left; " ><pre>'.$consulta->comments.'</pre></div>
 			<div style="word-wrap: break-word; width:100%; float: left; font-size:13px;" ></div>
 			';
+			$top=320;
+		}else{
+			$top=140;
 		}
+
+
 		$html.='
-		<div style="height:185px;  width:29.5%; position: absolute;left: 530px; top: 340px; font-size:13px; " >
+		<div style="height:185px;  width:29.5%; position: absolute;left: 540px; top: '.$top.'px; font-size:13px; " >
 			<div style="text-align:center; font-family: Courier;  width:100%;" ><br><br><br><br><br><br>'.(($medico->gender=='man')?'Dr.':'Dr(a).').$medico->firstname.' '.$medico->lastname.'<br><br><br><br><br></div>
 			<div style="width:100%; border-top:1px solid rgb(83,155,193); text-align:center; font-family: Courier;" >Firma</div>
 		</div>
-		<div style="border-top:2px solid rgb(83,155,193); text-align:center; font-family: Courier; font-size:13px;">
+		<div style="border-top:2px solid rgb(83,155,193); text-align:center; font-family: Courier; font-size:11px;">
 			'.(empty($conf->global->MAIN_INFO_SOCIETE_ADDRESS)?'':$conf->global->MAIN_INFO_SOCIETE_ADDRESS) .
 			  (empty($conf->global->MAIN_INFO_SOCIETE_TOWN)?'': ', '.$conf->global->MAIN_INFO_SOCIETE_TOWN).
 			  (empty($conf->global->MAIN_INFO_SOCIETE_STATE)?'': ', '.getState($conf->global->MAIN_INFO_SOCIETE_STATE)).
@@ -152,7 +161,9 @@ if ($user->rights->cclinico->crear){
 			  '
 		</div>
 		';
-		//print $html;
+
+		//$img='<img src="'.$urllogo.'" style="width:200px; height:50px;">';
+		//print $html; 
 		$pdf->writeHTML($html);
 		//$pdf->pdf->IncludeJs('print(TRUE)');
 		
@@ -162,7 +173,7 @@ if ($user->rights->cclinico->crear){
 
 
 
-
+ 
 
 	if ($aid>0) {
 		$form = new Form($db);	
@@ -178,19 +189,18 @@ if ($user->rights->cclinico->crear){
 		$mysoc->logo_mini=$conf->global->MAIN_INFO_SOCIETE_LOGO_MINI;
 		if (! empty($mysoc->logo_mini) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_mini))
 		{
-			$urllogo=DOL_URL_ROOT.'/viewimage.php?cache=1&amp;modulepart=companylogo&amp;file='.urlencode('thumbs/'.$mysoc->logo_mini);
+			$urllogo= $conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_mini;
 		}
 		else
 		{
-			$urllogo=DOL_URL_ROOT.'/theme/dolibarr_logo.png';
+			$urllogo='../theme/dolibarr_logo.png';
 		}
-		
 
-		$urllogo= $_SERVER['DOCUMENT_ROOT'].$urllogo;
+
 		$html.= '
 			<table class="noborder" >
 			 	<tr >
-				 	<td rowspan=4><img src="'.$urllogo.'" style="width:200px; height:50px;"></td>
+				 	<td rowspan=4 style="width:200px;" ><img src="'.$urllogo.'" style="max-width:200px; height:50px;"></td>
 				 	<td align="center" style="width:350px;">
 				 		<strong>'.(empty($conf->global->MAIN_INFO_SOCIETE_NOM)?'':$conf->global->MAIN_INFO_SOCIETE_NOM).'</strong>
 				 	</td>

@@ -352,9 +352,7 @@ function select_dol_products($selected='', $htmlname='prod', $show_empty=0, $exc
     }*/
     $sql.= " FROM ".MAIN_DB_PREFIX ."product as u";
 
-    $sql.="
-    WHERE
-     u.entity=".$conf->entity;
+
 
     $sql.= " ORDER BY u.ref ASC";
 
@@ -590,9 +588,9 @@ print '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
 	$var=!$var;
 	print '<tr '.$bc[$var].'>';
 	if ($conf->global->CLINICO_PROD>0) {
-		print '<td><fieldset disabled>Productos/Servicio:  '.$form->select_produits_list((GETPOST("prod")?GETPOST("prod"):$conf->global->CLINICO_PROD),'prod').'</fieldset></td>';
+		print '<td>Productos/Servicio:  '.select_dol_products($conf->global->CLINICO_PROD, 'prod', 0, '',1).'</td>';
 	}else{
-		print '<td>Productos/Servicio:  '.select_dol_products(GETPOST("prod")).'</td>';
+		print '<td>Productos/Servicio:  '.select_dol_products($conf->global->CLINICO_PROD).'</td>';
 	}
 
 	print '<td align="center" width="20">';

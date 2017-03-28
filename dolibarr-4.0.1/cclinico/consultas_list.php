@@ -289,7 +289,7 @@ if (!empty($search_Type_consultation)) {
 if (!empty($search_reason)) {
 	$sql.= " LEFT JOIN llx_c_motivo_consulta as mc on t.reason=mc.rowid";
 }
-if (!empty($search_reason)) {
+if (!empty($search_diagnostics)) {
 	$sql.= " LEFT JOIN llx_c_tipo_diagnostico as td on t.diagnostics=td.rowid";
 }
 
@@ -330,6 +330,7 @@ if ($search_reason){
 if ($search_diagnostics){
 	$sql.=" and td.description LIKE '%".$search_diagnostics."%'";
 }
+
 
 
 if ($search_statut) $sql.= natural_search("t.statut",$search_statut);
@@ -662,7 +663,7 @@ if (! empty($arrayfields['t.statut']['checked'])){
 
 			if (! empty($arrayfields['t.Type_consultation']['checked'])){
 				print '<td>'; 
-				$resql1=$db->query("SELECT * FROM llx_c_tipo_consulta as a WHERE a.entity=".$conf->entity." AND a.active=1 AND a.rowid=".$obj->Type_consultation);
+				$resql1=$db->query("SELECT * FROM llx_c_tipo_consulta as a WHERE  a.active=1 AND a.rowid=".$obj->Type_consultation);
 
 			    if ($resql1)
 			    {
@@ -680,7 +681,7 @@ if (! empty($arrayfields['t.statut']['checked'])){
 			}
 			if (! empty($arrayfields['t.reason']['checked'])){
 				print '<td>'; 
-				$resql1=$db->query("SELECT * FROM llx_c_motivo_consulta as a WHERE a.entity=".$conf->entity." AND a.active=1 AND a.rowid=".$obj->reason);
+				$resql1=$db->query("SELECT * FROM llx_c_motivo_consulta as a WHERE a.active=1 AND a.rowid=".$obj->reason);
 			    if ($resql1)
 			    {
 			        $num2 = $db->num_rows($resql1);
@@ -697,7 +698,7 @@ if (! empty($arrayfields['t.statut']['checked'])){
 			}
 			if (! empty($arrayfields['t.diagnostics']['checked'])){
 				print '<td>'; 
-				$resql1=$db->query("SELECT * FROM llx_c_tipo_diagnostico as a WHERE a.entity=".$conf->entity." AND a.active=1 AND a.rowid=".$obj->diagnostics);
+				$resql1=$db->query("SELECT * FROM llx_c_tipo_diagnostico as a WHERE  a.active=1 AND a.rowid=".$obj->diagnostics);
 			    if ($resql1)
 			    {
 			        $num2 = $db->num_rows($resql1);

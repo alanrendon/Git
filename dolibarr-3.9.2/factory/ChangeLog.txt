@@ -1,0 +1,31 @@
+3.5.+1.0.1
+	- fix : bugs on declination, and add categories choice on setup (root, variant, catalog) 
+	- fix : icon on box error fixed
+	- fix : add extrafields feature
+	- fix : access error with multicompany module enabled
+	- fix : include categorie class left on projecttask.php
+
+3.6+1.1.0
+	- Add : object link template (tpl)
+	- fix : document tabs error
+
+3.6+1.1.1
+	- Add : multicompany feature
+	- fix : declination enhancement
+	- fix : pmp not well calculated
+
+3.6+1.1.2
+	- Evo : component stock movement are now made during validation of the OF (not create draft)
+
+3.6+1.1.3
+	- fix : create OF : hours locked
+
+3.6+1.1.4
+	- Add : change price depending on composed product
+
+3.6+1.1.5
+	- Add : description on component
+	- Add : Qty used on Global
+	- Add : image preview of product 
+	- Add : CRLF on descriptionQty used on Global
+	

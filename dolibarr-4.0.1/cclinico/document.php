@@ -142,11 +142,14 @@ if ($object->id)
 
     print '</div>';
 
+
+
     dol_fiche_end();
     
-    $modulepart = 'object';
+    $modulepart = 'scanner_user_temp';
     $permission = $user->rights->cclinico->crear;
     $param = '&id=' . $object->id;
+    $relativepathwithnofile=$upload_dir."/";
     include DOL_DOCUMENT_ROOT . '/core/tpl/document_actions_post_headers.tpl.php';
 } else {
     print $langs->trans("ErrorUnknown");

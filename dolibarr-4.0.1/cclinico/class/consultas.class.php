@@ -951,8 +951,9 @@ class Consultas extends CommonObject
 		dol_syslog(__METHOD__, LOG_DEBUG);
 
 		$sql = 'SELECT a.description FROM llx_c_tipo_diagnostico as a WHERE
-		 a.entity ='.$conf->entity.' AND 
+	
 		 a.active=1 AND a.rowid='.trim($id);
+
 		$resql = $this->db->query($sql);
 		if ($resql) {
 			$num = $this->db->num_rows($resql);
