@@ -53,7 +53,9 @@ else if (event.keyCode == 38) nombre.select();" value="{apellido}" size="35" max
     </tr>
     <tr>
       <th class="vtabla" scope="row">Men&uacute;s</th>
-      <td class="vtabla"><input name="menu1" type="checkbox" id="menu1" value="TRUE" {1}> Panaderías<br>
+      <td class="vtabla">
+        <input name="menu1" type="checkbox" id="menu1" value="TRUE" {1}> 
+        Panaderías<br>
         <input name="menu2" type="checkbox" id="menu2" value="TRUE" {2}>
         Rosticer&iacute;a<br>
         <input name="menu3" type="checkbox" id="menu3" value="TRUE" {3}>
@@ -67,7 +69,11 @@ else if (event.keyCode == 38) nombre.select();" value="{apellido}" size="35" max
         <input name="menu7" type="checkbox" id="menu7" value="TRUE" {7}>
         Balances<br>
         <input name="menu8" type="checkbox" id="menu8" value="TRUE" {8}>
-        Administrador</td>
+        Administrador<br>
+        <input name="menu9" type="checkbox" id="menu9" value="TRUE" {9}>
+        Refacciones</br>
+        </td>
+        
     </tr>
     <tr>
       <th class="vtabla" scope="row">Capturista </th>

@@ -31,7 +31,8 @@ $socid      = GETPOST('socid','int');
 $doc        = GETPOST("doc");
 $doc2       = GETPOST("doc2");
 if ($user->societe_id) $socid=$user->societe_id;
-$dir_paciente="files/Paciente-".$id;
+$modulepart='cclinico';
+$dir_paciente=$conf->$modulepart->dir_output."/files/Paciente-".$id;
 $pacientes = new Pacientes($db);
 $antecedentes = new Antecedentes($db);
 $extrafields = new ExtraFields($db);
@@ -879,7 +880,7 @@ if (! empty($id) )
                            
                         </tr>
                         ';
-                        $dir_paciente="files/Paciente-".$id."/";
+                        $dir_paciente=$conf->$modulepart->dir_output."/files/Paciente-".$id."/";
                         if (is_dir($dir_paciente) && count(scandir($dir_paciente)) > 2 ) {
                             $directorio = opendir($dir_paciente);
                             $ban=0;

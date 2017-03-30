@@ -59,9 +59,9 @@ if (! $sortfield) $sortfield="name";
 $object = new Pacientes($db);
 if ($id > 0) $object->fetch($id);
 
-$upload_dir = "files/Paciente-".$id.'/documents';
-$modulepart='cclinico';
 
+$modulepart='cclinico';
+$upload_dir = $conf->$modulepart->dir_output."/files/Paciente-".$id.'/documents';
 
 /*
  * Actions
@@ -146,10 +146,10 @@ if ($object->id)
 
     dol_fiche_end();
     
-    $modulepart = 'scanner_user_temp';
+    $modulepart = 'cclinico';
     $permission = $user->rights->cclinico->crear;
     $param = '&id=' . $object->id;
-    $relativepathwithnofile=$upload_dir."/";
+    $relativepathwithnofile="files/Paciente-".$id.'/documents/';
     include DOL_DOCUMENT_ROOT . '/core/tpl/document_actions_post_headers.tpl.php';
 } else {
     print $langs->trans("ErrorUnknown");

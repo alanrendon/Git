@@ -360,7 +360,7 @@ class Factory extends CommonObject
 					llx_product AS t3 ON t.fk_product_children = t3.rowid
 				WHERE
 					t.fk_product_father = '.$id.' AND t3.fk_product_type = 0';
-		
+
 		$res_price = $this->db->query($sql_price);
 		$obj_price = $this->db->fetch_object($res_price);
 		$num_price = $this->db->num_rows($res_price);
@@ -376,6 +376,7 @@ class Factory extends CommonObject
 			llx_product_extrafields AS e ON b.rowid = e.fk_object
 		WHERE
 			b.rowid = '.$id;
+
 		$rq1 = $this->db->query($sql1);
 		$n=$this->db->num_rows($rq1);
 		$ress = $this->db->query($sql1);
@@ -403,7 +404,7 @@ class Factory extends CommonObject
 				$sqltc .= " AND entity = ".$conf->entity;
 				$resqltc = $this->db->query($sqltc);
 				$ntc = $this->db->num_rows($resqltc);
-
+				
 				if( $ntc > 0 ) {
 					$obj = $this->db->fetch_object($resqltc);
 					$valorTC = $obj->value;
@@ -456,7 +457,9 @@ class Factory extends CommonObject
 								WHERE
 									t.fk_product_father ='.$rs1->fk_product;														
 					$rq2 = $this->db->query($sql2);	
+					
 					while ($rs2= $this->db->fetch_object($rq2)) {
+						
 						$resp=substr($rs2->ref, 0, 3);
 						if((strcmp($resp, 'TRA')==0 || strcmp($resp, 'tra')==0) || strcmp($rs2->ref, 'cxhcnc')==0 || strcmp($rs2->ref, 'cxhdm')==0 || strcmp($rs2->ref, 'cxhr') ==0){
 						}else{				
@@ -478,6 +481,7 @@ class Factory extends CommonObject
 									t3.rowid='.$rs1->fk_product;						
 							$rq2AL = $this->db->query($sql2AL);	
 							$rs2AL= $this->db->fetch_object($rq2AL);
+
 							$pt=($rs2->esp*$rs2AL->anc*$rs2AL->lar*$rs2->fac/1000000); ////////////////Peso teorico///////////////////////				
 							$conversionMN=$rs2->price_mat*$valorTC;/////////////////////////conversion MN/////////////////////		
 							$costMatPrima=($conversionMN*$pt); 	////////////Costo materia prima /////////////////////////			
@@ -497,7 +501,8 @@ class Factory extends CommonObject
 							
 							$largo = ($rs2AL->lar/25.4);							
 							$ancho = ($rs2AL->anc/25.4);								
-							$area = $largo*$ancho;								
+							$area = $largo*$ancho;	
+
 							$string = "SELECT t.porcent, t.fac ";	
 							$string .= " FROM ".MAIN_DB_PREFIX."product_extrafields as t";	
 							$string .= " WHERE t.fk_object=".$idTrat;
@@ -533,6 +538,7 @@ class Factory extends CommonObject
 				$totalFinal=round(($sumSubtotal+($sumSubtotal*0.16)),2);
 				$sqql="UPDATE ".MAIN_DB_PREFIX."product as a SET a.price=".$subFinal." WHERE a.rowid=".$id;
 				$this->db->query($sqql);
+		
 				
 				if ( $num_price > 0 ) 
 				{
@@ -2192,7 +2198,7 @@ class Factory extends CommonObject
 				WHERE
 					c.fk_product ='.$id.'
 				AND d.rowid ='.$entr;
-																			
+															
 		$rq2 = $this->db->query($sql2);	
 		$rs2= $this->db->fetch_object($rq2);								
 				

@@ -88,8 +88,6 @@ class InterfaceModCtrlanticipo extends DolibarrTriggers
 					    $credit->change_value_advance($user);
 		            }
 		        }
-
-		   		
 		   	break;
 	    }
 

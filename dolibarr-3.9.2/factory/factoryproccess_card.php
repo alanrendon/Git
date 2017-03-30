@@ -112,11 +112,11 @@ if (empty($reshook))
 		$error=0;
 
 		
-	$object->fk_propal=GETPOST('fk_propal','int');
-	$object->fk_product=GETPOST('fk_product','int');
-	$object->fk_operator=GETPOST('fk_operator','int');
+		$object->fk_propal=GETPOST('fk_propal','int');
+		$object->fk_product=GETPOST('fk_product','int');
+		$object->fk_operator=GETPOST('fk_operator','int');
 
-		  
+			  
 
 		if (empty($object->ref))
 		{
@@ -150,30 +150,40 @@ if (empty($reshook))
 		$idPro= GETPOST('idProp');
 		$idProd= GETPOST('idProd');
 		if(GETPOST('dateEnd') &&  GETPOST('horas')  && GETPOST('minutos')){
+			//$fk_operator=GETPOST("fk_operator","int");
+
+			//if ($fk_operator>0) {
+				$horas= GETPOST('horas');
+				$minutos=  GETPOST('minutos');
+				$datEnd=GETPOST('dateEnd');
+				$fecha = trim($datEnd);
+				$aux=str_replace('/','-',$fecha);
+				$datE=date('Y-m-d',strtotime($aux));
+
+				$string ='UPDATE llx_factory_proccess
+							SET dateEnd = "'.$datE.'",
+							STATUS = 2,
+							hours='.$horas.',
+							minutes='.$minutos;
+				//$string .= ',fk_operator='.$fk_operator
+				$string .='
+							WHERE
+								fk_propal ='.$idPro.'
+							AND fk_product ='.$idProd;
+						
+				$query=$db->query($string);
+
+				//print '<script>window.location.href="'.$_SERVER["PHP_SELF"].'?idProp='.$idPro.'&idProd='.$idProd.'&action=view"</script>';
+				header("Location: ".$_SERVER["PHP_SELF"].'?idProp='.$idPro.'&idProd='.$idProd.'&action=view');
+				exit;
+			/*}else{
+				$action='cerrar';
+				setEventMessages('Introdusca el campo "Operador"', null, 'errors');
+			}*/
 			
-			$horas= GETPOST('horas');
-			$minutos=  GETPOST('minutos');
-			$datEnd=GETPOST('dateEnd');
-			$fecha = trim($datEnd);
-			$aux=str_replace('/','-',$fecha);
-			$datE=date('Y-m-d',strtotime($aux));
-
-			$string ='UPDATE llx_factory_proccess
-						SET dateEnd = "'.$datE.'",
-						 STATUS = 2,
-						 hours='.$horas.',
-						 minutes='.$minutos.'
-						WHERE
-							fk_propal ='.$idPro.'
-						AND fk_product ='.$idProd;
-					
-			$query=$db->query($string);
-
-			print '<script>window.location.href="'.$_SERVER["PHP_SELF"].'?idProp='.$idPro.'&idProd='.$idProd.'&action=view"</script>';
 		}else{
-			
-			print '<script>alert("Introduzca todos los datos")</script>';
-			$action='view';
+			setEventMessages('Introduzca todos los datos', null, 'errors');
+			$action='cerrar';
 		}
 
 	}
@@ -258,17 +268,17 @@ jQuery(document).ready(function() {
 });
 </script>';
 print '<div style="vertical-align: middle">
-					<div class="inline-block floatleft"></div>
-					<div class="inline-block floatleft valignmiddle refid refidpadding"></div>
-					<div class="pagination">
-						<ul>
-							<li class="pagination"></li>
-							<li class="pagination">								
-								Volver a maquinado<a data-role="button" data-icon="arrow-l" data-iconpos="left" href="factoryProces_list.php">&lt;</a>
-							</li>
-						</ul>
-					</div>
-				</div>';
+		<div class="inline-block floatleft"></div>
+		<div class="inline-block floatleft valignmiddle refid refidpadding"></div>
+		<div class="pagination">
+			<ul>
+				<li class="pagination"></li>
+				<li class="pagination">								
+					Volver a maquinado<a data-role="button" data-icon="arrow-l" data-iconpos="left" href="factoryProces_list.php">&lt;</a>
+				</li>
+			</ul>
+		</div>
+	</div>';
 
 
 // Part to create
@@ -292,7 +302,7 @@ if ($action == 'create')
 			print '</td>';
 		print '</tr>';
 		print '<tr>';	
-
+	
 	print '</table>'."\n";	
 	print '<br/>';
 	print '<div name="products_propal" id="products_propal"></div>';
@@ -317,9 +327,9 @@ if (($id || $ref) && $action == 'edit')
 	print '<table class="border centpercent">'."\n";
 	// print '<tr><td class="fieldrequired">'.$langs->trans("Label").'</td><td><input class="flat" type="text" size="36" name="label" value="'.$label.'"></td></tr>';
 	// 
-print '<tr><td class="fieldrequired">'.$langs->trans("Fieldfk_propal").'</td><td><input class="flat" type="text" name="fk_propal" value="'.$object->fk_propal.'"></td></tr>';
-print '<tr><td class="fieldrequired">'.$langs->trans("Fieldfk_product").'</td><td><input class="flat" type="text" name="fk_product" value="'.$object->fk_product.'"></td></tr>';
-print '<tr><td class="fieldrequired">'.$langs->trans("Fieldfk_operator").'</td><td><input class="flat" type="text" name="fk_operator" value="'.$object->fk_operator.'"></td></tr>';
+	print '<tr><td class="fieldrequired">'.$langs->trans("Fieldfk_propal").'</td><td><input class="flat" type="text" name="fk_propal" value="'.$object->fk_propal.'"></td></tr>';
+	print '<tr><td class="fieldrequired">'.$langs->trans("Fieldfk_product").'</td><td><input class="flat" type="text" name="fk_product" value="'.$object->fk_product.'"></td></tr>';
+	print '<tr><td class="fieldrequired">'.$langs->trans("Fieldfk_operator").'</td><td><input class="flat" type="text" name="fk_operator" value="'.$object->fk_operator.'"></td></tr>';
 
 	print '</table>';
 	
@@ -364,7 +374,7 @@ if ( $action == 'view' || $action == 'delete' || $action == 'cerrar' || $action 
 				llx_factory_proccess AS t
 			INNER JOIN llx_product AS p ON t.fk_product = p.rowid
 			INNER JOIN llx_propal AS pr ON t.fk_propal = pr.rowid
-			INNER JOIN llx_factory_operator AS o ON t.fk_operator = o.rowid
+			LEFT JOIN llx_factory_operator AS o ON t.fk_operator = o.rowid
 			where fk_propal='.$idPro.'
 			and fk_product='.$idProd.';';
 			//echo $string;
@@ -377,15 +387,24 @@ if ( $action == 'view' || $action == 'delete' || $action == 'cerrar' || $action 
 	}
 
 	if ($action == 'cerrar') {
-		$formquestion = array(
-                           
-                             array('type' => 'date', 'name' => 'dateEnd', 'id'=>'dateEnd', 'label' =>'Fecha de finalización' ),
-                             array('type' => 'text', 'name' => 'horas', 'id'=>'horas', 'label' =>'Horas  ' ),
-                             array('type' => 'text', 'name' => 'minutos', 'id'=>'minutosn', 'label' =>'Minutos  ' ),
-                            
-                            );
+		/*
+		$html.= '<select name="fk_operator" id="fk_operator" class="fk_operator">';
+			$operator= new Factorytools($db);
+			$list=$operator->get_operators();
+			$html.=  '<option value="-1">..Seleccione</option>';
+			foreach ($list as $dat2) {
+				$html.=  '<option value="'.$dat2->rowid.'">'.$dat2->name.'</option>';	
+			}
+		$html.=  '</select>';*/
 
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?idProp=' . $idPro.'&idProd='.$idProd, $langs->trans('Finalizar proceso'), '<b>Inicializado: '.dol_print_date($dat->dateStart,"dayhour").'</b>' , 'confirm_cerrar',  $formquestion, 0, 1,250);
+		$formquestion = array(
+	     array('type' => 'date', 'name' => 'dateEnd', 'id'=>'dateEnd', 'label' =>'Fecha de finalización' ),
+	     array('type' => 'text', 'name' => 'horas', 'id'=>'horas', 'label' =>'Horas  ' ),
+	     array('type' => 'text', 'name' => 'minutos', 'id'=>'minutosn', 'label' =>'Minutos  ' )
+	     //array('type' => 'other', "name"=>"fk_operator" ,"id"=>"fk_operator",'label' =>'Operador','value' => $html )
+	    );
+
+		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?idProp=' . $idPro.'&idProd='.$idProd, $langs->trans('Finalizar proceso'), '<b>Inicializado: '.dol_print_date($dat2->dateStart,"dayhour").'</b>' , 'confirm_cerrar',  $formquestion, 0, 1,250);
 		print $formconfirm;
 	}
 
@@ -605,7 +624,7 @@ if($comment){
 
 if($act=='view2'){
 	
-		print '<br/>';
+	print '<br/>';
 	print '<fieldset>';		
 	print load_fiche_titre($langs->trans("Detalle interrupciones"));
 

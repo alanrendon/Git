@@ -131,7 +131,7 @@ $sql.= " ORDER BY $sortfield $sortorder ";
 $sql.= " ".$db->plimit($conf->liste_limit+1, $offset);
 
 
-//print $sql;
+
 dol_syslog("factory/list.php sql=".$sql);
 $result = $db->query($sql);
 //print $sql;
@@ -164,6 +164,7 @@ if ($result)
 	print_liste_field_titre($langs->trans("QuantityPlannedShort"),$_SERVER["PHP_SELF"],"f.qty_planned", $begin, $param, 'align=right', $sortfield,$sortorder);
 	print_liste_field_titre($langs->trans("DurationPlannedShort"),$_SERVER["PHP_SELF"],"f.duration_planned", $begin, $param, 'align=center', $sortfield,$sortorder);
 	print_liste_field_titre($langs->trans("DateEndPlannedShort"),$_SERVER["PHP_SELF"],"f.date_end_planned", $begin, $param, 'align=center', $sortfield,$sortorder);
+	print_liste_field_titre($langs->trans("TimeEndPlannedShort"),$_SERVER["PHP_SELF"],"", $begin, $param, 'align=center', $sortfield,$sortorder);
 
 	print_liste_field_titre($langs->trans("DateStartMadeShort"),$_SERVER["PHP_SELF"],"f.date_start_made", $begin, $param, 'align=right', $sortfield,$sortorder);
 	print_liste_field_titre($langs->trans("QuantityMadeShort"),$_SERVER["PHP_SELF"],"f.qty_made", $begin, $param, 'align=right', $sortfield,$sortorder);
@@ -185,7 +186,7 @@ if ($result)
 	select_entrepot($search_entrepot, "entrepotid", 1, 1);
 	print '</td>';
 	print '<td class="liste_titre">&nbsp;</td>';
-	print '<td class="liste_titre" colspan=7 align="center"></td>';
+	print '<td class="liste_titre" colspan=8 align="center"></td>';
 	print '<td class="liste_titre" align="right">';
 	print '<input type="image" value="button_search" class="liste_titre" src="'.img_picto($langs->trans("Search"),'search.png','','',1).'" value="'.dol_escape_htmltag($langs->trans("Search")).'" title="'.dol_escape_htmltag($langs->trans("Search")).'">';
 	print '&nbsp; ';
@@ -222,13 +223,14 @@ if ($result)
 		// planned
 		print '<td align="center">'.dol_print_date($db->jdate($obj->date_start_planned),"day").'</td>';
 		print '<td align="right">'.$obj->qty_planned.'</td>';
-		print '<td align="right">'.convertSecondToTime($obj->duration_planned,'allhourmin').'</td>';
+		print '<td align="center">'.convertSecondToTime($obj->duration_planned,'allhourmin').'</td>';
 		print '<td align="center">'.dol_print_date($db->jdate($obj->date_end_planned),"day").'</td>';
+		print '<td align="center">'.dol_print_date($db->jdate($obj->date_end_planned),"%H:%M").'</td>';
 		
 		// made
 		print '<td align="center">'.dol_print_date($db->jdate($obj->date_start_made),"day").'</td>';
 		print '<td align="right">'.$obj->qty_made.'</td>';
-		print '<td align="right">'.convertSecondToTime($obj->duration_made,'allhourmin').'</td>';
+		print '<td align="center">'.convertSecondToTime($obj->duration_made,'allhourmin').'</td>';
 		print '<td align="center">'.dol_print_date($db->jdate($obj->date_end_made),"day").'</td>';
 
 		print '<td align="right">'.$factory->getLibStatut(4).'</td>';

@@ -1,5 +1,4 @@
 
-
 CREATE TABLE IF NOT EXISTS  `llx_factory_tools` (
   `rowid` int(11) NOT NULL AUTO_INCREMENT,
   `fk_operator` int(11) DEFAULT NULL,

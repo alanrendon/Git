@@ -248,7 +248,7 @@ class ActionsFactory // extends CommonObject
 
 	function validarStock($id){
 		global $db;		
-		
+		require_once DOL_DOCUMENT_ROOT.'/factory/class/factory.class.php';
 		$fact=new Factory($db);
 		$need= $fact->get_qty_propal($id);
 		$pend= $fact->get_qty_propal_pen($id);		

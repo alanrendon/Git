@@ -549,6 +549,16 @@ class Factoryproccess extends CommonObject
 			case 4:				
 				$statut= '<span class="hideonsmartphone">'."Listo para tratamiento".' </span>'.img_picto('En producci&oacute;n','statut4');
 				break;
+			case 5:				
+				$statut= '<span class="hideonsmartphone">'."Inicializado".' </span>'.img_picto('En producci&oacute;n','statut0');
+				break;
+			case 6:				
+				$statut= '<span class="hideonsmartphone">'."Tratamiento Finalizado".' </span>'.img_picto('En producci&oacute;n','statut6');
+				break;
+			case 7:				
+				$statut= '<span class="hideonsmartphone">'."Interrumpido".' </span>'.img_picto('En producci&oacute;n','statut1');
+				break;
+
 			default:
 				$statut='';
 				break;
@@ -611,12 +621,43 @@ class Factoryproccess extends CommonObject
 		AND a.fk_product = b.fk_product
 		WHERE
 		pro.fk_status_factory = 2
-		AND pro.fk_statut >= 2
+		AND pro.fk_statut = 2
 		AND b.rowid IS NULL
 		GROUP BY
 			pro.rowid;';
 				//c.rowid;';
-				//echo $sql.'<br/>';
+		//echo $sql.'<br/>';
+		$query=$this->db->query($sql);
+		$n=$this->db->num_rows($query);
+		if($n>0){
+			$band=0;
+			while ($dat=$this->db->fetch_object($query)) {
+				$list[]=$dat;
+			}
+		}
+		return $list;
+	}
+	function get_propals_treatment_pen(){
+		$list = array();
+		$sql='
+		SELECT
+			pro.rowid,
+			pro.ref
+		FROM
+			llx_propal AS pro
+		INNER JOIN llx_propaldet AS a ON pro.rowid = a.fk_propal
+		LEFT JOIN llx_factory_proccess AS b ON a.fk_propal = b.fk_propal
+		AND a.fk_product = b.fk_product
+		WHERE
+			pro.fk_status_factory = 2
+		AND pro.fk_statut = 2
+		AND b.status =4
+		GROUP BY
+			pro.rowid;';
+
+		//echo $sql.'<br/>';
+
+
 		$query=$this->db->query($sql);
 		$n=$this->db->num_rows($query);
 		if($n>0){
@@ -640,7 +681,27 @@ class Factoryproccess extends CommonObject
 
 		$query=$this->db->query($sql);
 		
-	echo $sql;
+		echo $sql;
+	}
+
+	function addProcesos_treatment($id_process, $idOperator, $fechaStart){
+		$fecha = trim($fechaStart);
+		$aux=str_replace('/','-',$fecha);
+		$datStart=date('Y-m-d H:i',strtotime($aux));
+		
+
+		$sql='insert into llx_factory_proccess_treatment
+				(fk_factory_proccess, fk_operator, dateStart)
+				values('.$id_process.','.$idOperator.',"'.$datStart.'");	';
+		//echo $sql;
+		$res=$this->db->query($sql);
+		if ($res) {
+			$sql='UPDATE llx_factory_proccess as a SET a.status=5 WHERE a.rowid='.$id_process;
+			$this->db->query($sql);
+		}
+		
+		
+		//echo $sql;
 	}
 
 }

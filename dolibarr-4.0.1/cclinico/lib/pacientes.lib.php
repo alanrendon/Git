@@ -84,7 +84,8 @@ function pacientes_prepare_head(Pacientes $object)
     }
 
     require_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
-    $upload_dir = "files/Paciente-".$object->id.'/documents';
+    $modulepart='cclinico';
+    $upload_dir = $conf->$modulepart->dir_output."/files/Paciente-".$object->id.'/documents';
     $nbFiles = count(dol_dir_list($upload_dir,'files',0,'','(\.meta|_preview\.png)$'));
     $head[$tab][0] = DOL_URL_ROOT.'/cclinico/document.php?id='.$object->id;
     $head[$tab][1] = $langs->trans("Documents");

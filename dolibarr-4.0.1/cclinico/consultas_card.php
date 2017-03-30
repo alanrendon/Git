@@ -20,7 +20,7 @@ $langs->load("users");
 $langs->load("other");
 $langs->load("commercial");
 $langs->load("cclinico");
-
+$modulepart='cclinico';
 $mesg=''; $error=0; $errors=array();
 
 $action     = (GETPOST('action','alpha') ? GETPOST('action','alpha') : 'view');
@@ -262,13 +262,13 @@ if ($action=='create_update' && !empty($aid)) {
 }
 
 if (!empty($_POST["doc"]) && !empty($aid)) {
-    $dir_paciente="files/Paciente-".$id;
+    $dir_paciente=$conf->$modulepart->dir_output."/files/Paciente-".$id;
     if (file_exists (($dir_paciente."/Consulta-".$aid."/".GETPOST("doc") ) )) {
         unlink ($dir_paciente."/Consulta-".$aid."/".GETPOST("doc"));
     }
 }
 if (!empty($_POST["doc2"]) && !empty($aid)) {
-    $dir_paciente="files/Paciente-".$id;
+    $dir_paciente=$conf->$modulepart->dir_output."/files/Paciente-".$id;
     $f=$dir_paciente."/Consulta-".$aid."/".GETPOST("doc2");
     $fname=GETPOST("doc2");
     if (file_exists (($dir_paciente."/Consulta-".$aid."/".GETPOST("doc2") ) )) {
@@ -545,7 +545,7 @@ if (!empty($_POST["fact"]) && $consultas->statut>0) {
 if (!empty($_POST["fact2"]) && $consultas->statut>0) {
     $consultas->vincular_consulta_factura(GETPOST("fact2"),$user);
 }
-$dir_paciente="files/Paciente-".$id;
+$dir_paciente=$conf->$modulepart->dir_output."/files/Paciente-".$id;
 //crear borrador vacío
 if ($action=='create') {
     

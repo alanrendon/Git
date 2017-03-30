@@ -248,9 +248,9 @@ $sql.=$hookmanager->resPrint;
 $sql.= " FROM ".MAIN_DB_PREFIX."factory_proccess as t
 INNER JOIN llx_product AS p ON t.fk_product = p.rowid
 INNER JOIN llx_propal AS pr ON t.fk_propal = pr.rowid
-INNER JOIN llx_factory_operator AS o ON t.fk_operator = o.rowid";
+LEFT JOIN llx_factory_operator AS o ON t.fk_operator = o.rowid";
 
-//$sql.= " WHERE u.entity IN (".getEntity('mytable',1).")";
+$sql.= " WHERE 1=1 and t.STATUS<4 ";
 
 if ($search_fk_propal) $sql.= natural_search("pr.ref",$search_fk_propal);
 if ($search_fk_product) $sql.= natural_search("p.ref",$search_fk_product);
@@ -288,7 +288,7 @@ if (empty($conf->global->MAIN_DISABLE_FULL_SCANLIST))
 }	
 
 //$sql.= $db->plimit($conf->liste_limit+1, $offset);
-
+//echo $sql;
 
 dol_syslog($script_file, LOG_DEBUG);
 $resql=$db->query($sql);
@@ -473,7 +473,15 @@ print '<td class="liste_titre" >';
             print '<tr>';
 			if (! empty($arrayfields['t.fk_product']['checked'])) print '<td>'.$fact->getNomUrlFactory($obj->fk_product, 1,'index').'</td>';        
 			if (! empty($arrayfields['t.fk_propal']['checked'])) print '<td>'.$objectstatic->getNomUrl(1).'</td>';
-			if (! empty($arrayfields['t.fk_operator']['checked'])) print '<td>'.$objectOp->getNomUrl(1,$obj->refOp).' '.$obj->NAME.'</td>';
+			if (! empty($arrayfields['t.fk_operator']['checked'])){
+				print '<td>';
+					if (!empty($obj->refOp)) {
+						print $objectOp->getNomUrl(1,$obj->refOp).' '.$obj->NAME ;
+					}else{
+						print "Sin Asignar";
+					}
+				print '</td>';
+			} 
 			$date=strtotime($obj->dateStart);
 			if (! empty($arrayfields['t.dateStart']['checked'])) print '<td>'.dol_print_date($date,"dayhour").'</td>';
 			$date=strtotime($obj->dateEnd);

@@ -209,7 +209,7 @@ print '<fieldset>';
 					print '<td align="left">'.$fact->getNomUrlFactory($dat->rowid, 1,'index').'</td>';
 					print '<td align="left">'.$dat->label.'</td>';
 					print '<td align="right">';			
-						print number_format($cantNeed,0,'.',',');						
+						print number_format($cantNeed/1000,2,'.',',')." K";						
 					print '</td>';		
 					print '<td align="right">';						
 						$qtyStoc = ($stoc>0) ? $stoc : 0 ;	
@@ -221,7 +221,7 @@ print '<fieldset>';
 							$pend+=$cantTT-$stoc;
 							$band=1;						
 						}						
-						print number_format($pend,0,'.',',');
+						print number_format($pend/1000,0,'.',',')." K";
 					print '</td>';	
 					print '<td align="right">';						
 						$price=$dat->cost_price;					

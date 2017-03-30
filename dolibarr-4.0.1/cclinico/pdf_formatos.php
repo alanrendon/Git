@@ -438,11 +438,12 @@ if ($user->rights->cclinico->crear){
 		</div>
 		';
 		//print $html;
+		$modulepart='cclinico';
 		$pdf->writeHTML($html);
-		if (!file_exists('files/Paciente-'.$aid.'/documents')) {
-		    dol_mkdir('files/Paciente-'.$aid.'/documents');
+		if (!file_exists($conf->$modulepart->dir_output.'/files/Paciente-'.$aid.'/documents')) {
+		    dol_mkdir($conf->$modulepart->dir_output.'/files/Paciente-'.$aid.'/documents');
 		}
-		$pdf->Output('files/Paciente-'.$aid.'/documents/'.$paciente->firstname.' '.$paciente->lastname.'.pdf','F');
+		$pdf->Output($conf->$modulepart->dir_output.'/files/Paciente-'.$aid.'/documents/'.$paciente->firstname.' '.$paciente->lastname.'.pdf','F');
 		$pdf->Output('Consulta-'.$paciente->firstname.' '.$paciente->lastname.'.pdf','I');
 	}
 

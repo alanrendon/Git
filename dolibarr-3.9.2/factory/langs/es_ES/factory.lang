@@ -1,7 +1,6 @@
 Dolibarr language file - es_ES - factory
 CHARSET=UTF-8
-QtyPen=Cant <br/> Pendiente (gr)
-QtyNeed=Cant <br/> Necesaria (gr)
+QtyPen=Cant <br/> Pendiente
 Propals=Presupuestos
 EntrepotStock=Almacén
 PropalFactoryList=Presupuestos en producción
@@ -47,7 +46,7 @@ QtyToBuild=Cantidad a fabricar
 DateEndBuildPlanned=Fecha final de producción planificada
 PlannedWorkload=Duración de producción planificada
 VerifyQty=Verificar en almacén si hay suficiente stock para producir
-QtyNeedOF=Cant <br>necesaria (gr)
+QtyNeedOF=Cant <br>necesaria
 QtyPresent=Cant <br>en stock
 QtyAlert=Control
 ProfitAmount=Margen Producción
@@ -106,6 +105,7 @@ DurationPlannedMade=Duración de producción Planificada / Real
 DateStartPlannedShort=Inicio Previsto
 QuantityPlannedShort=Cant. Prevista
 DateEndPlannedShort=Fin Previsto
+TimeEndPlannedShort=Tiempo consumido
 DurationPlannedShort=Duración Prevista
 DateStartMadeShort=Inicio Real
 QuantityMadeShort=Cant. Real

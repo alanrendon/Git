@@ -1,3 +1,6 @@
 [01-Feb-2017 14:34:14 America/Chicago] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
 [01-Feb-2017 14:34:32 America/Chicago] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
 [01-Feb-2017 14:36:48 America/Chicago] PHP Warning:  Unknown: Input variables exceeded 1000. To increase the limit change max_input_vars in php.ini. in Unknown on line 0
+[22-Feb-2017 12:04:46 America/Chicago] PHP Warning:  mysqli::mysqli(): (HY000/2002): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (111) in /home/maquimic/public_html/erp/htdocs/core/db/mysqli.class.php on line 196
+[14-Mar-2017 11:18:44 America/Chicago] PHP Warning:  mysqli::mysqli(): (HY000/2002): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2) in /home/maquimic/public_html/erp/htdocs/core/db/mysqli.class.php on line 196
+[14-Mar-2017 11:18:55 America/Chicago] PHP Warning:  mysqli::mysqli(): (HY000/2002): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2) in /home/maquimic/public_html/erp/htdocs/core/db/mysqli.class.php on line 196

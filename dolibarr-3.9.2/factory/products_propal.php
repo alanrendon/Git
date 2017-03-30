@@ -52,8 +52,11 @@ jQuery(document).ready(function() {
 			
 			operadores[i]=$("#fk_operator"+cad).val();		
 			if($("#fk_operator"+cad).val()==0){
+
 				alert("Seleccione operador");
+
 				return false;	
+
 			}
 
 		}
@@ -131,7 +134,7 @@ function productsPropal($db){
 				print '<td class="liste_titre" width=100px >Producto</td>';
 				print '<td class="liste_titre" width=100px >Fecha Inicialización</td>';
 				print '<td class="liste_titre" width=100px >Operador</td>';
-				print '<td class="liste_titre" width=100px >Asignar</td>';
+				print '<td align="center" class="liste_titre" width=100px  >Asignar</td>';
 			print '</tr>';
 
 			while ($data = $db->fetch_object($res)) {
@@ -139,23 +142,26 @@ function productsPropal($db){
 					print '<td>'.$data->ref.'</td>';			
 					print '<td>'.$data->label.'</td>';		
 					print '<td>';
-					if($dateop==''){				
-						date_default_timezone_set('America/Mexico_City');
-						$dateop=strtotime( date('Y-m-d h:i'));
-					}		
+						if($dateop==''){				
+							date_default_timezone_set('America/Mexico_City');
+							$dateop=strtotime( date('Y-m-d h:i'));
+						}		
 						print ($form->select_date($dateop,'dateStart'.$data->fk_product ,1, 1, 0, "", 1, 0, 1, 0, '', '', ''));
+						
+						//print '<input name="fk_operator" id="fk_operator'.$data->fk_product.'" style="display: none;" value="0">';
 					print '</td>';		
-					print '<td>';
+					print '<td>';		
 						print '<select name="fk_operator" id="fk_operator'.$data->fk_product.'" class="fk_operator">';
 							$operator= new Factorytools($db);
 							$list=$operator->get_operators();
-							print '<option value="0">..Seleccione</option>';
-							foreach ($list as $dat) {
-								print '<option value="'.$dat->rowid.'">'.$dat->name.'</option>';	
+							print  '<option value="0">..Seleccione</option>';
+							foreach ($list as $dat2) {
+								print '<option value="'.$dat2->rowid.'">'.$dat2->name.'</option>';	
 							}
 						print '</select>';
-					print '</td>';		
-					print '<td><input type="checkbox" class="check" id="'.$data->fk_product.'" value="'.$data->fk_product.'"/></td>';						
+					print '</td>';
+					print '</td>';	
+					print '<td align="center"><input type="checkbox" class="check" id="'.$data->fk_product.'" value="'.$data->fk_product.'"/></td>';						
 				print '</tr>';
 			}
 		

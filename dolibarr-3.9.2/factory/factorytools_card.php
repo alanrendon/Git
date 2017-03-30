@@ -73,7 +73,6 @@ $dateFin=GETPOST('dateEnd','alpha');
 $idP=GETPOST('idP','int');
 $action2= GETPOST('action2','alpha');
 
-
 $search_fk_operator=GETPOST('search_fk_operator','int');
 $search_dateCreation=GETPOST('search_dateCreation','int');
 $search_fk_product=GETPOST('search_fk_product','int');
@@ -133,14 +132,20 @@ if (empty($reshook))
 
 		/* object_prop_getpost_prop */
 		
-	$object->fk_operator=GETPOST('fk_operator','int');
-	$object->fk_product=GETPOST('fk_product','int');
-	$object->type=GETPOST('type','int');
-	$object->status=GETPOST('status','int');
-	$object->comment=GETPOST('comment','alpha');
-	$object->qty=GETPOST('qty');
-	$object->dateCreation=GETPOST('dateCreation');
+		$object->fk_operator=GETPOST('fk_operator','int');
+		$object->fk_product=GETPOST('fk_product','int');
+		$object->type=GETPOST('type','int');
+		$object->status=GETPOST('status','int');
+		$object->comment=GETPOST('comment','alpha');
+		$object->qty=GETPOST('qty');
+		$object->dateCreation=GETPOST('dateCreation');
 		
+		
+
+		if ($object->get_entrepot_valid($conf->global->FACT_ALM_HI)< $object->qty) {
+			$error++;
+			setEventMessages("Stock insuficiente", null, 'errors');
+		}
 
 		if (empty($object->fk_operator))
 		{
@@ -216,6 +221,174 @@ if (empty($reshook))
 		}
 	}
 
+
+
+	if($_REQUEST['action']=='fin'){
+		if ($_REQUEST['confirm']=='yes') {
+			if($dateFin){		
+				$factory= new Factorytools($db);
+				$factory->fetch($idP);
+
+				$qty=GETPOST('qty');
+				if ($qty<=$factory->qty && $qty>0) {
+					$dat=dol_mktime(0,0,0,GETPOST("dateEndmonth"),GETPOST("dateEndday") ,GETPOST("dateEndyear")  );
+					if ($qty==$factory->qty) {
+						$sql='UPDATE llx_factory_tools set status=2, dateDeliver="'.$db->idate($dat).'" where rowid='.$idP;
+						
+					}else{
+						$temp=$qty;
+						$qty=$factory->qty-$qty;
+						$factory->qty=$temp;
+						$id2=$factory->create($user);
+						$sql='UPDATE llx_factory_tools set  status=2, dateDeliver="'.$db->idate($dat).'" where rowid='.$id2;
+						$db->query($sql);	
+						$sql='UPDATE llx_factory_tools set qty='.$qty.' where rowid='.$idP;
+						
+					}
+				    $query=$db->query($sql);	
+					//echo $sql;
+					header("Location: factorytools_card.php?id=".$id."&action=view");
+					exit;
+				}else{
+					$action='confirmFin';
+					setEventMessages("Indique una cantidad de devolución valida", null, 'errors');
+				}
+			}else{
+				$action='confirmFin';
+				setEventMessages("Selecione fecha de entrega", null, 'errors');
+			}
+		}else{
+			$action='confirm_no';
+		}
+	}
+
+	/*if($_REQUEST['confirm']=='yes' && $_REQUEST['action']=='fin'){
+	    $act='view';
+	}*/
+
+	if($_REQUEST['action']=='delete'){
+		if ($_REQUEST['confirm']=='yes') {
+			if($dateFin){
+				$object->entrepot();						
+				$ref=$object->get_ref_operator($object->fk_operator);	
+
+				
+			    $id_tw=$object->fk_entrepot;
+			    $qty=0;  
+			    $sql='SELECT qty, fk_product from llx_factory_tools where rowid='.$idP;
+				$query=$db->query($sql);	
+				if($query){
+					$datQty=$db->fetch_object($query);
+					$qty=$datQty->qty;  
+				}
+			    
+			    $stlabel='Herramienta devuelta por el operador '.$ref;       
+
+			    $result=$product->fetch($datQty->fk_product);
+
+			    $product->load_stock();    // Load array product->stock_warehouse
+
+			    // Define value of products moved
+			    
+			    /*
+			    $dateFin = trim($dateFin);
+				$aux=str_replace('/','-',$dateFin);
+				$dat=date('Y-m-d',strtotime($aux));
+			    $sql='UPDATE llx_factory_tools set status=2, dateDeliver="'.$dat.'" where rowid='.$idP;
+				$query=$db->query($sql);	
+				//echo $sql;*/
+
+
+
+				$factory= new Factorytools($db);
+				$factory->fetch($idP);
+				$qty2=GETPOST('qty');
+
+				if ($qty2<=$factory->qty && $qty2>0) {
+					$pricesrc=0;
+				    if (! empty($product->pmp)) $pricesrc=$product->pmp;
+				    $pricedest=$pricesrc;
+
+					$dat=dol_mktime(0,0,0,GETPOST("dateEndmonth"),GETPOST("dateEndday") ,GETPOST("dateEndyear")  );
+					if ($qty2==$factory->qty) {
+						$result=$product->correct_stock($user,$id_tw,$qty,0,$stlabel,$pricedest);	
+						$sql='UPDATE llx_factory_tools set status=2, dateDeliver="'.$db->idate($dat).'" where rowid='.$idP;
+						
+					}else{
+						$result=$product->correct_stock($user,$id_tw,$qty,0,$stlabel,$pricedest);	
+						$temp=$qty2;
+						$qty2=$factory->qty-$qty2;
+						$factory->qty=$temp;
+						$id2=$factory->create($user);
+						$sql='UPDATE llx_factory_tools set  status=2, dateDeliver="'.$db->idate($dat).'" where rowid='.$id2;
+						$db->query($sql);	
+						$sql='UPDATE llx_factory_tools set qty='.$qty2.' where rowid='.$idP;
+					}
+				     // Add stock
+				    $query=$db->query($sql);	
+					//echo $sql;
+					header("Location: factorytools_card.php?id=".$id."&action=view");
+					exit;
+				}else{
+					$action='confirmDelete';
+					setEventMessages("Indique una cantidad de devolución valida", null, 'errors');
+				}
+			}else{
+				$action='confirmDelete';
+				setEventMessages("Indique una fecha valida", null, 'errors');
+			}
+		}else{
+			$action='confirm_no';
+		}
+	}
+
+	if($_REQUEST['action']=='option_no'){
+		if ($_REQUEST['confirm']=='yes') {
+			if (isset($dateFin) && strcmp($dateFin, '')!=0) {
+				if (!empty($comment)) {
+					$dat=dol_mktime(0,0,0,GETPOST("dateEndmonth"),GETPOST("dateEndday") ,GETPOST("dateEndyear")  );
+					$factory= new Factorytools($db);
+					$factory->fetch($idP);
+
+					$qty=GETPOST('qty');
+					if ($qty<=$factory->qty && $qty>0) {
+						if ($qty==$factory->qty) {
+							$result=$product->correct_stock($user,$id_tw,$qty,0,$stlabel,$pricedest);	
+							$sql='UPDATE llx_factory_tools set status=3, comment="'.$comment.'", dateDeliver="'.$db->idate($dat).'" where rowid='.$idP;
+							
+						}else{
+							$result=$product->correct_stock($user,$id_tw,$qty,0,$stlabel,$pricedest);	
+							$temp=$qty;
+							$qty=$factory->qty-$qty;
+							$factory->qty=$temp;
+							$id2=$factory->create($user);
+							$sql='UPDATE llx_factory_tools set  status=3, comment="'.$comment.'", dateDeliver="'.$db->idate($dat).'" where rowid='.$id2;
+							$db->query($sql);	
+							$sql='UPDATE llx_factory_tools set qty='.$qty.' where rowid='.$idP;
+						}
+						$db->query($sql);
+						header("Location: factorytools_card.php?id=".$id."&action=view");
+					}else{
+						$action='confirm_no';
+						setEventMessages("Indique una cantidad de devolución valida", null, 'errors');
+					}
+
+				}else{
+					$action='confirm_no';
+					setEventMessages("Ingrese un mensaje", null, 'errors');
+				}
+				
+			}else{
+				$action='confirm_no';
+				setEventMessages("Selecione fecha de entrega", null, 'errors');
+			}
+		}else{
+			$action="view";
+		}
+		
+	}
+	
+
 }
 
 
@@ -231,18 +404,18 @@ llxHeader('','Producción','');
 
 $form=new Form($db);
 
-print '<div style="vertical-align: middle">
-					<div class="inline-block floatleft"></div>
-					<div class="inline-block floatleft valignmiddle refid refidpadding"></div>
-					<div class="pagination">
-						<ul>
-							<li class="pagination"></li>
-							<li class="pagination">								
-								Volver a operadores<a data-role="button" data-icon="arrow-l" data-iconpos="left" href="factoryoperator_list.php">&lt;</a>
-							</li>
-						</ul>
-					</div>
-				</div>';
+print ' <div style="vertical-align: middle">
+			<div class="inline-block floatleft"></div>
+			<div class="inline-block floatleft valignmiddle refid refidpadding"></div>
+			<div class="pagination">
+				<ul>
+					<li class="pagination"></li>
+					<li class="pagination">								
+						Volver a operadores<a data-role="button" data-icon="arrow-l" data-iconpos="left" href="factoryoperator_list.php">&lt;</a>
+					</li>
+				</ul>
+			</div>
+		</div>';
 
 // Part to create
 if ($action == 'create')
@@ -258,52 +431,52 @@ if ($action == 'create')
 	print '<table class="border centpercent">'."\n";
 	// print '<tr><td class="fieldrequired">'.$langs->trans("Label").'</td><td><input class="flat" type="text" size="36" name="label" value="'.$label.'"></td></tr>';
 	// 
-print '<tr><td class="fieldrequired">'.$langs->trans("Operador").'</td>';
-	//print '<td><input class="flat" type="text" name="fk_operator" value="'.GETPOST('fk_operator').'"></td>';
+	print '<tr><td class="fieldrequired">'.$langs->trans("Operador").'</td>';
+		//print '<td><input class="flat" type="text" name="fk_operator" value="'.GETPOST('fk_operator').'"></td>';
+		print '<td>';
+			print '<select name=fk_operator>';
+				$list=array();
+				$list=$object->get_operators();
+				foreach ($list as $dat) {
+					print '<option value="'.$dat->rowid.'">'.$dat->name.'</option>';	
+				}
+			print '</select>';
+		print '</td>';
+
+
+	print '</tr>';
+	print '<tr><td class="fieldrequired">'.$langs->trans("Producto").'</td>';print '<td>';
+			print '<select name=fk_product>';
+				$list=array();
+				$list=$object->get_tools();
+				foreach ($list as $dat) {
+					print '<option value="'.$dat->rowid.'">'.$dat->label.'</option>';	
+				}			
+
+			print '</select>';
+		print '</td>';
+	print '</tr>';
+
+	print '<tr><td class="fieldrequired">'.$langs->trans("Cantidad").'</td>';print '<td>';
+			print '<input name="qty" type="text"/>';
+		print '</td>';
+	print '</tr>';
+
+	print '<tr><td class="fieldrequired">'.$langs->trans("Fecha").'</td>';print '<td>';
+			print ($form->select_date('','dateCreation' ,0, 0, 0, "", 1, 0, 1, 0, '', '', ''));
+		print '</td>';
+	print '</tr>';
+
+	print '<tr><td class="fieldrequired">'.$langs->trans("Tipo").'</td>';
 	print '<td>';
-		print '<select name=fk_operator>';
-			$list=array();
-			$list=$object->get_operators();
-			foreach ($list as $dat) {
-				print '<option value="'.$dat->rowid.'">'.$dat->name.'</option>';	
-			}
-		print '</select>';
-	print '</td>';
-
-
-print '</tr>';
-print '<tr><td class="fieldrequired">'.$langs->trans("Producto").'</td>';print '<td>';
-		print '<select name=fk_product>';
-			$list=array();
-			$list=$object->get_tools();
-			foreach ($list as $dat) {
-				print '<option value="'.$dat->rowid.'">'.$dat->label.'</option>';	
-			}			
-
-		print '</select>';
-	print '</td>';
-print '</tr>';
-
-print '<tr><td class="fieldrequired">'.$langs->trans("Cantidad").'</td>';print '<td>';
-		print '<input name="qty" type="text"/>';
-	print '</td>';
-print '</tr>';
-
-print '<tr><td class="fieldrequired">'.$langs->trans("Fecha").'</td>';print '<td>';
-		print ($form->select_date('','dateCreation' ,0, 0, 0, "", 1, 0, 1, 0, '', '', ''));
-	print '</td>';
-print '</tr>';
-
-print '<tr><td class="fieldrequired">'.$langs->trans("Tipo").'</td>';
-print '<td>';
-		print '<select name=type>';
-			print '<option value=1>Consumible</option>';
-			print '<option value=2>Operable</option>';
-		print '</select>';
-	print '</td>';
-print '</tr>';
-//print '<tr><td class="fieldrequired">'.$langs->trans("Fieldstatus").'</td><td><input class="flat" type="text" name="status" value="'.GETPOST('status').'"></td></tr>';
-//print '<tr><td class="fieldrequired">'.$langs->trans("Fieldcomment").'</td><td><input class="flat" type="text" name="comment" value="'.GETPOST('comment').'"></td></tr>';
+			print '<select name=type>';
+				print '<option value=1>Consumible</option>';
+				print '<option value=2>Operable</option>';
+			print '</select>';
+		print '</td>';
+	print '</tr>';
+	//print '<tr><td class="fieldrequired">'.$langs->trans("Fieldstatus").'</td><td><input class="flat" type="text" name="status" value="'.GETPOST('status').'"></td></tr>';
+	//print '<tr><td class="fieldrequired">'.$langs->trans("Fieldcomment").'</td><td><input class="flat" type="text" name="comment" value="'.GETPOST('comment').'"></td></tr>';
 
 	print '</table>'."\n";
 
@@ -314,7 +487,7 @@ print '</tr>';
 	print '</form>';
 }
 
-if($action=='view'){
+if($action=='view' || $action=='confirmDelete' || $action=='confirmFin' || $action=='confirm_no'){
 	$objectOp=new Factoryoperator($db);
 	$result=$objectOp->fetch($id);
 	print '<br/>';
@@ -346,6 +519,89 @@ if($action=='view'){
 		print '</table>';
 	print '</fieldset>';
 	print '<br/>';
+	if($action=='confirmDelete'){
+		$form = new Form($db);
+		$id=GETPOST('id','int');
+		$idP=GETPOST('idP','int');
+		$qty=GETPOST('qty');
+		$confirm=GETPOST('confirm');
+		$factory= new Factorytools($db);
+		$factory->fetch($idP);
+
+		if($dateFin){
+			$dat=dol_mktime(0,0,0,GETPOST("dateEndmonth"),GETPOST("dateEndday") ,GETPOST("dateEndyear")  );
+		}else{
+			$dat=dol_now();
+		}
+		if (empty($qty)) {
+			$qty=$factory->qty;
+		}
+
+
+		$formquestion = array(      
+	        array('type' => 'date', 'name' => 'dateEnd', 'id'=>'dateEnd', 'label' =>'Fecha de entrega', 'value' => $dat ),
+			array('type' => 'text', 'name' => 'qty', 'id'=>'qty', 'label' =>'Piesas a devolver:', 'value' => $qty, 'size' => 5 )  
+	    );
+		print $form->formconfirm("factorytools_card.php?id=".$id."&action=delete&idP=".$idP."","La herramienta esta completa?","","delete",$formquestion,'',2,170);
+	}
+
+
+	if($action=='confirmFin'){
+		$form = new Form($db);
+		$id=GETPOST('id','int');
+		$idP=GETPOST('idP','int');
+		$qty=GETPOST('qty');
+		$confirm=GETPOST('confirm');
+		$factory= new Factorytools($db);
+		$factory->fetch($idP);
+
+		if($dateFin){
+			$dat=dol_mktime(0,0,0,GETPOST("dateEndmonth"),GETPOST("dateEndday") ,GETPOST("dateEndyear")  );
+		}else{
+			$dat=dol_now();
+		}
+		if (empty($qty)) {
+			$qty=$factory->qty;
+		}
+
+
+		$formquestion = array(      
+	        array('type' => 'date', 'name' => 'dateEnd', 'id'=>'dateEnd', 'label' =>'Fecha de entrega', 'value' => $dat ),
+			array('type' => 'text', 'name' => 'qty', 'id'=>'qty', 'label' =>'Piesas a devolver:', 'value' => $qty, 'size' => 5 )  
+	    );
+
+		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id='.$id.'&action=fin&idP='.$idP.'', 'El material se agoto?','', 'fin',  $formquestion,'',2,170);
+		print $formconfirm;
+	}
+
+
+	if($action=='confirm_no'){
+		$form = new Form($db);
+		$id=GETPOST('id','int');
+		$idP=GETPOST('idP','int');
+		$comment=GETPOST('comment');
+		$text='<textarea name="comment"  id="comment" cols="40" rows="3" >'.$comment.'</textarea>';
+		$factory= new Factorytools($db);
+		$factory->fetch($idP);
+		if($dateFin){
+			$dat=dol_mktime(0,0,0,GETPOST("dateEndmonth"),GETPOST("dateEndday") ,GETPOST("dateEndyear")  );
+		}else{
+			$dat=dol_now();
+		}
+		if (empty($qty)) {
+			$qty=$factory->qty;
+		}
+
+		$formquestion = array( 
+			array('type' => 'date', 'name' => 'dateEnd', 'id'=>'dateEnd', 'label' =>'Fecha de entrega:', 'value' => $dat ),
+			array('type' => 'text', 'name' => 'qty', 'id'=>'qty', 'label' =>'Piesas a devolver:', 'value' => $qty, 'size' => 5 ),
+			array('type' => 'other',"name"=>"comment" , "id"=>"comment", 'label' =>'Comentario de entrega:', 'value' => $text )  
+	    );
+
+		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id='.$id.'&action=view&idP='.$idP.'', 'Devolución de material (Incompleto)','Desea continuar con esta accion?', 'option_no',  $formquestion,'',1,250);
+		print $formconfirm;
+	}
+
 
 	print '<fieldset>';
 		print '<br/>';
@@ -363,24 +619,32 @@ if($action=='view'){
 					
 			$list=array();
 			$list=$object->get_tools_asigned($id);
-			foreach ($list as $dat) {
+			if ($list) {
+				foreach ($list as $dat) {
+					print '<tr ">';
+						print '<td align="left">'.$fact->getNomUrlFactory($dat->rowid, 1,'index').'</td>';
+						print '<td align="left">'.$dat->label.'</td>';
+						print '<td align="left">'.$dat->qty.'</td>';
+						print '<td align="left">'.dol_print_date($db->jdate($dat->dateCreation), 'day').'</td>';					
+						if($dat->type==2){
+							print '<td align="left">Operable</td>';							
+							print '<td align="center"><a href="factorytools_card.php?id='.$id.'&idP='.$dat->fila.'&action=confirmDelete" class="button">Devolver</a></td>';					
+							
+						}else{
+							print '<td align="left">Consumible</td>';	
+							print '<td align="center"><a href="factorytools_card.php?id='.$id.'&idP='.$dat->fila.'&action=confirmFin" class="button">Devolver</a></td>';			
+						}					
+					print '</tr>';	
+				}
+			}else{
 				print '<tr ">';
-					print '<td align="left">'.$fact->getNomUrlFactory($dat->rowid, 1,'index').'</td>';
-					print '<td align="left">'.$dat->label.'</td>';
-					print '<td align="left">'.$dat->qty.'</td>';
-					print '<td align="left">'.dol_print_date($db->jdate($dat->dateCreation), 'day').'</td>';					
-					if($dat->type==2){
-						print '<td align="left">Operable</td>';							
-						print '<td align="center"><a href="factorytools_card.php?id='.$id.'&idP='.$dat->fila.'&action=confirmDelete" class="button">Devolver</a></td>';					
-						
-					}else{
-						print '<td align="left">Consumible</td>';	
-						print '<td align="center"><a href="factorytools_card.php?id='.$id.'&idP='.$dat->fila.'&action=confirmFin" class="button">Devolver</a></td>';			
-					}					
+					print '<td colspan=6 align="left">Sin elementos</td>';				
 				print '</tr>';	
-			}	
+			}
+				
 		print '</table>';		
 		print '<form>';
+			
 
 
 	print '</fieldset>';
@@ -388,53 +652,10 @@ if($action=='view'){
 	$act='view2';
 }
 
-if($action=='confirmDelete'){
-	$form = new Form($db);
-	$id=GETPOST('id','int');
-	$idP=GETPOST('idP','int');
-
-	$formquestion = array(                            
-                     array('type' => 'date', 'name' => 'dateEnd', 'id'=>'dateEnd', 'label' =>'Fecha de entrega' ),                    
-                    );
-	print $form->formconfirm("factorytools_card.php?id=".$id."&action=view&idP=".$idP."","Comfirmar","La herramienta esta completa?","delete",$formquestion);
-}
-
-if($action=='confirmFin'){
-	$form = new Form($db);
-	$id=GETPOST('id','int');
-	$idP=GETPOST('idP','int');
-	$formquestion = array(                            
-        array('type' => 'date', 'name' => 'dateEnd', 'id'=>'dateEnd', 'label' =>'Fecha de entrega' ),            
-        );
-
-		$formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?id='.$id.'&action=view&idP='.$idP.'', $langs->trans('Herramienta agotada'), $langs->trans('El material se termino?'), 'fin',  $formquestion);
-		print $formconfirm;
-}
-
-if($_REQUEST['confirm']=='yes' && $_REQUEST['action']=='fin'){
-
-	if($dateFin){		
-
-	    $dateFin = trim($dateFin);
-		$aux=str_replace('/','-',$dateFin);
-		$dat=date('Y-m-d',strtotime($aux));
-	    $sql='UPDATE llx_factory_tools set status=2, dateDeliver="'.$dat.'" where rowid='.$idP;
-		$query=$db->query($sql);	
-		//echo $sql;
-	  
-	    print "<script>window.location.href='factorytools_card.php?id=".$id."&action=view'</script>";
-
-	}else{
-		print '<script>alert("Selecione fecha de entrega")</script>';
-	}
-    $act='view2';
-}
-
-if($_REQUEST['confirm']=='yes' && $_REQUEST['action']=='fin'){
-    $act='view2';
-}
 
 
+
+/*
 if($_REQUEST['confirm']=='yes' && $_REQUEST['action']=='delete'){
 
 	if($dateFin){
@@ -521,25 +742,11 @@ if($_REQUEST['confirm']=='no' && $_REQUEST['action']=='delete'){
 
 	$act='view2';
 }
+*/
 
-if($comment){	
-	if (isset($dateFin) && strcmp($dateFin, '')!=0) {
-		$dateFin = trim($dateFin);
-		$aux=str_replace('/','-',$dateFin);
-		$dat=date('Y-m-d',strtotime($aux));
-
-		$sql='UPDATE llx_factory_tools set status=3, comment="'.$comment.' " , dateDeliver="'.$dat.'" where rowid='.$idP;
-		$query=$db->query($sql);	
-		print "<script>window.location.href='factorytools_card.php?id=".$id."&action=view'</script>";
-		
-	}else{
-		print "<script>alert('Seleccione la fecha de entrega')</script>";	
-	}
-	
-}
 
 if($act=='view2'){
-		print '<br/>';
+	print '<br/>';
 	print '<fieldset>';
 		print '<br/>';		
 		print load_fiche_titre($langs->trans("Historial de herramientas "));		
@@ -557,31 +764,38 @@ if($act=='view2'){
 					
 			$list=array();
 			$list=$object->get_tools_history($id);
-			foreach ($list as $dat) {
+			if ($list) {
+				foreach ($list as $dat) {
+					print '<tr ">';
+						print '<td align="left">'.$fact->getNomUrlFactory($dat->rowid, 1,'index').'</td>';
+						print '<td align="left">'.$dat->label.'</td>';
+						print '<td align="left">'.$dat->qty.'</td>';
+						print '<td align="left">'.dol_print_date($db->jdate($dat->dateCreation), 'day').'</td>';	
+						print '<td align="left">'.dol_print_date($db->jdate($dat->dateDeliver), 'day').'</td>';					
+						if($dat->type==2){
+							print '<td align="left">Operable</td>';							
+							if($dat->status==2){
+								print '<td align="center">Devuelto</td>';
+							}else{
+								print '<td align="center">Comentario:'.$dat->comment.'</td>';
+							}						
+							
+						}else{
+							print '<td align="left">Consumible</td>';	
+							if($dat->status==2){
+								print '<td align="center">Agotada</td>';
+							}else{
+								print '<td align="center">Comentario:'.$dat->comment.'</td>';
+							}						
+						}					
+					print '</tr>';	
+				}	
+			}else{
 				print '<tr ">';
-					print '<td align="left">'.$fact->getNomUrlFactory($dat->rowid, 1,'index').'</td>';
-					print '<td align="left">'.$dat->label.'</td>';
-					print '<td align="left">'.$dat->qty.'</td>';
-					print '<td align="left">'.dol_print_date($db->jdate($dat->dateCreation), 'day').'</td>';	
-					print '<td align="left">'.dol_print_date($db->jdate($dat->dateDeliver), 'day').'</td>';					
-					if($dat->type==2){
-						print '<td align="left">Operable</td>';							
-						if($dat->status==2){
-							print '<td align="center">Devuelto</td>';
-						}else{
-							print '<td align="center">Comentario:'.$dat->comment.'</td>';
-						}						
-						
-					}else{
-						print '<td align="left">Consumible</td>';	
-						if($dat->status==2){
-							print '<td align="center">Agotada</td>';
-						}else{
-							print '<td align="center"></td>';
-						}						
-					}					
+					print '<td colspan=6 align="left">Sin elementos</td>';				
 				print '</tr>';	
-			}	
+			}
+			
 		print '</table>';		
 		print '<form>';
 	print '</fieldset>';

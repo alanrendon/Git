@@ -199,7 +199,10 @@ class Factorytools extends CommonObject
 		
 		$sql .= " t.fk_operator,";
 		$sql .= " t.fk_product,";
+		$sql .= " t.dateCreation,";
+		
 		$sql .= " t.type,";
+		$sql .= " t.qty,";
 		$sql .= " t.status,";
 		$sql .= " t.comment";
 
@@ -222,6 +225,9 @@ class Factorytools extends CommonObject
 				$this->fk_operator = $obj->fk_operator;
 				$this->fk_product = $obj->fk_product;
 				$this->type = $obj->type;
+				$this->qty=$obj->qty;
+				$this->dateCreation=$obj->dateCreation;
+				
 				$this->status = $obj->status;
 				$this->comment = $obj->comment;
 
@@ -637,7 +643,14 @@ class Factorytools extends CommonObject
 		$obj= $this->db->fetch_object($resql);		
 
 		return $obj->value;
-	
+	}
+
+	public function get_entrepot_valid($entrepot=0){
+		$sql = "SELECT a.reel FROM llx_product_stock as a WHERE a.fk_product=".$this->fk_product." AND a.fk_entrepot=".$entrepot;
+					
+		$resql=$this->db->query($sql);		
+		$obj= $this->db->fetch_object($resql);		
+		return $obj->reel;
 	}
 
 	public function get_tools(){
