@@ -126,6 +126,8 @@ $arrayfields=array(
 't.fk_operator'=>array('label'=>$langs->trans("Operador"), 'checked'=>1),
 't.dateStart'=>array('label'=>$langs->trans("Fecha inicio"), 'checked'=>1),
 't.dateEnd'=>array('label'=>$langs->trans("Ficha fin"), 'checked'=>1),
+'t.hours'=>array('label'=>$langs->trans("Horas"), 'checked'=>1),
+'t.minutes'=>array('label'=>$langs->trans("Minutos"), 'checked'=>1),
 't.status'=>array('label'=>$langs->trans("Estado"), 'checked'=>1),
 
     
@@ -236,7 +238,9 @@ $sql = "SELECT
 		t.fk_operator,
 		t.dateStart,
 		t.dateEnd,
-		t. STATUS";
+		t. STATUS,
+		t.hours,
+		t.minutes";
 
 
 // Add fields for extrafields
@@ -357,6 +361,11 @@ if (! empty($arrayfields['t.fk_propal']['checked'])) print_liste_field_titre($ar
 if (! empty($arrayfields['t.fk_operator']['checked'])) print_liste_field_titre($arrayfields['t.fk_operator']['label'],$_SERVER['PHP_SELF'],'t.fk_operator','',$param,'',$sortfield,$sortorder);
 if (! empty($arrayfields['t.dateStart']['checked'])) print_liste_field_titre($arrayfields['t.dateStart']['label'],$_SERVER['PHP_SELF'],'t.dateStart','',$param,'',$sortfield,$sortorder);
 if (! empty($arrayfields['t.dateEnd']['checked'])) print_liste_field_titre($arrayfields['t.dateEnd']['label'],$_SERVER['PHP_SELF'],'t.dateEnd','',$param,'',$sortfield,$sortorder);
+
+if (! empty($arrayfields['t.hours']['checked'])) print_liste_field_titre("Horas",$_SERVER['PHP_SELF'],'r.hours','',$param,'',$sortfield,$sortorder);
+if (! empty($arrayfields['t.minutes']['checked'])) print_liste_field_titre("Minutos",$_SERVER['PHP_SELF'],'r.minutes','',$param,'',$sortfield,$sortorder);
+
+
 if (! empty($arrayfields['t.status']['checked'])) print_liste_field_titre($arrayfields['t.status']['label'],$_SERVER['PHP_SELF'],'t.status','',$param,'',$sortfield,$sortorder);
 
     
@@ -389,6 +398,8 @@ if (! empty($arrayfields['t.status']['checked'])) print_liste_field_titre($array
 if (! empty($arrayfields['t.fk_product']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_fk_product" value="'.$search_fk_product.'" size="10"></td>';
 if (! empty($arrayfields['t.fk_propal']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_fk_propal" value="'.$search_fk_propal.'" size="10"></td>';
 if (! empty($arrayfields['t.fk_operator']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_fk_operator" value="'.$search_fk_operator.'" size="10"></td>';
+if (! empty($arrayfields['t.hours']['checked'])) print '<td class="liste_titre"></td>';
+if (! empty($arrayfields['t.minutes']['checked'])) print '<td class="liste_titre"></td>';
 print '<td class="liste_titre"></td>';
 print '<td class="liste_titre"></td>';
 print '<td class="liste_titre" >';	
@@ -486,6 +497,8 @@ print '<td class="liste_titre" >';
 			if (! empty($arrayfields['t.dateStart']['checked'])) print '<td>'.dol_print_date($date,"dayhour").'</td>';
 			$date=strtotime($obj->dateEnd);
 			if (! empty($arrayfields['t.dateEnd']['checked'])) print '<td>'.dol_print_date($date,"day").'</td>';
+			if (! empty($arrayfields['t.hours']['checked'])) print '<td>'.$obj->hours.'</td>';
+			if (! empty($arrayfields['t.minutes']['checked'])) print '<td>'.$obj->minutes.'</td>';
 			if (! empty($arrayfields['t.status']['checked'])) print '<td>'.$object->LibStatut($obj->STATUS).'</td>';
             
         	

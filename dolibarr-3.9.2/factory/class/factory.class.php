@@ -2117,6 +2117,9 @@ class Factory extends CommonObject
 					if($solic > $rs3->suma){						
 						$sum+=$solic-$rs3->suma;
 					}
+					if ( $rs3->suma>=$solic/1000) {
+						$sum=0;
+					}
 					
 				}
 			}	

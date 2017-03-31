@@ -126,6 +126,8 @@ $arrayfields=array(
 'r.fk_operator'=>array('label'=>$langs->trans("Operador"), 'checked'=>1),
 'r.dateStart'=>array('label'=>$langs->trans("Fecha inicio"), 'checked'=>1),
 'r.dateEnd'=>array('label'=>$langs->trans("Ficha fin"), 'checked'=>1),
+'r.hours'=>array('label'=>$langs->trans("Horas"), 'checked'=>1),
+'r.minutes'=>array('label'=>$langs->trans("Minutos"), 'checked'=>1),
 't.status'=>array('label'=>$langs->trans("Estado"), 'checked'=>1),
 
     
@@ -237,7 +239,9 @@ $sql = "
 		r.fk_operator,
 		r.dateStart,
 		r.dateEnd,
-		t. STATUS";
+		t. STATUS,
+		r.hours,
+		r.minutes";
 
 
 // Add fields for extrafields
@@ -359,6 +363,11 @@ if (! empty($arrayfields['t.fk_propal']['checked'])) print_liste_field_titre($ar
 if (! empty($arrayfields['r.fk_operator']['checked'])) print_liste_field_titre($arrayfields['r.fk_operator']['label'],$_SERVER['PHP_SELF'],'r.fk_operator','',$param,'',$sortfield,$sortorder);
 if (! empty($arrayfields['r.dateStart']['checked'])) print_liste_field_titre($arrayfields['r.dateStart']['label'],$_SERVER['PHP_SELF'],'r.dateStart','',$param,'',$sortfield,$sortorder);
 if (! empty($arrayfields['r.dateEnd']['checked'])) print_liste_field_titre($arrayfields['r.dateEnd']['label'],$_SERVER['PHP_SELF'],'r.dateEnd','',$param,'',$sortfield,$sortorder);
+if (! empty($arrayfields['r.hours']['checked'])) print_liste_field_titre("Horas",$_SERVER['PHP_SELF'],'r.hours','',$param,'',$sortfield,$sortorder);
+if (! empty($arrayfields['r.minutes']['checked'])) print_liste_field_titre("Minutos",$_SERVER['PHP_SELF'],'r.minutes','',$param,'',$sortfield,$sortorder);
+
+
+
 if (! empty($arrayfields['t.status']['checked'])) print_liste_field_titre($arrayfields['t.status']['label'],$_SERVER['PHP_SELF'],'t.status','',$param,'',$sortfield,$sortorder);
 
     
@@ -391,7 +400,9 @@ if (! empty($arrayfields['t.status']['checked'])) print_liste_field_titre($array
 if (! empty($arrayfields['t.fk_product']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_fk_product" value="'.$search_fk_product.'" size="10"></td>';
 if (! empty($arrayfields['t.fk_propal']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_fk_propal" value="'.$search_fk_propal.'" size="10"></td>';
 if (! empty($arrayfields['r.fk_operator']['checked'])) print '<td class="liste_titre"><input type="text" class="flat" name="search_fk_operator" value="'.$search_fk_operator.'" size="10"></td>';
-print '<td class="liste_titre"></td>';
+if (! empty($arrayfields['r.hours']['checked'])) print '<td class="liste_titre"></td>';
+if (! empty($arrayfields['r.minutes']['checked'])) print '<td class="liste_titre"></td>';
+print '<td class="liste_titre" ></td>';
 print '<td class="liste_titre"></td>';
 print '<td class="liste_titre" >';	
 		print '<select class="flat" name="search_status">
@@ -490,6 +501,8 @@ print '<td class="liste_titre" >';
 			if (! empty($arrayfields['r.dateStart']['checked'])) print '<td>'.dol_print_date($date,"dayhour").'</td>';
 			$date=strtotime($obj->dateEnd);
 			if (! empty($arrayfields['r.dateEnd']['checked'])) print '<td>'.dol_print_date($date,"day").'</td>';
+			if (! empty($arrayfields['r.hours']['checked'])) print '<td>'.$obj->hours.'</td>';
+			if (! empty($arrayfields['r.minutes']['checked'])) print '<td>'.$obj->minutes.'</td>';
 			if (! empty($arrayfields['t.status']['checked'])) print '<td>'.$object->LibStatut($obj->STATUS).'</td>';
             
         	
@@ -498,12 +511,14 @@ print '<td class="liste_titre" >';
     		$reshook=$hookmanager->executeHooks('printFieldListValue',$parameters);    // Note that $action and $object may have been modified by hook
             print $hookmanager->resPrint;
         	// Date creation
+        	
             if (! empty($arrayfields['t.datec']['checked']))
             {
                 print '<td align="center">';
                 print dol_print_date($db->jdate($obj->date_creation), 'dayhour');
                 print '</td>';
             }
+
             // Date modification
             if (! empty($arrayfields['t.tms']['checked']))
             {

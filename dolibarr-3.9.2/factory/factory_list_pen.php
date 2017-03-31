@@ -207,8 +207,8 @@ if ($result)
 	print_liste_field_titre($langs->trans('QtyNeed'),$_SERVER["PHP_SELF"],'','',$param,'align="right"',$sortfield,$sortorder);	
 	print_liste_field_titre($langs->trans('Stock'),$_SERVER["PHP_SELF"],'','',$param,'align="right"',$sortfield,$sortorder);	
 	print_liste_field_titre($langs->trans('QtyPen'),$_SERVER["PHP_SELF"],'','',$param,'align="right"',$sortfield,$sortorder);	
-	print_liste_field_titre($langs->trans('UnitPmp'),$_SERVER["PHP_SELF"],'','',$param, 'align="right"',$sortfield,$sortorder);
-	print_liste_field_titre($langs->trans('PriceCost'),$_SERVER["PHP_SELF"],'','',$param,'align="right"',$sortfield,$sortorder);
+	//print_liste_field_titre($langs->trans('UnitPmp'),$_SERVER["PHP_SELF"],'','',$param, 'align="right"',$sortfield,$sortorder);
+	//print_liste_field_titre($langs->trans('PriceCost'),$_SERVER["PHP_SELF"],'','',$param,'align="right"',$sortfield,$sortorder);
 	print_liste_field_titre('',$_SERVER["PHP_SELF"],"",'','','',$sortfield,$sortorder,'maxwidthsearch ');
 	print "</tr>\n";
 
@@ -222,8 +222,8 @@ if ($result)
 	print '<td class="liste_titre" colspan="1">&nbsp;</td>';	
 	print '<td class="liste_titre" colspan="1">&nbsp;</td>';	
 	print '<td class="liste_titre" colspan="1">&nbsp;</td>';	
-	print '<td class="liste_titre" colspan="1">&nbsp;</td>';	
-	print '<td class="liste_titre" colspan="1">&nbsp;</td>';	
+	//print '<td class="liste_titre" colspan="1">&nbsp;</td>';	
+	//print '<td class="liste_titre" colspan="1">&nbsp;</td>';	
 	
 	print '<td class="liste_titre" align="right">';
 	print '<input type="image" name="button_search" class="liste_titre" src="'.img_picto($langs->trans("Search"),'search.png','','',1).'" value="'.dol_escape_htmltag($langs->trans("Search")).'" title="'.dol_escape_htmltag($langs->trans("Search")).'">';
@@ -267,31 +267,40 @@ if ($result)
 			$cantNeed+=$cantTT;
 			$stoc= $fact->get_qty_stock($dat->rowid);			
 			if($cantNeed>$stoc){
-				print '<tr >';
-					print '<td align="left">'.$fact->getNomUrlFactory($dat->rowid, 1,'index').'</td>';
-					print '<td align="left">'.$dat->label.'</td>';
-					print '<td align="right">';											
-						print number_format($cantNeed,0,'.',',');
-					print '</td>';					
-					print '<td align="right">';						
-						$qtyStoc = ($stoc>0) ? $stoc : 0 ;					
-						print $fact->getUrlStock($dat->rowid, 1, $qtyStoc);			 
-					print '</td>';
-					print '<td align="right">';							
-						$pend=$cantNeed-$stoc;				
-						print number_format($pend,0,'.',',');						
-					print '</td>';	
-					print '<td align="right">';											
-						$price= $dat->cost_price;							
-						print price($price);
-					print '</td>';
-					print '<td align="right">';
-						$pricett= $price*$cantNeed;							
-						print price($pricett);
-					print '</td>';				
+				$qtyStoc = ($stoc>0) ? $stoc : 0 ;		
+				$pend=$cantNeed-$stoc;
+				if ($stoc>= $cantNeed/1000) {
+					$pend=0;
+				}
 
-					print '<td><a href="detailsFactoryPen.php?id='.$dat->rowid.'" class="button">Ver</a></td>';
-				print "</tr>\n";
+				if ($pend/1000!=0) {
+					print '<tr >';
+						print '<td align="left">'.$fact->getNomUrlFactory($dat->rowid, 1,'index').'</td>';
+						print '<td align="left">'.$dat->label.'</td>';
+						print '<td align="right">';											
+							print number_format($cantNeed/1000,0,'.',',');
+						print '</td>';					
+						print '<td align="right">';						
+										
+							print $fact->getUrlStock($dat->rowid, 1, $qtyStoc);			 
+						print '</td>';
+						print '<td align="right">';							
+										
+							print number_format($pend/1000,0,'.',',')." K";						
+						print '</td>';	
+						/*print '<td align="right">';											
+							$price= $dat->cost_price;							
+							print price($price);
+						print '</td>';
+						print '<td align="right">';
+							$pricett= $price*$cantNeed;							
+							print price($pricett);
+						print '</td>';*/			
+
+						print '<td><a href="detailsFactoryPen.php?id='.$dat->rowid.'" class="button">Ver</a></td>';
+					print "</tr>\n";
+				}
+				
 			}
 			$cant=0;
 			$cantNeed=0;

@@ -81,7 +81,7 @@ class modFactory extends DolibarrModules
 		$this->need_dolibarr_version = array(3, 4);
 
 		// hook pour la recherche
-		$this->module_parts = array('hooks' => array('searchform','propaldao','globalcard','formfile'),'triggers' => 1);
+		$this->module_parts = array('hooks' => array('searchform','propaldao','globalcard','formfile'));
 		
 		// Boites
 		$this->boxes = array();

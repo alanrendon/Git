@@ -122,17 +122,17 @@ print '<fieldset>';
 			print '<td class="liste_titre" width=100px align="left">'.$langs->trans("Customer").'</td>';
 			print '<td class="liste_titre" width=100px align="left">'.$langs->trans("Date").'</td>';
 			print '<td class="liste_titre" width=50px align="right">'.$langs->trans("QtyNeed").'</td>';	
-			print '<td class="liste_titre" width=50px align="right">'.$langs->trans("Stock").'</td>';					
+			//print '<td class="liste_titre" width=50px align="right">'.$langs->trans("Stock").'</td>';					
 			print '<td class="liste_titre" width=50px align="right">'.$langs->trans("QtyPen").'</td>';
-			print '<td class="liste_titre" width=100px align="right">'.$langs->trans("UnitPmp").'</td>';
-			print '<td class="liste_titre" width=100px align="right">'.$langs->trans("PriceCost").'</td>';
+			//print '<td class="liste_titre" width=100px align="right">'.$langs->trans("UnitPmp").'</td>';
+			//print '<td class="liste_titre" width=100px align="right">'.$langs->trans("PriceCost").'</td>';
 		print '</tr>';	
 
 		$listP=array();
 		$listP=$fact->get_propals_product($idProd);
 		$band=0;
 		$i=0;
-
+		$sum_cant_need=0;
 		//while ($dat=$db->fetch_object($query)) {	
 		foreach ($listP as $dat) {								
  			
@@ -168,21 +168,27 @@ print '<fieldset>';
 					print "</td>\n";
 
 					print '<td align="right">';												
-						print $cantNeed;
+						print ($cantNeed/1000)." K";
+						$sum_cant_need+=$cantNeed;
 					print '</td>';	
-					print '<td align="right">';												
-						$qtyStoc = ($stoc>0) ? $stoc : 0 ;					
-						print $fact->getUrlStock($idProd, 1, $qtyStoc);	
-					print '</td>';									
+					//print '<td align="right">';												
+						$qtyStoc = ($stoc>0) ? $stoc : 0 ;
+						$stock2= $fact->getUrlStock($idProd, 1, $qtyStoc);			
+					//	print $stock2;
+					//print '</td>';									
 					print '<td align="right">';							
 						if($cantNeed>$stoc){
 							$pend+=$cantNeed-$stoc;
 							$band=1;						
+						}	
+						if($stoc>=$cantNeed/1000){
+							$pend=0;
+							$band=0;						
 						}						
 //						echo $cantTT.' '.$stoc.' '.$pend.'<br/>';
-						print $pend;
+						print ($pend/1000)." K";
 					print '</td>';	
-					print '<td align="right">';
+					/*print '<td align="right">';
 						//$price= $fact->priceFather($idProd);							
 						$price=$cost_price;
 						print price($price);
@@ -190,7 +196,7 @@ print '<fieldset>';
 					print '<td align="right">';
 						$pricett= $price*$cantNeed;							
 						print price($pricett);
-					print '</td>';
+					print '</td>';*/
 				print '</tr>';
 
 				$pesoTeoriUnit=0;
@@ -199,6 +205,29 @@ print '<fieldset>';
 			}
 
 			$i++;
+		}
+		if ($listP) {
+			print '<tr class="pair" >';
+				print '<td align="right" colspan=3>';					
+					print "Total:";
+				print '</td>';
+				print '<td align="right" >';					
+					print ($sum_cant_need/1000)." K";
+				print '</td>';
+				/*print '<td align="right" >';					
+					print $stock2;
+				print '</td>';*/
+				print '<td align="right" >';	
+					if ($stoc>=($sum_cant_need/1000)) {
+						$pen_need=0;
+					}else{
+						$pen_need=$sum_cant_need-$stoc;
+					}
+					print ($pen_need/1000)." K";
+				print '</td>';
+
+				
+			print '</tr>';
 		}
 		
 	print '</table>';	

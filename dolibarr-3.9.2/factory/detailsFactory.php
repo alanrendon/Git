@@ -220,7 +220,12 @@ print '<fieldset>';
 						if($cantTT>$stoc){
 							$pend+=$cantTT-$stoc;
 							$band=1;						
-						}						
+						}
+						if ($stoc>=$cantTT/1000) {
+							$pend=0;
+							$band=0;
+						}
+
 						print number_format($pend/1000,0,'.',',')." K";
 					print '</td>';	
 					print '<td align="right">';						

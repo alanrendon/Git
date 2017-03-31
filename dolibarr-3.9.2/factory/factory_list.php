@@ -351,12 +351,12 @@ if ($result)
 
 			print '<td align="right">';
 				$need= $fact->get_qty_propal($objp->propalid);
-				print number_format($need,0,'.',',');
+				print number_format($need/1000,0,'.',',')." K";
 			print "</td>\n";
 
 			print '<td align="right">';
 				$exit=$fact->get_qty_propal_pen($objp->propalid);
-				print number_format($exit,0,'.',',');				
+				print number_format($exit,0,'.',',')." K";				
 			print "</td>\n";
 			print '<td align="center">';
 				print dol_print_date($db->jdate($objp->dp), 'day');
