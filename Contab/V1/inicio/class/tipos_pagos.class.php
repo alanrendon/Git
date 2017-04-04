@@ -18,7 +18,7 @@ class tipos_pagos extends conexion {
         LEFT JOIN llx_contab_payment_term AS b ON a.rowid = fk_payment_term
         WHERE
           b.rowid IS NULL;";
-     
+      
     $data = $this->db->query($string);
     
     if ($data) {    
@@ -65,10 +65,8 @@ class tipos_pagos extends conexion {
               b.libelle
             FROM
               llx_contab_payment_term AS a
-            INNER JOIN llx_c_payment_term AS b ON a.fk_payment_term = b.rowid 
-            ORDER BY
-            a.cond_pago;";
-
+            INNER JOIN llx_c_payment_term AS b ON a.fk_payment_term = b.rowid;";
+      
     $data = $this->db->query($string);
     
     if ($data) {      

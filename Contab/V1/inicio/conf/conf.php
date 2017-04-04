@@ -10,14 +10,15 @@ if(isset($_SESSION['ENTITY'])){
 
 
 define('DB_HOST','localhost');
-define('DB_USER','pruebascemsa'); //usuario de la base de datos
-define('DB_PASS','PRu3vA$C3M');  //contraseña de la base de datos
-define('DB_NAME','pruebascemsa');  //nombre de la base de datos
+define('DB_USER','root'); //usuario de la base de datos
+define('DB_PASS','');  //contraseña de la base de datos
+define('DB_NAME','dolibarr3921');  //nombre de la base de datos
 define('DB_CHARSET','utf-8');
-define('IMG_ROOT','http://cloud.dolibarrmexico.com:88/dolicemsa/viewimage.php?cache=1&amp;modulepart=companylogo&amp;file=thumbs%2FLOGO-CEMSA_mini.jpg');
-define('PREFIX','llx_'); 
+define('IMG_ROOT','http://contab.grupoauribox.com/Aieme/dolibarr/htdocs/viewimage.php?cache=1&modulepart=companylogo&file=thumbs%2FPetroChina-Logo_mini.png');
+define('PREFIX','llx_');
+
 #Ejemplo de URL, favor de omitir el último /
-define('DOL_URL','http://cloud.dolibarrmexico.com:88/dolicemsa');
+define('DOL_URL','http://contab.grupoauribox.com/Aieme/dolibarr/htdocs');
 define('ENTITY',$ENTITY);
 define('HIDOLI',0); //Ocultar divs de relación de facturas cliente/proveedor
 

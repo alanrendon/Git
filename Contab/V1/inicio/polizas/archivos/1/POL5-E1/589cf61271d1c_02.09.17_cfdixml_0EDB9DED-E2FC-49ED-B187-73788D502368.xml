@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd" version="3.2" folio="11450" fecha="2016-02-08T01:01:01" formaDePago="Pago en una sola exhibición" noCertificado="00001000000301408771" certificado="MIIEWjCCA0KgAwIBAgIUMDAwMDEwMDAwMDAzMDE0MDg3NzEwDQYJKoZIhvcNAQEFBQAwggGKMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29kc0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVycmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FUOTcwNzAxTk4zMTUwMwYJKoZIhvcNAQkCDCZSZXNwb25zYWJsZTogQ2xhdWRpYSBDb3ZhcnJ1YmlhcyBPY2hvYTAeFw0xMzExMjUyMjIwMzRaFw0xNzExMjUyMjIwMzRaMIGmMRgwFgYDVQQDEw9VTklTRU0gU0EgREUgQ1YxGDAWBgNVBCkTD1VOSVNFTSBTQSBERSBDVjEYMBYGA1UEChMPVU5JU0VNIFNBIERFIENWMSUwIwYDVQQtExxVTkk5ODA1MTNQUjUgLyBBRUFCNjYwMTE0MTg1MR4wHAYDVQQFExUgLyBBRUFCNjYwMTE0SE5FTkxEMDkxDzANBgNVBAsTBlVuaWRhZDCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAn/1kpu3mCrnMjFv6KhJCRopYNfTIlCpaYqdc1nVDPhcxGNftswdxf9AGDeSvyIeWAdDyRNdMy+MU+idVer62aWD6nRhzXlH75iurbzZp2K7HkoykIhbCA12wB3Bqi6fIi3qhaE+9uqqrOsN+ek/A0NxrUmnHZgAkfq1YnpS5psMCAwEAAaMdMBswDAYDVR0TAQH/BAIwADALBgNVHQ8EBAMCBsAwDQYJKoZIhvcNAQEFBQADggEBABIZBYqyjcUoQ+AkcD+Wzo+ZKin9cbersLeu6a3vETnFJcOQ0oyx1CcwNG/du+kWWQ3yu9Pc0Fz//QQx0zn3eLj2GVgMURaMiWXKKbx8adMOUMblZGVFOC6l/1v4DJ/QM+S0LwQgK9TxWHf3iA1vHqqb/3dQNNAIisjMMxJ3qRpNkZxK7trcEnRGVXv+FvIAIIUnZqQjS5UggWV9YknFAvE6ZxJLSqPSQ19pGlHugRPOFpsx7r/4A4MBOlHoMa9mABH6nxKxv7hWIuklVeJGOH9uaBPLplcan2++DD64K8xuV9nF3i8A8wRiR9oOzHmoVvjmFnw1WJ5arpShftmVgRc=" subTotal="8575.50" total="8575.50" tipoDeComprobante="ingreso" metodoDePago="Deposito Bancario" LugarExpedicion="Cortazar, Guanajuato, México" sello="ln5n3McNzHUIvmDR6LRJ1EY6Sz++SCkT7yExO0jVLyRv6slw3FZzmLNCcnDvOPcadCY8Vgq8uwHH0Ujj+UyzOkDGDK2L1hI8Gww2ppjEyT/3MjnSpmhoHtoLlfHLkOvVRFT89tRo1hNkVdzFwuyPYyGUIaALkmP8CFDfY4Je1hY=">
+  <cfdi:Emisor rfc="UNI980513PR5" nombre="Unisem, S.A. de C.V.">
+    <cfdi:DomicilioFiscal calle="Carretera Panamericana" noExterior="km 290" colonia="La Fortaleza" municipio="Cortazar" estado="Guanajuato" pais="México" codigoPostal="38481" />
+    <cfdi:RegimenFiscal Regimen="Regimen General de Ley" />
+  </cfdi:Emisor>
+  <cfdi:Receptor rfc="REMG780227C59" nombre="Reyes Martínez Gabriel">
+    <cfdi:Domicilio calle="Doctor Parres" noExterior="50" noInterior="int. 1" colonia="Emiliano Zapata" municipio="Cuautla" estado="Morelos" pais="México" codigoPostal="62744" />
+  </cfdi:Receptor>
+  <cfdi:Conceptos>
+    <cfdi:Concepto cantidad="1" unidad="Ninguna" descripcion="Anticipo a cuenta de semilla para siembra" valorUnitario="8575.50" importe="8575.50" />
+  </cfdi:Conceptos>
+  <cfdi:Impuestos totalImpuestosRetenidos=".00" totalImpuestosTrasladados=".00">
+    <cfdi:Traslados>
+      <cfdi:Traslado impuesto="IVA" tasa=".00" importe=".00" />
+    </cfdi:Traslados>
+  </cfdi:Impuestos>
+  <cfdi:Complemento>
+    <tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/TimbreFiscalDigital/TimbreFiscalDigital.xsd" version="1.0" UUID="0EDB9DED-E2FC-49ED-B187-73788D502368" FechaTimbrado="2016-02-10T09:38:56" selloCFD="ln5n3McNzHUIvmDR6LRJ1EY6Sz++SCkT7yExO0jVLyRv6slw3FZzmLNCcnDvOPcadCY8Vgq8uwHH0Ujj+UyzOkDGDK2L1hI8Gww2ppjEyT/3MjnSpmhoHtoLlfHLkOvVRFT89tRo1hNkVdzFwuyPYyGUIaALkmP8CFDfY4Je1hY=" noCertificadoSAT="00001000000200365214" selloSAT="d2hw4W+g0RlBhoIZZxbSgPwQYFoGLwswkQtR47GechCwZYC3KQL94hABgJFaDS7w9/4NDDga+3QbVvQ+wRjxI/dXjXD2lCMH3CdD9+85QQEuuyrMTeW6cWN6whZZ3/Ufe371WuKGrsdf7e6te39x/snVnLH4/iT1vKrBsSHg5eg=" />
+  </cfdi:Complemento>
+</cfdi:Comprobante>

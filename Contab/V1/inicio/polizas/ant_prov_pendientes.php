@@ -65,7 +65,7 @@ $valor              = "";
     <input type="hidden" id="tmoneda" value="<?=$moneda?>">
     <div class="right_col" role="main">
         <div class="x_title">
-            <h2>Facturas de proveedores pendientes de contabilizar</h2>
+            <h2>Anticipos de proveedores pendientes de contabilizar</h2>
             <div class="clearfix"></div>
         </div>
         <div class="x_content" >
@@ -84,18 +84,17 @@ $valor              = "";
                  
                     <table class="table table-striped jambo_table bulk_action" id="datatable">
                         <thead>
-                            <th>Factura</th>
-                            <th>Fecha Fact.</th>
-                            <th>Fecha Pago</th>
-                            <th>Condición de pago</th>
+                            <th>Anticipo</th>
+                            <th>Fecha</th>
+                            <th>Tipo de Anticipo</th>
+                            <th>Importe a solicitar</th>
                             <th>Importe Total</th>
-                            <th>Importe Pagado</th>
                             <th>Moneda</th>
                             <th><i class="fa fa-calculator" aria-hidden="true"></th>
                         </thead>
                         <tbody>
                             <?php    
-                                $a_factures=$facpen->getFacPolizasPend();
+                                $a_factures=$facpen->getFacPolizasAntPend();
                             ?>
                             <?php foreach ($a_factures as $key => $a_facture): ?>
                                 <?php  
@@ -104,87 +103,47 @@ $valor              = "";
                                 <tr>
                                     <td>
                                          <?php echo $a_facture['ref'] ?>
-                                            <a href="#" data-toggle="tooltip" data-placement="top" title="<?php echo $a_facture['nom'] ?>">
-                                                <i class="fa fa-question-circle fa-lg"> </i></a>
-                                            </a>
+                                            
 
                                     </td>
-                                    <td>
-                                        <?php echo $a_facture['datef'] ?>
-                                    </td>
+    
                                     <td>
                                         <?php echo $a_facture['dateo'] ?>
                                        
                                     </td>
 
-                                    <?php  
-
-                                        $fac            =$facpen->fetch_facture($a_facture['rowid']);
-                                        $a_payment_term = $facpen->getCondiciones_de_Pago();
-                                        $name           = (is_object($fac)) ? 'cond_pago_'.$fac->fk_cond_reglement : null ;
-                                        $cp             =(isset($a_payment_term[$name])) ? $a_payment_term[$name] : 0 ;  
-                                        if (is_object($fac) && $fac->fk_cond_reglement == 0  && $fac->type) {
-                                            $tipo="Notas de crédito";
-                                        }else{
-                                            switch ($cp) {
-                                                case 1:
-                                                    $tipo = 'Contado';
-                                                    break;
-                                                case 2:
-                                                    if ( $a_facture['paye']==1) {
-                                                        $tipo = 'Crédito-Pagado';
-                                                    }else{
-                                                        $tipo = 'Crédito';
-                                                    }
-                                                    break;
-                                                case 3:
-                                                    $tipo = 'Anticipo';
-                                                    break;
-                                                case 4:
-                                                    $tipo= '50/50';
-                                                    break;
-                                                default:
-                                                    $tipo= 'N/A';
-                                                    break;
+                                    <td>
+                                        <?php
+                                            if ($a_facture['type_advance']==1) {
+                                                echo "Proveedor externo";
+                                            }else{
+                                                echo "Colaboradores/Víaticos";
                                             }
-                                        }
-                                    ?>
-                                    <td>
-                                        <?php echo $tipo; ?>
-                                    </td>
-                                    <td align='right'>
-                                        <?php echo $moneda.' '.number_format($a_facture['total_ttc'],2) ?>
-                                            
-                                    </td>
-                                    <td align='right'>
-                                        <?php echo $moneda.' '.number_format($a_facture['amount'],2) ?>
-                                    </td>
-                                    <td>
-                                            <?php if ($divisa->check_if_active()): ?>
-                                                    <?php $divisa->fk_document = $a_facture['rowid']; ?>
-                                                    <?php $divisa_monnaie = $divisa->divisa_facture_fourn(); ?>
+                                        ?>
 
-                                                    <?php if ($divisa_monnaie): ?>
-                                                        <?php echo $divisa_monnaie->divisa ?>
-                                                    <?php else: ?>
-                                                            <?php $divisa_monnaie = $divisa->check_monnaie(); ?>
-                                                            <?php echo $divisa_monnaie->value ?>
-                                                    <?php endif ?>
-                                                        
-                                                <?php else: ?>
-                                                    
-                                                    <?php echo $divisa_monnaie->value; ?>
-                                            <?php endif ?>
                                     </td>
-                                   <td>
-                                            <input name='factid[]' type='checkbox' value="<?php echo $a_facture['rowid']?>">
-                                            <?php if ($a_facture['paye']==0 && $cp==1): ?>
-                                                 <a href="#" data-toggle="tooltip" data-placement="top" title="Esta factura de tipo contado no cuenta con un pago. Puede contabilizarse bajo su criterio.">
-                                                    <i class="fa fa-exclamation-circle fa-lg" style="color: #ffa500 ;"> </i>
-                                                </a>
-                                             
-                                            <?php endif ?>
+                                    <td>
+                                        <?php
+                                            
+                                            echo $a_facture['import'];
+                                            
+                                        ?>
                                     </td>
+                                    <td>
+                                        <?php
+                                            
+                                            echo $a_facture['total_import'];
+                                            
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                            
+                                            echo $a_facture['code'];
+                                            
+                                        ?>
+                                    </td>
+                                    <td></td>
                                 </tr>
                             <?php endforeach ?>
                         </tbody>

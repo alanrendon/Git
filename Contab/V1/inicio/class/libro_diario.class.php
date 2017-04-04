@@ -6,8 +6,9 @@ class LibroDiario extends conexion {
 	public function __construct() { 
 		parent::__construct(); 
 	} 
-	
+
 	public function get_pol_diario($periodo){
+
         $rows = array();
         $porciones = explode("/", $periodo[0]);
         
@@ -19,13 +20,19 @@ class LibroDiario extends conexion {
         if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $periodo[0])) {
 
           $periodo[0] = str_replace("-","/",$periodo[0]);
+
             $periodo[1] = str_replace("-","/",$periodo[1]);
+            echo "string";
+            print_r($periodo[0]);
+            return null;
             $date = new DateTime($periodo[0]);
+
             $periodo[0] =$date->format('Y-m-d');
 
             $date = new DateTime($periodo[1]);
             $periodo[1] =$date->format('Y-m-d');
         }
+
          $ajuste = 0;
         if($porciones [0]==13 ){
             $ajuste = 1;

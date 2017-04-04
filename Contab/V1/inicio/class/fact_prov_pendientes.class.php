@@ -90,6 +90,49 @@ class FacPolizaPendiente extends conexion {
 		return $a;
 	}
 
+	public function getFacPolizasAntPend(){
+
+		$rows=array();
+		$sql='
+		SELECT
+			a.rowid,
+			a.ref,
+			a.type_advance,
+			a.import,
+			a.total_import,
+			b.code,
+			a.date_advance AS dateo
+		FROM
+			llx_ctrl_advance_provider AS a
+		LEFT JOIN llx_multidivisa_divisas as b on b.rowid=a.fk_mcurrency';
+	
+		$query= $this->db->query($sql);
+		if ($query) {
+			while($row = $query->fetch_assoc())
+			{
+				$rows[] = $row;
+			}
+
+		}
+
+		/*foreach ($rows as $key => $row) {
+
+			if ($row['polif_fac_type']==11 &&  $row['paye']==0) {
+				unset($rows[$key]);
+			}
+			else if ($row['polif_fac_type']==1) {
+				unset($rows[$key]);
+			}
+			if (isset($rows[$key+1])) {
+				if ($row['rowid'] == $rows[$key+1]['rowid']) {
+					unset($rows[$key]);
+					unset($rows[$key+1]);
+				}
+			}
+			
+		}*/
+		return $rows;
+	}
 
 	function fetch_facture($rowid)
 	{

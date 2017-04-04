@@ -108,11 +108,10 @@ $empresa_entity = $user_empresa->get_multiempresa(ENTITY);
                                         <li><a href="<?php echo $url[4].'consulta.php'?>">Consultar</a></li>
                                         <li><a href="<?php echo $url[4].'fact_clie_pendientes.php'?>">Fact. Clie. Pendientes</a></li>
                                         <li><a href="<?php echo $url[4].'fact_prov_pendientes.php'?>">Fact. Prov. Pendientes</a></li>
+                                        <li><a href="<?php echo $url[4].'ant_prov_pendientes.php'?>">Ant. Prov. Pendientes</a></li>
                                         <li><a href="<?php echo $url[4].'transfert_pendientes.php'?>">Movimientos Bancarios Pendientes</a></li>
                                         <li><a href="<?php echo $url[4].'commande_pedido.php'?>">Pedidos a proveedor</a></li>
-                                        <?php if ($divisa->check_if_active()): ?>
-                                            <li><a href="<?php echo $url[4].'perdida_ganancia.php'?>">Pérdida/Ganancia</a></li>
-                                        <?php endif ?>
+                                        
                                         <li><a href="<?php echo $url[4].'stock_pendientes.php'?>">Movimientos de Stock Pendientes</a></li>
                                         <li><a href="<?php echo $url[4].'gastos_pendientes.php'?>">Gastos Pendientes</a></li>
                                         <li><a href="<?php echo $url[4].'template.php'?>">Plantillas</a></li>
@@ -126,7 +125,7 @@ $empresa_entity = $user_empresa->get_multiempresa(ENTITY);
                                         <li><a href="<?php echo $url[7].'estado_resultados.php'?>">Estado de Resultados</a></li>
                                         <li><a href="<?php echo $url[7].'balance_comprobacion.php'?>">Balanza de Comprobación</a></li>
                                         <li><a href="<?php echo $url[7].'libro_diario.php'?>">Libro Diario</a></li>
-                                        <li><a href="<?php echo $url[7].'cuentas_mayor.php'?>">Cuentas de Mayor</a></li>
+                                        <li><a href="<?php echo $url[7].'cuentas_mayor.php'?>">Libro Mayor</a></li>
                                         <li><a href="<?php echo $url[7].'auxiliar.php'?>">Auxiliar de cuentas</a></li>
                                         <li><a href="<?php echo $url[7].'consulta_diot.php'?>">DIOT</a></li>
                                     </ul>

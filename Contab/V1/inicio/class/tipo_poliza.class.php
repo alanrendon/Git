@@ -31,7 +31,7 @@ class Tipo_Poliza extends conexion {
 				FROM
 					llx_contab_tipo_grupo_poliza
 				WHERE
-					abr NOT IN ('CP','CxP','CPP','PP','PxP','PPP','PRS','PSS','PGCP','PGCC')
+					abr NOT IN ('CP','CxP','CPP','PP','PxP','PPP','PRS','PSS')
 				ORDER BY
 					abr";
 		$query= $this->db->query($sql);
@@ -56,9 +56,9 @@ class Tipo_Poliza extends conexion {
 				FROM
 					".PREFIX."contab_tipo_grupo_poliza
 				WHERE
-					abr IN('CP','CPP','CxP','PGCC')
+					abr IN('CP','CPP','CxP')
                 ORDER BY
-                id";
+                abr";
 		$query= $this->db->query($sql);
         
 		if ($query) {
@@ -81,9 +81,9 @@ class Tipo_Poliza extends conexion {
 				FROM
 					".PREFIX."contab_tipo_grupo_poliza
 				WHERE
-					abr IN('PP','PXP','PPP','PGCP')
+					abr IN('PP','PXP','PPP')
                 ORDER BY
-                id";
+                abr";
 		$query= $this->db->query($sql);
         
 		if ($query) {
@@ -96,6 +96,8 @@ class Tipo_Poliza extends conexion {
 		return $rows;
 	}
 
+	
+
 	public function get_tipo_poliza_prearmado_stock() {
 		$rows = array();
         
@@ -106,9 +108,9 @@ class Tipo_Poliza extends conexion {
 				FROM
 					".PREFIX."contab_tipo_grupo_poliza
 				WHERE
-					abr IN('PSS','PRS')
+					abr IN('PSS','PRS','AAP')
                 ORDER BY
-                id";
+                abr";
 		$query= $this->db->query($sql);
         
 		if ($query) {

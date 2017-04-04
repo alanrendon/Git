@@ -48,62 +48,9 @@ class Divisa extends conexion
 		return $row;
 	}
 
-	public function fechtMultidivisa_facture_fourn()
+	public function fechtMultidivisa($value=0)
 	{
-		$row = false;
-		$sql = 'SELECT
-					MAX(m.rowid) AS rowid,
-					m.fecha,
-					m.hora,
-					m.source_divisa,
-					m.target_divisa,
-					m.target_iva,
-					m.target_total,
-					m.target_subtotal,
-					p.datep,
-					m.tipo_cambio AS tc
-				FROM
-					llx_multidivisa AS m
-				INNER JOIN llx_paiementfourn_facturefourn AS pf ON pf.fk_facturefourn = m.fk_document
-				INNER JOIN llx_paiementfourn AS p ON pf.fk_paiementfourn = p.rowid
-				WHERE
-					m.fk_document = "'.$this->fk_document.'"
-				AND date(m.fecha) = date(p.datep)
-				GROUP BY
-					p.datep';
-		$query = $this->db->query($sql);
-		if ($query) 
-			$row = $query->fetch_object();
-		return $row;
-	}
-
-	public function fechtMultidivisa_facture()
-	{
-		$row = false;
-		$sql = 'SELECT
-					MAX(m.rowid) AS rowid,
-					m.fecha,
-					m.hora,
-					m.source_divisa,
-					m.target_divisa,
-					m.target_iva,
-					m.target_total,
-					m.target_subtotal,
-					p.datep,
-					m.tipo_cambio AS tc
-				FROM
-					llx_multidivisa AS m
-				INNER JOIN llx_paiement_facture AS pf ON pf.fk_facture = m.fk_document
-				INNER JOIN llx_paiement AS p ON pf.fk_paiement = p.rowid
-				WHERE
-					m.fk_document = "'.$this->fk_document.'"
-				AND date(m.fecha) = date(p.datep)
-				GROUP BY
-					p.datep';
-		$query = $this->db->query($sql);
-		if ($query) 
-			$row = $query->fetch_object();
-		return $row;
+		# code...
 	}
 
 
