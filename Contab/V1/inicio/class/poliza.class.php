@@ -166,13 +166,15 @@ class Poliza extends conexion {
                 GROUP BY
                     poliza.rowid
 				ORDER BY 
-					poliza.fecha DESC,
 					poliza.tipo_pol ASC,
-					poliza.cons ASC
+					poliza.cons ASC,
+                    poliza.anio ASC,
+                    poliza.mes ASC
+					
 				LIMIT 10
 				";
 
-		
+
         $query = $this->db->query($sql);
         if ($query) {
             $rows = array();

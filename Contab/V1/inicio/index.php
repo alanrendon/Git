@@ -1,3 +1,6 @@
+<?php
+ob_start();
+?>
 <!DOCTYPE html>
 <html lang="es">
 	<?php include_once("base/head.php"); ?>
@@ -8,7 +11,7 @@
 		<!-- /top tiles -->
 		<div class="row">
 			<div class="jumbotron">
-				<h1>Bienvenido a Contab PRO 1.0</h1>
+				<h1>Bienvenido a Contab PRO 3.0 el Módulo de Contabilidad</h1>
 				<blockquote>
 					<p>
 						<h2><i class="fa fa-tag"></i> Actualización:</h2>
@@ -25,7 +28,7 @@
 				<br />
 				<br />
 				<div align="right">
-					<span>Contab PRO 1.0 | Para más información consulte el <a href="#"> Manual de usuario</a> </span>
+					<span>Contab PRO 3.0 | Para más información consulte el <a href="#"> Manual de usuario</a> </span>
 				</div>
 			</div>
 		</div>
@@ -36,7 +39,7 @@
 	<!-- footer content -->
 	<footer>
 		<div class="pull-right">
-			Contab PRO 1.0 | Dolibarr ERP by <a href="http://www.auriboxconsulting.com/">Auribox Consulting</a>
+			Módulo de Contabilidad | Dolibarr ERP by <a href="http://www.auriboxconsulting.com/">Auribox Consulting</a>
 		</div>
 		<div class="clearfix"></div>
 	</footer>
@@ -89,3 +92,5 @@
 	<script src="js/app.js"></script>
 </body>
 </html>
+
+<?php ob_end_flush(); ?>

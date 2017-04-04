@@ -3,8 +3,12 @@ $url[0] = "../";
 require_once "../conex/conexion.php";
 require_once $url[0]."class/admin.class.php";
 require_once $url[0]."class/fact_prov_pendientes.class.php";
+require_once ($url[0]."class/multidivisa.class.php");
+require  $url[0]."class/extrafields_facture.class.php";
 
 $eDolibarr = new admin();
+$divisa    = new Divisa();
+$extra_field =new ExtraFieldFacture();
 $valores = $eDolibarr->get_user();
 $moneda = $eDolibarr->get_moneda($valores['MAIN_MONNAIE']);
 
@@ -50,6 +54,30 @@ if(isset($_POST['factid'])){
                         print "<td>Importe total</td>";
                         print "<td >".$moneda." ".number_format($vfac['total_ttc'],2)."</td>";
                     print "</tr>";
+                    if ($divisa->check_if_active()){
+                        
+                        $divisa->fk_document    = $vfac['rowid']; 
+                        $extra_field->fk_object =$vfac['rowid'];
+
+                        if ($tc = $extra_field->get_tc_facture_fourn()) {
+
+                            $divisa_monnaie        = $divisa->divisa_facture_fourn();
+                            $divisa_monnaie_entity = $divisa->check_monnaie();
+
+                            if (strcasecmp($divisa_monnaie->divisa, $divisa_monnaie_entity->value) <> 0){
+                                print "<tr>";
+                                print "<td>Divisa</td>";
+                                print "<td>".$divisa_monnaie->divisa."</td>";
+                                print "</tr>";
+
+                                print "<tr>";
+                                print "<td>Tipo de cambio establecido</td>";
+                                print "<td>".$tc->tc."</td>";
+                                print "</tr>";
+                                
+                            }                    
+                        }
+                    }
                 print "</tbody>";
             print "</table>";
             print "<input type='hidden' name='factidRecuperado[]' value='".$factid."'>";
@@ -150,6 +178,30 @@ if(isset($_POST['factid'])){
                     }
                     print "<td>Estado</td>";
                     print "<td>".$statut."</td>";
+                     if ($divisa->check_if_active()){
+                        
+                        $divisa->fk_document    = $vfac['rowid']; 
+                        $extra_field->fk_object =$vfac['rowid'];
+
+                        if ($tc = $extra_field->get_tc_facture_fourn()) {
+
+                            $divisa_monnaie        = $divisa->divisa_facture_fourn();
+                            $divisa_monnaie_entity = $divisa->check_monnaie();
+
+                            if (strcasecmp($divisa_monnaie->divisa, $divisa_monnaie_entity->value) <> 0){
+                                print "<tr>";
+                                print "<td>Divisa</td>";
+                                print "<td>".$divisa_monnaie->divisa."</td>";
+                                print "</tr>";
+
+                                print "<tr>";
+                                print "<td>Tipo de cambio establecido</td>";
+                                print "<td>".$tc->tc."</td>";
+                                print "</tr>";
+                                
+                            }                    
+                        }
+                    }
                 print "</tr>";
             print "</tbody>";
         print "</table>";

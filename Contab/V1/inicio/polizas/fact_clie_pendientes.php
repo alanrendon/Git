@@ -156,6 +156,7 @@ $finFecha = $fechaUltimo->mes.'/'.$finFecha.'/'.$fechaUltimo->anio;
                                             <?php echo $moneda.' '.number_format($a_facture['amount'], 2) ?>
                                         </td>
                                         <td>
+                                   
                                             <?php if ($divisa->check_if_active()): ?>
                                                     <?php $divisa->fk_document = $a_facture['rowid']; ?>
                                                     <?php $divisa_monnaie = $divisa->divisa_facture(); ?>
@@ -611,6 +612,7 @@ function f_get_partidas_facture(facturasid){
 
             $('#cliente_debe').val($('#ttc').val());
             $('#cliente_haber').val($('#ttc').val());
+            //ht = total
             $('#venta_haber').val($('#ht').val());
             $('#iva_haber').val($('#tva').val());
             $('#bancos_debe').val($('#ttc').val());

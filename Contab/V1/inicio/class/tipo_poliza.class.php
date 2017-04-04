@@ -31,7 +31,7 @@ class Tipo_Poliza extends conexion {
 				FROM
 					llx_contab_tipo_grupo_poliza
 				WHERE
-					abr NOT IN ('CP','CxP','CPP','PP','PxP','PPP','PRS','PSS')
+					abr NOT IN ('CP','CxP','CPP','PP','PxP','PPP','PRS','PSS','PGCP','PGCC')
 				ORDER BY
 					abr";
 		$query= $this->db->query($sql);
@@ -56,9 +56,9 @@ class Tipo_Poliza extends conexion {
 				FROM
 					".PREFIX."contab_tipo_grupo_poliza
 				WHERE
-					abr IN('CP','CPP','CxP')
+					abr IN('CP','CPP','CxP','PGCC')
                 ORDER BY
-                abr";
+                id";
 		$query= $this->db->query($sql);
         
 		if ($query) {
@@ -81,9 +81,9 @@ class Tipo_Poliza extends conexion {
 				FROM
 					".PREFIX."contab_tipo_grupo_poliza
 				WHERE
-					abr IN('PP','PXP','PPP')
+					abr IN('PP','PXP','PPP','PGCP')
                 ORDER BY
-                abr";
+                id";
 		$query= $this->db->query($sql);
         
 		if ($query) {
@@ -108,7 +108,7 @@ class Tipo_Poliza extends conexion {
 				WHERE
 					abr IN('PSS','PRS')
                 ORDER BY
-                abr";
+                id";
 		$query= $this->db->query($sql);
         
 		if ($query) {
