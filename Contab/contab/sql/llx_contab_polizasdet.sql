@@ -5,7 +5,9 @@ CREATE TABLE IF NOT EXISTS `llx_contab_polizasdet` (
   `cuenta` varchar(50) NOT NULL,
   `debe` double NOT NULL,
   `haber` double NOT NULL,
-  `descripcion` varchar(80) DEFAULT NULL,
+  `fk_proveedor` int(11) DEFAULT NULL,
   PRIMARY KEY (`rowid`),
-  KEY `idx` (`cuenta`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+  KEY `idx` (`cuenta`)  
+);
+
+ALTER TABLE `llx_contab_polizasdet` ADD `iva` tinyint(4);

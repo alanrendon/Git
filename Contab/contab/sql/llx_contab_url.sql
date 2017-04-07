@@ -1,7 +1,0 @@
-CREATE TABLE IF NOT EXISTS  `llx_contab_url` (
-  `rowid` int(11) NOT NULL AUTO_INCREMENT,
-  `entity` int(11) NOT NULL DEFAULT '1',
-  `url` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`rowid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-SET FOREIGN_KEY_CHECKS=1;

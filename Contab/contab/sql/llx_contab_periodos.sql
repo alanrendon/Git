@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS `llx_contab_periodos` (
   `rowid` int(11) NOT NULL AUTO_INCREMENT,
-  `entity` int(11) NOT NULL DEFAULT '1',
   `anio` int(11) NOT NULL,
   `mes` int(11) NOT NULL,
   `estado` int(11) NOT NULL,
@@ -10,4 +9,4 @@ CREATE TABLE IF NOT EXISTS `llx_contab_periodos` (
   `validado_ld` smallint(6) unsigned NOT NULL DEFAULT '0',
   `validado_lm` smallint(6) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`rowid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ;

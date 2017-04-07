@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS `llx_contab_polizas` (
   `rowid` int(11) NOT NULL AUTO_INCREMENT,
-  `entity` int(11) NOT NULL DEFAULT '1',
   `tipo_pol` varchar(1) NOT NULL DEFAULT 'D',
   `cons` int(11) NOT NULL,
   `anio` smallint(6) NOT NULL,
@@ -14,6 +13,8 @@ CREATE TABLE IF NOT EXISTS `llx_contab_polizas` (
   `ant_ctes` bit(1) NOT NULL DEFAULT b'0',
   `fechahora` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `societe_type` smallint(6) DEFAULT '0',
-  `recurente` int(2) DEFAULT '0',
   PRIMARY KEY (`rowid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ;
+
+ALTER TABLE llx_contab_polizas ADD  `fk_proveedor` int(11);
+ALTER TABLE llx_contab_polizas ADD  `contabilizar_pol` int(11);
