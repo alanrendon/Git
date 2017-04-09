@@ -90,6 +90,9 @@ if (file_exists(DOL_DOCUMENT_ROOT.'/contab/class/contabperiodos.class.php')) {
 } else {
 	require_once DOL_DOCUMENT_ROOT.'/custom/contab/class/contabperiodos.class.php';
 }
+if (file_exists(DOL_DOCUMENT_ROOT.'/contab/class/Contabsociete.class.php')) {
+	require_once DOL_DOCUMENT_ROOT.'/contab/class/Contabsociete.class.php';
+} 
 
 if (file_exists(DOL_DOCUMENT_ROOT.'/contab/core/lib/contab.lib.php')){
 	require_once DOL_DOCUMENT_ROOT.'/contab/core/lib/contab.lib.php';
@@ -917,6 +920,7 @@ if(1){
 	}
 	if ($row <= 0) {
 ?>
+	
 		<table class="noborder" style="width:100%">
 		<tr class="liste_titre">
 			<td colspan="4">Encabezado de la Poliza</td>
@@ -1073,23 +1077,23 @@ if(1){
 		<table class="noborder" style="width:100%">
 		<tr class="liste_titre">
 			<td colspan="2">Encabezado de la Poliza</td>
-			<td style="text-align: right;">
+			<td style="text-align: center;">
 				<a href="print.php?tipo=excel&id=<?=$pol->id;?>" target="popup">
 					Descargar Excel
 				</a>
 			</td>
-			<td  style="text-align: right;">
+			<td  style="text-align: center;" colspan="2">
 				<a href="print.php?tipo=pdf&id=<?=$pol->id;?>" target="popup">
 					Descargar PDF
 				</a>
 			</td>
-			<td style="text-align: right;">
+			<td style="text-align: center;">
 			<a href="rec.php?id=<?=$pol->id; ?>&action=addnewrec" target="_blank">Convertir en Recurrente</a>
 			</td>
-			<td style="text-align: right;">
+			<td style="text-align: center;">
 				<a href="addcuenta.php?tpenvio=fichepol&anio=<?=$anio?>&mes=<?=$mes?>" >Agregar cuenta</a>
 			</td>
-			<td style="text-align: right;">
+			<td style="text-align: center;">
 				<a href="poliza.php?id=<?=$pol->id; ?>&amp;action=delpol<?=($esfaccte == 1 ? '&fc='.$esfaccte : '');?><?=($esfacprov == 1 ? '&fp='.$esfacprov : '');?><?=($socid > 0 ? '&socid='.$socid : '');?>&facid=<?=$facid;?>&anio=<?=$anio?>&mes=<?=$mes?>">Borrar Poliza</a>
 			</td>
 		</tr>
@@ -1144,7 +1148,7 @@ if(1){
 					<!-- <a href="poliza.php?action=filterfac<?=($esfaccte == 1 ? '&fc='.$esfaccte : '');?><?=($esfacprov == 1 ? '&fp='.$esfacprov : '');?><?=($socid > 0 ? '&socid='.$socid : '');?>&facid=<?=$facid;?>&anio=<?=$anio?>&mes=<?=$mes?>"><?=img_view("Filtrar por Factura"); ?></a> -->
 				</td>
 				<td colspan = "2">Fecha: <?php print date("Y-m-d",$pol->fecha);?></td>
-				<td colspan = "2">
+				<td colspan = "4">
 					Documento Relacionado: <a href="<?=DOL_URL_ROOT.$pagina;?>?facid=<?=$facid;?>"><?php echo $facnumber; ?></a>
 				</td>
 				
@@ -1153,7 +1157,7 @@ if(1){
 			if($nomsoc!=''){
 				?>
 				<tr <?php print $bc[$var]; ?>>
-				<td colspan = "6">
+				<td colspan = "7">
 					Tercero: <strong><?php echo $nomsoc; ?></strong>
 				</td>
 				</tr>
@@ -1166,7 +1170,7 @@ if(1){
 					&nbsp;
 					Comentario: <strong><?php echo substr($pol->comentario,0,150); ?></strong>
 				</td>
-				<td colspan = "3" >
+				<td colspan = "4" >
 					Archivos adjuntos:<br/>
 				<?php
 
@@ -1188,7 +1192,7 @@ if(1){
 
 			</tr>
 			<tr <?php print $bc[$var]; ?>>
-				<td colspan = "6">
+				<td colspan = "8">
 					Cheque a Nombre: <strong><?php echo substr($pol->anombrede,0,150); ?></strong>
 					&nbsp;
 					Num. Cheque: <strong><?php echo substr($pol->numcheque,0,150); ?></strong>
@@ -1198,7 +1202,7 @@ if(1){
 			if($pol->pol_ajuste==1){ 
 			?>
 			<tr <?=$bc[$var]; ?>>
-				<td colspan = "6">
+				<td colspan = "8">
 					<strong>Poliza del periodo de ajuste</strong>
 				</td>
 			</tr>
@@ -1213,6 +1217,7 @@ if(1){
 			<td>Cuenta</td>
 			<td>Concepto</td>
 			<td>UUID</td>
+			<td>Proveedor</td>
 			<td style="text-align: right; width: 10%;">Debe</td>
 			<td style="text-align: right; width: 10%;">Haber</td>
 			<td colspan='2' style="text-align: right;"><a href="poliza.php?id=<?=$pol->id; ?>&amp;action=newpolline<?=($esfaccte == 1 ? '&fc='.$esfaccte : '');?><?=($esfacprov == 1 ? '&fp='.$esfacprov : '');?><?=($socid > 0 ? '&socid='.$socid : '');?>&facid=<?=$facid;?>&anio=<?=$anio?>&mes=<?=$mes?>">Nuevo Asiento</a> </td>
@@ -1254,6 +1259,22 @@ if(1){
 					?></td>
 					<td><?php print $poldet->desc; ?></td>
 					<td><?php print $poldet->uuid; ?></td>
+
+<?php
+					if ($poldet->fk_proveedor>0) {
+						echo "<td>";
+							$societe=new Contabsociete($db);
+							$societe->fetch($poldet->fk_proveedor);
+							print $societe->getNomUrl();
+						echo "</td>";
+					}else{
+						echo "<td>";
+							print "N/A";
+						echo "</td>";
+					}
+
+?>
+
 					<td style="text-align: right;"><?=($poldet->debe != 0 ? $langs->getCurrencySymbol($conf->currency).' '.number_format($poldet->debe, 2) : ""); ?></td>
 					<td style="text-align: right;"><?=($poldet->haber != 0 ? $langs->getCurrencySymbol($conf->currency).' '.number_format($poldet->haber, 2) : ""); ?></td>
 <?php

@@ -139,7 +139,11 @@ function truncateFloat($number, $digitos)
 
 
 $object=new Contabdepreciation($db);
-$sql="SELECT * FROM llx_contab_depreciation as a";
+$sql="SELECT * FROM llx_contab_depreciation as a ";
+$type_active=GETPOST("type_active","int");
+
+
+
 $resql=$db->query($sql);
 if ($resql)
 {
@@ -193,160 +197,163 @@ if ($resql)
     	$totaldep_actu_n=0;
     	$totaldep_mensual_del_eje=0;
 		while ($obj = $db->fetch_object($resql)) {
-			$dia=dol_print_date($obj->date_purchase,"%d");
-			
+			if ($obj->type_active==$type_active || $type_active==-1) {
+				
+				$dia=dol_print_date($obj->date_purchase,"%d");
+				
 
-			$lifetime=$obj->depreciation_rate/100;
+				$lifetime=$obj->depreciation_rate/100;
 
-			
-			$fecha_inicio_depresiacion=(       ($dia<28 )? strtotime( " + ".(28-$dia)." days" , $db->jdate($obj->date_purchase) )    :  $obj->date_purchase );
-
-
-
-			$dif=dif_date(dol_print_date($fecha_inicio_depresiacion,"%Y-%m-%d"),dol_print_date($hoy,"%Y-%m-%d"));
-
-
-			
-
-			$mes_uso_comp=round($dif,0);
-
-
-			$mes_uso_comp_2=1/($lifetime/12);
+				
+				$fecha_inicio_depresiacion=(       ($dia<28 )? strtotime( " + ".(28-$dia)." days" , $db->jdate($obj->date_purchase) )    :  $obj->date_purchase );
 
 
 
-			if ($mes_uso_comp>$mes_uso_comp_2) {
-				$mes_uso_comp_def=$mes_uso_comp_2;
-			}else{
-				$mes_uso_comp_def=$mes_uso_comp;
-			}
+				$dif=dif_date(dol_print_date($fecha_inicio_depresiacion,"%Y-%m-%d"),dol_print_date($hoy,"%Y-%m-%d"));
 
 
-			$dep_acumulada=$mes_uso_comp-dol_print_date($hoy,"%m");
+				
+
+				$mes_uso_comp=round($dif,0);
 
 
-
-
-			$dep_acumulada_med1=round($dep_acumulada,0);
-			//$dep_acumulada_med=$dep_acumulada_med1*($lifetime/12)*$obj->amount;
-			$dep_acumulada_med=$dep_acumulada_med1;
-			$dep_acumulada_final=0;
+				$mes_uso_comp_2=1/($lifetime/12);
 
 
 
-			if ($dep_acumulada_med1>$mes_uso_comp_def) {
-				$dep_acumulada_final=$mes_uso_comp_def;
-			}else{
-				if ($dep_acumulada_med1<0) {
-					$dep_acumulada_final=0;
+				if ($mes_uso_comp>$mes_uso_comp_2) {
+					$mes_uso_comp_def=$mes_uso_comp_2;
 				}else{
-					$dep_acumulada_final=$dep_acumulada_med;
+					$mes_uso_comp_def=$mes_uso_comp;
 				}
-			}
-			$dep_acumulada_final=$dep_acumulada_final*($lifetime/12)*$obj->amount;
 
 
-			$dep_eje1=$dep_acumulada_final+(dol_print_date($hoy,"%m")* ( $lifetime/12 )*$obj->amount);
-			if ($dep_eje1>$obj->amount) {
-				$dep_eje=$obj->amount-$dep_acumulada_final;
-			}else{
-				if (dol_print_date($fecha_inicio_depresiacion,"%Y") == dol_print_date($hoy,"%Y")) {
-					$dep_eje=(dol_print_date($hoy,"%m")-dol_print_date($fecha_inicio_depresiacion,"%m"))*($lifetime/12)*$obj->amount;
+				$dep_acumulada=$mes_uso_comp-dol_print_date($hoy,"%m");
+
+
+
+
+				$dep_acumulada_med1=round($dep_acumulada,0);
+				//$dep_acumulada_med=$dep_acumulada_med1*($lifetime/12)*$obj->amount;
+				$dep_acumulada_med=$dep_acumulada_med1;
+				$dep_acumulada_final=0;
+
+
+
+				if ($dep_acumulada_med1>$mes_uso_comp_def) {
+					$dep_acumulada_final=$mes_uso_comp_def;
 				}else{
-					$dep_eje=dol_print_date($hoy,"%m")*($lifetime/12)*$obj->amount;
-				}
-			}
-
-			$sdo_redimir=$obj->amount-$dep_acumulada_final;
-
-			$acum_al_final=$dep_acumulada_final+$dep_eje;
-
-			$valor_neto_lib=$obj->amount-$acum_al_final;
-
-
-			$anio=dol_print_date($fecha_inicio_depresiacion,"%Y");
-
-
-			$mes=dol_print_date($fecha_inicio_depresiacion,"%m");
-
-
-			$inpc_adq=inpc($mes,$anio);
-			
-
-			$anio_hoy=dol_print_date($db->idate($hoy),"%Y");
-			$mes_hoy=dol_print_date($db->idate($hoy),"%m");
-
-			$inpc_ultima_mitad=0;
-			if ($anio<>$anio_hoy) {
-				$inpc_ultima_mitad=inpc(floor($mes_hoy/2),$anio_hoy);
-			}else{
-				$inpc_ultima_mitad=inpc(floor(($mes_hoy-$mes)/2)+($mes-1),$anio);
-			}
-
-
-			$actz=truncateFloat($inpc_ultima_mitad/$inpc_adq,4);
-
-			$dep_actu_n=$dep_eje*$actz;
-
-
-			$fecha_depre=dol_print_date($date_purchase,"%Y-%m-%d");
-			$fecha_hoy=dol_print_date($db->idate($hoy),"%Y-%m-%d");
-
-			$dep_mensual_del_eje=0;
-			if ($fecha_depre>$fecha_hoy) {
-				$dep_mensual_del_eje=0;
-
-			}else{
-				$temp=0;
-				if ( ($dep_acumulada_final+(($mes_hoy-1)*($lifetime/12)*$obj->amount) ) >$obj->amount ) {
-
-					$temp=$obj->amount-$dep_acumulada_final;
-
-				}else{
-					if ($anio==$anio_hoy) {
-
-						$temp= (($mes_hoy-1)-$mes)*($lifetime/12)*$obj->amount;
+					if ($dep_acumulada_med1<0) {
+						$dep_acumulada_final=0;
 					}else{
-
-						$temp= ($mes_hoy-1)*($lifetime/12)*$obj->amount;
+						$dep_acumulada_final=$dep_acumulada_med;
 					}
 				}
-				$dep_mensual_del_eje=$dep_eje-$temp;
+				$dep_acumulada_final=$dep_acumulada_final*($lifetime/12)*$obj->amount;
+
+
+				$dep_eje1=$dep_acumulada_final+(dol_print_date($hoy,"%m")* ( $lifetime/12 )*$obj->amount);
+				if ($dep_eje1>$obj->amount) {
+					$dep_eje=$obj->amount-$dep_acumulada_final;
+				}else{
+					if (dol_print_date($fecha_inicio_depresiacion,"%Y") == dol_print_date($hoy,"%Y")) {
+						$dep_eje=(dol_print_date($hoy,"%m")-dol_print_date($fecha_inicio_depresiacion,"%m"))*($lifetime/12)*$obj->amount;
+					}else{
+						$dep_eje=dol_print_date($hoy,"%m")*($lifetime/12)*$obj->amount;
+					}
+				}
+
+				$sdo_redimir=$obj->amount-$dep_acumulada_final;
+
+				$acum_al_final=$dep_acumulada_final+$dep_eje;
+
+				$valor_neto_lib=$obj->amount-$acum_al_final;
+
+
+				$anio=dol_print_date($fecha_inicio_depresiacion,"%Y");
+
+
+				$mes=dol_print_date($fecha_inicio_depresiacion,"%m");
+
+
+				$inpc_adq=inpc($mes,$anio);
+				
+
+				$anio_hoy=dol_print_date($db->idate($hoy),"%Y");
+				$mes_hoy=dol_print_date($db->idate($hoy),"%m");
+
+				$inpc_ultima_mitad=0;
+				if ($anio<>$anio_hoy) {
+					$inpc_ultima_mitad=inpc(floor($mes_hoy/2),$anio_hoy);
+				}else{
+					$inpc_ultima_mitad=inpc(floor(($mes_hoy-$mes)/2)+($mes-1),$anio);
+				}
+
+
+				$actz=truncateFloat($inpc_ultima_mitad/$inpc_adq,4);
+
+				$dep_actu_n=$dep_eje*$actz;
+
+
+				$fecha_depre=dol_print_date($date_purchase,"%Y-%m-%d");
+				$fecha_hoy=dol_print_date($db->idate($hoy),"%Y-%m-%d");
+
+				$dep_mensual_del_eje=0;
+				if ($fecha_depre>$fecha_hoy) {
+					$dep_mensual_del_eje=0;
+
+				}else{
+					$temp=0;
+					if ( ($dep_acumulada_final+(($mes_hoy-1)*($lifetime/12)*$obj->amount) ) >$obj->amount ) {
+
+						$temp=$obj->amount-$dep_acumulada_final;
+
+					}else{
+						if ($anio==$anio_hoy) {
+
+							$temp= (($mes_hoy-1)-$mes)*($lifetime/12)*$obj->amount;
+						}else{
+
+							$temp= ($mes_hoy-1)*($lifetime/12)*$obj->amount;
+						}
+					}
+					$dep_mensual_del_eje=$dep_eje-$temp;
+				}
+
+
+
+				$totalmes_uso_comp+=$mes_uso_comp;
+				$totaldep_acumulada_final+=$dep_acumulada_final;
+				$totaldep_eje+=$dep_eje;
+				$totalsdo_redimir+=$sdo_redimir;
+				$totalacum_al_final+=$acum_al_final;
+				$totalvalor_neto_lib+=$valor_neto_lib;
+				$totalinpc_adq+=$inpc_adq;
+				$totalinpc_ultima_mitad+=$inpc_ultima_mitad;
+				$totalactz+=$actz;
+				$totaldep_actu_n+=$dep_actu_n;
+				$totaldep_mensual_del_eje+=$dep_mensual_del_eje;
+				$html.="
+					<tr>
+					  <td style=' border:0.5px solid;'>".$obj->clave."</td>
+					  <td style=' border:0.5px solid;'>".$obj->depreciation_rate."</td>
+					  <td style=' border:0.5px solid;'>".dol_print_date($obj->date_purchase,"%d/%m/%Y")."</td>
+					  <td style=' border:0.5px solid;'>".$obj->amount."</td>
+					  <td style=' border:0.5px solid;'>".dol_print_date($fecha_inicio_depresiacion,"%d/%m/%Y")."</td>
+					  <td style=' border:0.5px solid;'>".price($mes_uso_comp_def)."</td>
+					  <td style=' border:0.5px solid;'>".price(round($dep_acumulada_final,2))."</td>
+					  <td style=' border:0.5px solid;'>".price(round($dep_eje,2))."</td>
+					  <td style=' border:0.5px solid;'>".price(round($sdo_redimir,2))."</td>
+					  <td style=' border:0.5px solid;'>".price(round($acum_al_final,2))."</td>
+					  <td style=' border:0.5px solid;'>".price(round($valor_neto_lib))."</td>
+					  <td style=' border:0.5px solid;'>".price($inpc_adq)."</td>
+					  <td style=' border:0.5px solid;'>".price($inpc_ultima_mitad)."</td>
+					  <td style=' border:0.5px solid;'>".$actz."</td>
+					  <td style=' border:0.5px solid;'>".price(round($dep_actu_n,2))."</td>
+					  <td style=' border:0.5px solid;'>".price(round($dep_mensual_del_eje,2))."</td>
+					</tr>
+				";
 			}
-
-
-
-			$totalmes_uso_comp+=$mes_uso_comp;
-			$totaldep_acumulada_final+=$dep_acumulada_final;
-			$totaldep_eje+=$dep_eje;
-			$totalsdo_redimir+=$sdo_redimir;
-			$totalacum_al_final+=$acum_al_final;
-			$totalvalor_neto_lib+=$valor_neto_lib;
-			$totalinpc_adq+=$inpc_adq;
-			$totalinpc_ultima_mitad+=$inpc_ultima_mitad;
-			$totalactz+=$actz;
-			$totaldep_actu_n+=$dep_actu_n;
-			$totaldep_mensual_del_eje+=$dep_mensual_del_eje;
-			$html.="
-				<tr>
-				  <td style=' border:0.5px solid;'>".$obj->clave."</td>
-				  <td style=' border:0.5px solid;'>".$obj->depreciation_rate."</td>
-				  <td style=' border:0.5px solid;'>".dol_print_date($obj->date_purchase,"%d/%m/%Y")."</td>
-				  <td style=' border:0.5px solid;'>".$obj->amount."</td>
-				  <td style=' border:0.5px solid;'>".dol_print_date($fecha_inicio_depresiacion,"%d/%m/%Y")."</td>
-				  <td style=' border:0.5px solid;'>".price($mes_uso_comp_def)."</td>
-				  <td style=' border:0.5px solid;'>".price(round($dep_acumulada_final,2))."</td>
-				  <td style=' border:0.5px solid;'>".price(round($dep_eje,2))."</td>
-				  <td style=' border:0.5px solid;'>".price(round($sdo_redimir,2))."</td>
-				  <td style=' border:0.5px solid;'>".price(round($acum_al_final,2))."</td>
-				  <td style=' border:0.5px solid;'>".price(round($valor_neto_lib))."</td>
-				  <td style=' border:0.5px solid;'>".price($inpc_adq)."</td>
-				  <td style=' border:0.5px solid;'>".price($inpc_ultima_mitad)."</td>
-				  <td style=' border:0.5px solid;'>".$actz."</td>
-				  <td style=' border:0.5px solid;'>".price(round($dep_actu_n,2))."</td>
-				  <td style=' border:0.5px solid;'>".price(round($dep_mensual_del_eje,2))."</td>
-				</tr>
-			";
 		}
 		$html.="
 				<tr>

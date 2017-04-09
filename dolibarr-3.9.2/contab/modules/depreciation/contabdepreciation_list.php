@@ -322,7 +322,7 @@ $sql.= $db->plimit($conf->liste_limit+1, $offset);
 
 
 dol_syslog($script_file, LOG_DEBUG);
-
+//echo $sql;
 $resql=$db->query($sql);
 if ($resql)
 {
@@ -366,7 +366,9 @@ if ($search_depreciation_accumulated != '') $params.= '&amp;search_depreciation_
 	    		Generar Reporte 
 	    		".($form->select_date(
 			        GETPOST("date_advance"), 'date_advance', 0, 0, 1, "", 1, 1, 1, 0, '', '', ''
-			    ))."
+			    ))."  
+			    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tipo de activo
+	    		".($object->select_dol_active(GETPOST('type_active'),"type_active",1))."
 			    <input type='submit' class='button' name='xls' value='Generar Reporte XLS'>
 			    <input type='submit' class='button' name='pdf' value='Generar Reporte PDF'>
 	    		</div>

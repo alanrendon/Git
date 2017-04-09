@@ -110,35 +110,37 @@
 				poliza.anombrede,
 				poliza.numcheque,
 				poliza.societe_type,
-				poliza.fk_proveedor,
+				b.fk_proveedor,
 
 			IF (p.estado IS NULL, 0, p.estado) AS estado
 			FROM
 				llx_contab_polizas AS poliza
+			INNER JOIN llx_contab_polizasdet as b on b.fk_poliza=poliza.rowid
 			LEFT JOIN llx_contab_periodos AS p ON p.anio = poliza.anio
 			AND p.mes = ' . $periodomes . '
 			WHERE
-				poliza.tipo_pol = "E"
+				(poliza.tipo_pol = "E" OR poliza.contabilizar_pol=1)
 			AND poliza.fecha != "0000-00-00"
 			AND poliza.entity = ' . $conf->entity . '
 			AND poliza.anio = "' . $anio . '"
 			AND poliza.mes = "' . $mes . '"
+			AND b.fk_proveedor!=-1
 
 			';
 			if (!empty($id_prov)) {
-				$sql.='AND poliza.fk_proveedor = '.$id_prov;
+				$sql.='AND b.fk_proveedor = '.$id_prov;
 			}
 			
 		$sql.='
 
 			GROUP BY
-				poliza.rowid
+				poliza.rowid,
+				b.fk_proveedor
 			ORDER BY
 				poliza.fechahora ASC,
 				poliza.societe_type ASC,
 				poliza.cons ASC,
 				poliza.tipo_pol DESC';
-	
         $query = $db->query($sql);
         if ($query) {
             $rows = array();
@@ -205,12 +207,14 @@
 		$anio  = $fecha->anio;
     	$mes   = $fecha->mes;
 	}
-	header('Content-type: text/plain');
-    header('Content-Disposition: attachment; filename=DIOT_POLIZAS_'.$anio.'-'.$mes.'.txt');
+
 	$polizas_diot= getPolizas_diot($anio, $mes,$fk_proveedor);
 
 
-
+	header('Content-type: text/plain');
+    header('Content-Disposition: attachment; filename=DIOT_POLIZAS_'.$anio.'-'.$mes.'.txt');
+    //header('Content-type: application/ms-excel');
+	//header('Content-Disposition: attachment; filename=DIOT_POLIZAS_'.$anio.'-'.$mes.'.xls');
 	foreach ($polizas_diot as $poli_key => $poli_value) {
 
 
@@ -223,22 +227,31 @@
 				asiento.debe,
 				asiento.haber,
 				asiento.rowid,
+				asiento.iva,
 				asiento.descripcion as de
 			FROM
 				llx_contab_polizasdet AS asiento
 			LEFT JOIN llx_contab_cat_ctas as b on b.cta=asiento.cuenta
-
 			WHERE
 				asiento.fk_poliza=".$poli_value->id;
+
+			if (!empty($poli_value->fk_proveedor)) {
+				$sql.=' AND asiento.fk_proveedor = '.$poli_value->fk_proveedor;
+			}
 			$res=$db->query($sql);
 
 			if ($db->num_rows($res)>0) {
 					$debe=0;
 					$haber=0;
-
-					while ($obj=$db->fetch_object()) {
-						$debe+=$obj->debe;
-						$haber+=$obj->haber;
+					while ($obj=$db->fetch_object($res)) {
+						$ar=substr_count($obj->cuenta, '.');
+						if ($ar==2 && $obj->iva==1) {
+							$debe+=round($obj->debe/1.16,4);
+							$haber+=round($obj->haber/1.16,4);
+						}elseif ($ar==2 && $obj->iva!=1) {
+							$debe+=round($obj->debe);
+							$haber+=round($obj->haber);
+						}
 					}
 
 					$sql="SELECT * FROM llx_contab_societe as a WHERE a.rowid=".$poli_value->fk_proveedor;
@@ -247,27 +260,64 @@
 					$id_fiscal="";
 					$nombre_extranjero="";
 					$rfc="";
+
+
+					$code_tip_prov="";
+					$code_tip_op="";
 					if ($res) {
 						$ob=$db->fetch_object($res);
 						$id_fiscal=$ob->id_fiscal;
 						$nombre_extranjero=$ob->nom;
 						$rfc=$ob->rfc;
+						$tip_prov=$ob->tip_prov;
+						
+						if ($tip_prov==1) {
+							$code_tip_prov="04";
+						}
+						if ($tip_prov==2) {
+							$code_tip_prov="05";
+						}
+						if ($tip_prov==3) {
+							$code_tip_prov="15";
+						}
+
+
+						$tip_op=$ob->tip_op;
+						
+						if ($tip_op==1) {
+							$code_tip_op="03";
+						}
+						if ($tip_op==2) {
+							$code_tip_op="06";
+						}
+						if ($tip_op==3) {
+							$code_tip_op="85";
+						}
 					}
 
 
 					$xml_array[$i]['rfc']               =$rfc;
-					$xml_array[$i]['key_to']            ="";
-					$xml_array[$i]['key_ts']            ="";
-					$xml_array[$i]['id_fiscal']         =$id_fiscal;
-					$xml_array[$i]['nombre_extranjero'] =$nombre_extranjero;
-					if ($haber-$debe!=0) {
-						$xml_array[$i]['compIppSubTot']     =round(floatval($haber-$debe),0);
-					}else{
+					$xml_array[$i]['key_to']            =$code_tip_prov;
+					$xml_array[$i]['key_ts']            =$code_tip_op;
+					$xml_array[$i]['id_fiscal']         ="";
+					$xml_array[$i]['nombre_extranjero'] ="";
+
+
+					if ($haber-$debe==0) {
 						$xml_array[$i]['compIppSubTot']     =round(floatval($haber),0);
+						
+					}else{
+						if ($haber==0) {
+							$xml_array[$i]['compIppSubTot']     =round(floatval(($debe) ),0);
+						}else{
+							$xml_array[$i]['compIppSubTot']     =round(floatval(($haber-$debe) ),0);
+						}
+						
 					}
 					
 					$xml_array[$i]['compIppTot']        = 0;
 					$i++;
+
 				}
 		}
 
@@ -289,6 +339,7 @@
 						$ob=$db->fetch_object($res);
 						$id_fiscal=$ob->id_fiscal;
 						$nombre_extranjero=$ob->nom;
+
 					}
 
 
@@ -335,8 +386,7 @@
 		}
 	}
 	$xml_array =$aux;
-
-
+    //$file = fopen('DIOT_POLIZAS_'.$anio.'-'.$mes.'.txt', "a");
 	foreach ($xml_array as $xml_key => $xml_value) {
 		/*echo<<<EOT
 		{$xml_value['key_to']}|{$xml_value['key_ts']}|{$xml_value['rfc']}|||||{$xml_value['compIppSubTot']}|||||||||||||||
@@ -344,11 +394,12 @@
 		EOT;*/
 		$xml_value['compIppSubTot'] = $xml_value['compIppSubTot'] == 0 ?  '':$xml_value['compIppSubTot'];
 		$xml_value['compIppTot']    = $xml_value['compIppTot'] == 0 ?	  '':$xml_value['compIppTot'];
-		echo $xml_value['key_to'].'|'.$xml_value['key_ts'].'|'.$xml_value['rfc'].'|'.$xml_value['id_fiscal'].'|'.$xml_value['nombre_extranjero'].'|||'.$xml_value['compIppSubTot'].'||||||||||||'.$xml_value['compIppTot'].'|||';
+		echo $xml_value['key_to'].'|'.$xml_value['key_ts'].'|'.$xml_value['rfc'].'|'.$xml_value['id_fiscal'].'|'.$xml_value['nombre_extranjero'].'|||'.round(floatval($xml_value['compIppSubTot']),0).'||0||||||||||'.$xml_value['compIppTot'].'|||';
 			if ($xml_key<(sizeof($xml_array)-1)) 
 				echo PHP_EOL;
+		
 	}
-
+	//fclose($file);
 
 	function burbuja($A,$n)
     {
@@ -364,5 +415,3 @@
       return $A;
     }
  ?>
-
-

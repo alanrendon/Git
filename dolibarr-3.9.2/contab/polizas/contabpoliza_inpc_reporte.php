@@ -401,14 +401,28 @@ if ($anio>0) {
 					
 				
 	$sql="SELECT a.noviembre,a.diciembre FROM ".MAIN_DB_PREFIX."contab_inpc as a WHERE a.year=".$anio;
+	
 	$res=$db->query($sql);
 	$mes1=0;
 	$mes2=0;
 	if ($res) {
 		$obj=$db->fetch_object($res);
 		$mes1=$obj->diciembre;
-		$mes2=$obj->noviembre;
 	}
+
+	$sql="SELECT a.noviembre,a.diciembre FROM ".MAIN_DB_PREFIX."contab_inpc as a WHERE a.year=".($anio-1);
+		
+	//$html.=$sql;
+	$res=$db->query($sql);
+
+	if ($res) {
+		$obj=$db->fetch_object($res);
+		$mes2=$obj->diciembre;
+	}
+	@$tasa=$mes1/$mes2;
+	$tasa2=$tasa-1;
+
+
 	@$tasa=$mes1/$mes2;
 	$tasa2=$tasa-1;
 
@@ -424,7 +438,7 @@ if ($anio>0) {
 	}
 
 	if ($dif_cred_deu<0) {
-		$title="Ajuste Anual por Inflación Acumulable:";
+		$title="Ajuste Anual por Inflación:";
 		$dif_cred_deu=0;
 	}else{
 		$acred=$dif_cred_deu;
@@ -462,18 +476,19 @@ if ($anio>0) {
 			</tr>
 			<tr>
 				<td style='border:0.5px solid; background-color:#c0c0c0;' align='left'><b>".$title."</b></td>
-				<td style='border:0.5px solid;' align='right'><b>".round($tasa2*$acred,0)."</b></td>
+				<td style='border:0.5px solid;' align='right'><b>".round(round($tasa2,4)*$acred,0)."</b></td>
 			</tr>
 			<tr>
 				<td style='border:0.5px solid; background-color:#666699;' align='left'><b>Deducible</b></td>
-				<td style='border:0.5px solid;' align='right'><b>".round(($dif_deu_cred)*$tasa2,0)."</b></td>
+				<td style='border:0.5px solid;' align='right'><b>".round(($dif_deu_cred)*round($tasa2,4),0)."</b></td>
 			</tr>
 			<tr>
 				<td style='border:0.5px solid; background-color:#666699;' align='left'><b>Acumulable</b></td>
-				<td style='border:0.5px solid;' align='right'><b>".round(($dif_cred_deu)*$tasa2,0)."</b></td>
+				<td style='border:0.5px solid;' align='right'><b>".round(($dif_cred_deu)*round($tasa2,4),0)."</b></td>
 			</tr>
-		</table>
-
+		</table>";
+		
+		$html.="
 		<br><br><br>
 		<table  style='margin-left:40px; border-collapse: collapse;width: 30%;font-size:6px' align='left' >
 			<tr>

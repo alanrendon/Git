@@ -191,27 +191,27 @@ class Contabsociete extends CommonObject
 		
 		$sql .= ') VALUES (';
 		
-		$sql .= ' '.(! isset($this->nom)?'NULL':"'".$this->db->escape($this->nom)."'").',';
-		$sql .= ' '.(! isset($this->tip_prov)?'NULL':"'".$this->db->escape($this->tip_prov)."'").',';
+		$sql .= ' '.(empty($this->nom)?'NULL':"'".$this->db->escape($this->nom)."'").',';
+		$sql .= ' '.(empty($this->tip_prov)?'NULL':"'".$this->db->escape($this->tip_prov)."'").',';
 		
-		$sql .= ' '.(! isset($this->rfc)?'NULL':"'".$this->db->escape($this->rfc)."'").',';
-		$sql .= ' '.(! isset($this->id_fiscal)?'NULL':"'".$this->db->escape($this->id_fiscal)."'").',';
-		$sql .= ' '.(! isset($this->tip_op)?'NULL':"'".$this->db->escape($this->tip_op)."'").',';
+		$sql .= ' '.(empty($this->rfc)?'NULL':"'".$this->db->escape($this->rfc)."'").',';
+		$sql .= ' '.(empty($this->id_fiscal)?'NULL':"'".$this->db->escape($this->id_fiscal)."'").',';
+		$sql .= ' '.(empty($this->tip_op)?'NULL':"'".$this->db->escape($this->tip_op)."'").',';
 
 
 
-		$sql .= ' '.(! isset($this->entity)?'NULL':$this->entity).',';
-		$sql .= ' '.(! isset($this->statut)?'NULL':$this->statut).',';
+		$sql .= ' '.(empty($this->entity)?'NULL':$this->entity).',';
+		$sql .= ' '.(empty($this->statut)?'NULL':$this->statut).',';
 		$sql .= ' '."'".$this->db->idate(dol_now())."'".',';
-		$sql .= ' '.(! isset($this->address)?'NULL':"'".$this->db->escape($this->address)."'").',';
-		$sql .= ' '.(! isset($this->zip)?'NULL':"'".$this->db->escape($this->zip)."'").',';
-		$sql .= ' '.(! isset($this->town)?'NULL':"'".$this->db->escape($this->town)."'").',';
-		$sql .= ' '.(! isset($this->fk_departement)?'NULL':$this->fk_departement).',';
-		$sql .= ' '.(! isset($this->fk_pays)?'NULL':$this->fk_pays).',';
-		$sql .= ' '.(! isset($this->phone)?'NULL':"'".$this->db->escape($this->phone)."'").',';
-		$sql .= ' '.(! isset($this->fax)?'NULL':"'".$this->db->escape($this->fax)."'").',';
-		$sql .= ' '.(! isset($this->url)?'NULL':"'".$this->db->escape($this->url)."'").',';
-		$sql .= ' '.(! isset($this->email)?'NULL':"'".$this->db->escape($this->email)."'").',';
+		$sql .= ' '.(empty($this->address)?'NULL':"'".$this->db->escape($this->address)."'").',';
+		$sql .= ' '.(empty($this->zip)?'NULL':"'".$this->db->escape($this->zip)."'").',';
+		$sql .= ' '.(empty($this->town)?'NULL':"'".$this->db->escape($this->town)."'").',';
+		$sql .= ' '.(empty($this->fk_departement)?'NULL':$this->fk_departement).',';
+		$sql .= ' '.(empty($this->fk_pays)?'NULL':$this->fk_pays).',';
+		$sql .= ' '.(empty($this->phone)?'NULL':"'".$this->db->escape($this->phone)."'").',';
+		$sql .= ' '.(empty($this->fax)?'NULL':"'".$this->db->escape($this->fax)."'").',';
+		$sql .= ' '.(empty($this->url)?'NULL':"'".$this->db->escape($this->url)."'").',';
+		$sql .= ' '.(empty($this->email)?'NULL':"'".$this->db->escape($this->email)."'").',';
 		$sql .= ' NULL,';
 		$sql .= ' NULL,';
 		$sql .= ' '.$user->id.',';
@@ -221,7 +221,7 @@ class Contabsociete extends CommonObject
 		$sql .= ')';
 
 		$this->db->begin();
-
+		echo $sql;
 		$resql = $this->db->query($sql);
 		if (!$resql) {
 			$error ++;
@@ -301,7 +301,7 @@ class Contabsociete extends CommonObject
 		} else {
 			$sql .= ' WHERE t.rowid = ' . $id;
 		}
-
+		//echo $sql;
 		$resql = $this->db->query($sql);
 		if ($resql) {
 			$numrows = $this->db->num_rows($resql);
@@ -353,6 +353,45 @@ class Contabsociete extends CommonObject
 			return - 1;
 		}
 	}
+	public function valid($type=0)
+	{
+		dol_syslog(__METHOD__, LOG_DEBUG);
+
+		$sql = 'SELECT';
+		$sql .= ' t.rowid';
+
+		$sql .= ' FROM ' . MAIN_DB_PREFIX . $this->table_element . ' as t';
+		if ($type==0) {
+			if (!empty($this->nom)) {
+				$sql .= ' WHERE t.nom = "'.$this->nom.'"';
+			} else {
+				return -1;
+			}
+		}elseif ($type==1) {
+			if (!empty($this->rfc)) {
+				$sql .= ' WHERE t.rfc = "'.$this->rfc.'"';
+			} else {
+				return -1;
+			}
+		}
+		
+		//echo $sql;
+		$resql = $this->db->query($sql);
+		if ($resql) {
+			$numrows = $this->db->num_rows($resql);
+			if ($numrows>0) {
+				return -1;
+			}else{
+				return 1;
+			}
+			$this->db->free($resql);
+		} else {
+			$this->errors[] = 'Error ' . $this->db->lasterror();
+			dol_syslog(__METHOD__ . ' ' . join(',', $this->errors), LOG_ERR);
+			return - 1;
+		}
+	}
+
 
 	/**
 	 * Load object in memory from the database

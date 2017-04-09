@@ -155,6 +155,7 @@ class Contabpolizas extends CommonObject
 		if (isset($this->ant_ctes)) $this->ant_ctes=trim($this->ant_ctes);
 		if (isset($this->societe_type)) $this->societe_type=trim($this->societe_type);
 		if ($this->pol_ajuste==1){$this->pol_ajuste=1;}else{$this->pol_ajuste=0;}
+		if ($this->contabilizar_pol==1){$this->contabilizar_pol=1;}else{$this->contabilizar_pol=0;}
 
 		// Check parameters
 		// Put here code to add control on parameters values
@@ -177,6 +178,7 @@ class Contabpolizas extends CommonObject
 		$sql.= "societe_type,";
 		$sql.= "fechahora,";
 		$sql.= "fk_proveedor,";
+		$sql.= "contabilizar_pol,";
 		$sql.= "perajuste";
 		
 		if (isset($this->fechahora) && $this->fechahora) {
@@ -202,6 +204,8 @@ class Contabpolizas extends CommonObject
 		$sql.= " ".(! isset($this->societe_type)?'NULL':"'".$this->societe_type."'");
 		$sql.= " ".(! isset($this->fechahora)?'':",'".date("Y-m-d H:m:s",$this->fechahora)."' ,");
 		$sql.= " ".(! isset($this->fk_proveedor)?'NULL':"'".$this->db->escape($this->fk_proveedor)."'").",";
+		$sql.= " ".(! isset($this->contabilizar_pol)?'NULL':"'".$this->db->escape($this->contabilizar_pol)."'").",";
+		
 		$sql.= " ".$this->pol_ajuste;
 		$sql.= ")";
 
@@ -420,6 +424,7 @@ class Contabpolizas extends CommonObject
 		$sql.= " t.ant_ctes,";
 		$sql.= " t.fechahora,";
 		$sql.= "societe_type,";
+		$sql.= "contabilizar_pol,";
 		$sql.= "fk_proveedor,";
 		
 		$sql.= "perajuste";
@@ -446,6 +451,7 @@ class Contabpolizas extends CommonObject
                 $this->anio = $obj->anio;
                 $this->mes = $obj->mes;
                 $this->fk_proveedor = $obj->fk_proveedor;
+                $this->contabilizar_pol = $obj->contabilizar_pol;
                 
 				$this->fecha = $this->db->jdate($obj->fecha);
 				$this->concepto = $obj->concepto;
@@ -1659,6 +1665,9 @@ class Contabpolizas extends CommonObject
 		if (isset($this->concepto)) $this->concepto=trim($this->concepto);
 		if (isset($this->comentario)) $this->comentario=trim($this->comentario);
 		if (isset($this->fk_facture)) $this->fk_facture=trim($this->fk_facture);
+		if (isset($this->contabilizar_pol)) $this->fk_facture=trim($this->contabilizar_pol);
+
+		
 		//if (isset($this->ant_ctes)) $this->ant_ctes=trim($this->ant_ctes);
 
 		// Check parameters
@@ -1680,9 +1689,11 @@ class Contabpolizas extends CommonObject
 		//$sql.= " fk_facture=".(isset($this->fk_facture)?"'".$this->db->escape($this->fk_facture)."'":"null")."";
 		$sql.= " fk_facture=".(isset($this->fk_facture)?$this->fk_facture:"null").",";
 		$sql.= " ant_ctes=".(isset($this->ant_ctes)?$this->ant_ctes:false).",";
+		$sql.= " contabilizar_pol=".(isset($this->contabilizar_pol)?$this->contabilizar_pol:"null").",";
 		$sql.= " societe_type=".(isset($this->societe_type)?$this->societe_type:"null");
+		
 		$sql.= " ,perajuste=".$this->pol_ajuste." ";
-		$sql.= " ,fk_proveedor=".$this->fk_proveedor." ";
+		//$sql.= " ,fk_proveedor=".$this->fk_proveedor." ";
         $sql.= " WHERE rowid=".$this->id;
         $sql.= " AND entity = ".$conf->entity;
 

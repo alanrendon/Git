@@ -158,6 +158,10 @@ if (empty($reshook))
 		$object->rfc=GETPOST('rfc');
 		$object->id_fiscal=GETPOST('id_fiscal');
 		$object->tip_op=GETPOST('tip_op');
+
+		
+
+
 		if ($object->tip_prov==2) {
 			if (empty($object->rfc))
 			{
@@ -171,11 +175,23 @@ if (empty($reshook))
 			}
 		}
 
+		if ($object->valid(1)==-1)
+		{
+			$error++;
+			setEventMessages("El RFC del Proveedor ya existe", null, 'errors');
+		}
+
 		
 		if (empty($object->nom))
 		{
 			$error++;
 			setEventMessages($langs->transnoentitiesnoconv("ErrorFieldRequired","Nombre del Proveedor"), null, 'errors');
+		}
+
+		if ($object->valid()==-1)
+		{
+			$error++;
+			setEventMessages("El Nombre del Proveedor ya existe", null, 'errors');
 		}
 
 		if (! $error)
@@ -351,6 +367,9 @@ if ($action == 'create')
 		</td>
 	</tr>';
 	$tip_prov=GETPOST("tip_prov");
+	if (empty($tip_prov)) {
+		$tip_prov=1;
+	}
 	print '
 	<tr>
 		<td class="fieldrequired">'.$langs->trans("Tipo de proveedor").'
@@ -388,13 +407,22 @@ if ($action == 'create')
 			<td colspan="3">
 				<input type="text" name="rfc" id="rfc" size="32" value="'.GETPOST('rfc').'">
 			</td>
-		</tr>';
-		print '
+		</tr>
 		<tr>
 			<td class="fieldrequired">'.$langs->trans("No. ID fiscal").'
 			</td>
 			<td colspan="3">
 				<input type="text" name="id_fiscal" id="id_fiscal" size="32" value="'.GETPOST('id_fiscal').'">
+			</td>
+		</tr>';
+	}
+	if ($tip_prov==1) {
+		print '
+		<tr>
+			<td class="fieldrequired">'.$langs->trans("RFC").'
+			</td>
+			<td colspan="3">
+				<input type="text" name="rfc" id="rfc" size="32" value="'.GETPOST('rfc').'">
 			</td>
 		</tr>';
 	}
@@ -604,6 +632,16 @@ if (($id || $ref) && $action == 'edit' )
 			</td>
 		</tr>';
 	}
+	if ($object->tip_prov==1) {
+		print '
+		<tr>
+			<td class="fieldrequired">'.$langs->trans("RFC").'
+			</td>
+			<td colspan="3">
+				<input type="text" name="rfc" id="rfc" size="32" value="'.$object->rfc.'">
+			</td>
+		</tr>';
+	}
 
 
 	print '
@@ -768,6 +806,17 @@ if ($id && (empty($action) || $action == 'view' || $action == 'delete'))
 		</td>
 	</tr>';
 	
+
+	if ($object->tip_prov==1) {
+		print '
+		<tr>
+			<td>'.$langs->trans("RFC").'
+			</td>
+			<td colspan="3">
+				'.$object->rfc.'
+			</td>
+		</tr>';
+	}
 	if ($object->tip_prov==2) {
 		print '
 		<tr>
@@ -786,6 +835,8 @@ if ($id && (empty($action) || $action == 'view' || $action == 'delete'))
 			</td>
 		</tr>';
 	}
+
+	
 
 	print '
 	<tr>
@@ -806,24 +857,6 @@ if ($id && (empty($action) || $action == 'view' || $action == 'delete'))
 			print '
 		</td>
 	</tr>';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -853,7 +886,10 @@ if ($id && (empty($action) || $action == 'view' || $action == 'delete'))
  
    
     print '<tr><td>'.fieldLabel('State','state_id').'</td><td colspan="3" class="maxwidthonsmartphone">';
-    print getState($object->fk_pays);
+    if (!empty($object->fk_pays)) {
+    	print getState($object->fk_pays);
+    }
+    
 
     print '</td></tr>';
     

@@ -47,15 +47,24 @@ include_once(DOL_DOCUMENT_ROOT.'/core/class/html.formcompany.class.php');
 dol_include_once('/contab/class/contabsociete.class.php');
 require_once DOL_DOCUMENT_ROOT.'/core/lib/company.lib.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formother.class.php';
+if (file_exists(DOL_DOCUMENT_ROOT.'/contab/class/Contabsociete.class.php')) {
+	require_once DOL_DOCUMENT_ROOT.'/contab/class/Contabsociete.class.php';
+} 
 // Load traductions files requiredby by page
 $langs->load("contab");
 $langs->load("other");
 
 // Get parameters
+$limit = GETPOST("limit")?GETPOST("limit","int"):$conf->liste_limit;
 $action		= GETPOST('action','alpha');
 $backtopage = GETPOST('backtopage');
 $myparam	= GETPOST('myparam','alpha');
 $id         = GETPOST("id");
+$page = GETPOST('page','int');
+if ($page == -1) { $page = 0; }
+$offset = $limit * $page;
+
+
 
 $proveedor=GETPOST("proveedor");
 $month=GETPOST("month");
@@ -112,64 +121,64 @@ function total_debe_haber($id)
 }
 $sql="
 	SELECT
-	poliza.rowid AS 'id',
-	poliza.entity,
-	(
-		CASE poliza.tipo_pol
-		WHEN 'D' THEN
-			'Diario'
-		WHEN 'E' THEN
-			'Egreso'
-		WHEN 'I' THEN
-			'Ingreso'
-		WHEN 'C' THEN
-			'Cheque'
-		END
-	) AS tipo_pol,
-	CONCAT(
-		DATE_FORMAT(poliza.fecha, '%y%c'),
-		'-',
-		poliza.tipo_pol,
-		'-',
-		poliza.cons
-	) AS cons,
-	poliza.anio,
-	poliza.mes,
-	poliza.fecha,
-	poliza.tipo_pol AS tipol_l,
-	poliza.cons npol,
-	poliza.concepto,
-	poliza.comentario,
-	poliza.anombrede,
-	poliza.numcheque,
-	factProve.rowid,
-	factCliente.rowid,
-	poliza.societe_type,
-	factCliente.facnumber,
-	factProve.ref,
+		poliza.rowid AS 'id',
+		poliza.entity,
+		(
+			CASE poliza.tipo_pol
+			WHEN 'D' THEN
+				'Diario'
+			WHEN 'E' THEN
+				'Egreso'
+			WHEN 'I' THEN
+				'Ingreso'
+			WHEN 'C' THEN
+				'Cheque'
+			END
+		) AS tipo_pol,
+		CONCAT(
+			DATE_FORMAT(poliza.fecha, '%y%c'),
+			'-',
+			poliza.tipo_pol,
+			'-',
+			poliza.cons
+		) AS cons,
+		poliza.anio,
+		poliza.mes,
+		poliza.fecha,
+		poliza.tipo_pol AS tipol_l,
+		poliza.cons npol,
+		poliza.concepto,
+		poliza.comentario,
+		poliza.anombrede,
+		poliza.numcheque,
+		poliza.societe_type,
+
 	IF (p.estado IS NULL, 1, p.estado) AS estado
 	FROM
 		llx_contab_polizas AS poliza
-	LEFT JOIN llx_facture_fourn AS factProve ON factProve.rowid = poliza.fk_facture
-	LEFT JOIN llx_facture AS factCliente ON factCliente.rowid = poliza.fk_facture
+	INNER JOIN llx_contab_polizasdet as b on b.fk_poliza=poliza.rowid
 	LEFT JOIN llx_contab_periodos AS p ON p.anio = poliza.anio AND p.mes = poliza.mes
 ";
 
-	$sql.="
-	WHERE
-		poliza.fecha != '0000-00-00' ";
+$sql.="
+WHERE
+	poliza.fecha != '0000-00-00' ";
 
 	if ($id>0) {
 		$sql.=" AND poliza.rowid= ".$id;
 	}
 	if ($proveedor>0) {
-		$sql.=" AND poliza.fk_proveedor= ".$proveedor;
+		$sql.=" AND b.fk_proveedor=".$proveedor;
 	}
 	if ($month>0) {
 		$sql.=" AND poliza.mes= ".$month;
 	}
 	if ($year>0) {
 		$sql.=" AND poliza.anio= ".$year;
+	}
+
+	if ( $id>0 || $proveedor>0 || $month>0 || $year>0) {
+		$sql.=" AND b.fk_proveedor>0 ";
 	}
 
 	
@@ -179,15 +188,13 @@ $sql.="
 	GROUP BY
 		poliza.rowid
 	ORDER BY
+		poliza.fecha desc,
 		poliza.tipo_pol ASC,
-		poliza.cons ASC,
-		poliza.anio ASC,
-		poliza.mes ASC
-	LIMIT 10
+		poliza.cons ASC
+		
 ";
 
-
-
+$sql.= $db->plimit($conf->liste_limit+1, $offset);
 
 
 
@@ -201,12 +208,14 @@ if ( (empty($action) || $action == 'view')  )
 	    });
 	});
 	</script>';
-	print load_fiche_titre("Pólizas - Consulta y Registro");
-	
+	//print load_fiche_titre("Pólizas - Consulta y Registro",$page, $_SERVER["PHP_SELF"]);
+	print_barre_liste("Pólizas - Consulta y Registro", $page, $_SERVER["PHP_SELF"]);    
 	dol_fiche_head();
     $res=$db->query("SELECT a.nom,a.rowid FROM llx_contab_societe as a ");
+    
     if ($res) {
 		if ($db->num_rows($res)>0) {
+
 			print '
 		<form method="POST" name="formsoc" action="diot.php" >
 			<table>
@@ -248,7 +257,7 @@ if ( (empty($action) || $action == 'view')  )
 			<td style="width:30px;">
 				
 			</td>';
-			if ( $month>0 && $year>0) {
+			if ( $month>0 && $year>0 ) {
 				print '
 				<td>
 					<select id="type_diot" name="type_diot" class="flat">';
@@ -287,7 +296,8 @@ if ( (empty($action) || $action == 'view')  )
 	
 		
 	print '</div>'."\n";
-
+	//print_barre_liste("", $page, $_SERVER["PHP_SELF"]);
+    
 	print '<table class="liste ">';
 		print '<tr class="liste_titre">';
 			print_liste_field_titre("Tipo");
@@ -336,11 +346,13 @@ if ( (empty($action) || $action == 'view')  )
 			asiento.debe,
 			asiento.haber,
 			asiento.rowid,
-			asiento.descripcion as de
+			asiento.descripcion as de,
+			asiento.fk_proveedor
 		FROM
 			llx_contab_polizasdet AS asiento
 		LEFT JOIN llx_contab_cat_ctas as b on b.cta=asiento.cuenta
 		WHERE
+			asiento.fk_proveedor!=-1 AND
 			asiento.fk_poliza =".$id;
 
 		$res=$db->query($sql);
@@ -354,6 +366,9 @@ if ( (empty($action) || $action == 'view')  )
 					</td>
 					<td>
 						Cuenta
+					</td>
+					<td>
+						Proveedor
 					</td>
 					<td>
 						Descripción
@@ -370,7 +385,8 @@ if ( (empty($action) || $action == 'view')  )
 				if ($db->num_rows($res)>0) {
 					$debe=0;
 					$haber=0;
-					while ($obj=$db->fetch_object()) {
+					$societe=new Contabsociete($db);
+					while ($obj=$db->fetch_object($res)) {
 						print '
 							<tr >
 								<td>
@@ -378,7 +394,20 @@ if ( (empty($action) || $action == 'view')  )
 								</td>
 								<td>
 									'.$obj->cuenta.' - '.$obj->des.'
-								</td>
+								</td>';
+								
+								if ($obj->fk_proveedor>0) {
+									echo "<td>";
+										$societe->fetch($obj->fk_proveedor);
+										print $societe->getNomUrl();
+									echo "</td>";
+								}else{
+									echo "<td>";
+										print "N/A";
+									echo "</td>";
+								}
+
+						print '
 								<td>
 									'.$obj->de.'
 								</td>
@@ -399,7 +428,7 @@ if ( (empty($action) || $action == 'view')  )
 							<td>
 								<b>Total</b>
 							</td>
-							<td colspan=2>
+							<td colspan=3>
 							</td>
 		
 							<td>
@@ -413,7 +442,7 @@ if ( (empty($action) || $action == 'view')  )
 				}else{
 					print '
 						<tr >
-							<td colspan=5>
+							<td colspan=6>
 								Sin Elementos
 							</td>
 	

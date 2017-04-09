@@ -85,6 +85,7 @@ class Contabpolizasdet extends CommonObject
 		if (isset($this->debe)) $this->debe=trim($this->debe);
 		if (isset($this->haber)) $this->haber=trim($this->haber);
 		if (isset($this->fk_poliza)) $this->fk_poliza=trim($this->fk_poliza);
+        if (isset($this->iva)) $this->iva=trim($this->iva);
 
 		// Check parameters
 		// Put here code to add control on parameters values
@@ -98,6 +99,7 @@ class Contabpolizasdet extends CommonObject
 		$sql.= "haber,";
         $sql.= "descripcion,";
         $sql.= "uuid,";
+        $sql.= "iva,";
 		$sql.= "fk_poliza";
 		
         $sql.= ") VALUES (";
@@ -108,9 +110,11 @@ class Contabpolizasdet extends CommonObject
 		$sql.= " ".(! isset($this->haber)?'NULL':"'".$this->haber."'").",";
         $sql.= " ".(! isset($this->desc)?'NULL':"'".$this->desc."'").",";
         $sql.= " ".(! isset($this->uuid)?'NULL':"'".$this->uuid."'").",";
+        $sql.= " ".(! isset($this->iva)?'NULL':$this->iva).",";
 		$sql.= " ".(! isset($this->fk_poliza)?'NULL':"'".$this->fk_poliza."'")."";
 
 		$sql.= ")";
+
 
 		$this->db->begin();
 
@@ -249,7 +253,10 @@ class Contabpolizasdet extends CommonObject
 		$sql.= " t.haber,";
         $sql.= " t.descripcion,";
         $sql.= " t.uuid,";
+        $sql.= " t.iva,";
+        $sql.= " t.fk_proveedor,";
 		$sql.= " t.fk_poliza";
+        
 		
         $sql.= " FROM ".MAIN_DB_PREFIX."contab_polizasdet as t";
         $sql.= " WHERE t.rowid = ".$id;
@@ -271,7 +278,10 @@ class Contabpolizasdet extends CommonObject
                 
                 $this->desc = $obj->descripcion;
                 $this->uuid = $obj->uuid;
+                $this->iva = $obj->iva;
 				$this->fk_poliza = $obj->fk_poliza;
+                $this->fk_proveedor = $obj->fk_proveedor;
+                
             }
             $this->db->free($resql);
 
@@ -298,7 +308,8 @@ class Contabpolizasdet extends CommonObject
     	$sql.= " t.haber,";
         $sql.= " t.descripcion,";
         $sql.= " t.uuid,";
-    	$sql.= " t.fk_poliza";
+    	$sql.= " t.fk_poliza,";
+        $sql.= " t.fk_proveedor";
     
     	$sql.= " FROM ".MAIN_DB_PREFIX."contab_polizasdet as t";
     	$sql .= " INNER JOIN ".MAIN_DB_PREFIX."contab_polizas as p";
@@ -331,6 +342,7 @@ class Contabpolizasdet extends CommonObject
                 $this->desc = $obj->descripcion;
                 $this->uuid = $obj->uuid;
     			$this->fk_poliza = $obj->fk_poliza;
+                $this->fk_proveedor = $obj->fk_proveedor;
     			
     			$this->db->free($resql);
     			return 1;
@@ -518,8 +530,11 @@ class Contabpolizasdet extends CommonObject
 		if (isset($this->haber)) $this->haber=trim($this->haber);
         if (isset($this->desc)) $this->desc=trim($this->desc);
         if (isset($this->uuid)) $this->uuid=trim($this->uuid);
+        if (isset($this->iva)) $this->iva=trim($this->iva);
 		if (isset($this->fk_poliza)) $this->fk_poliza=trim($this->fk_poliza);
+        if (isset($this->fk_proveedor)) $this->fk_proveedor=trim($this->fk_proveedor);
 
+        
 		// Check parameters
 		// Put here code to add a control on parameters values
 
@@ -532,6 +547,8 @@ class Contabpolizasdet extends CommonObject
 		$sql.= " haber=".(isset($this->haber)?str_replace(",", "", number_format($this->haber,2)):"null").",";
         $sql.= " descripcion='".(isset($this->desc)?$this->desc:"null")."',";
         $sql.= " uuid='".(isset($this->uuid)?$this->uuid:"null")."',";
+        $sql.= " iva='".(isset($this->iva)?$this->iva:"0")."',";
+        $sql.= " fk_proveedor='".(isset($this->fk_proveedor)?$this->fk_proveedor:"null")."',";
 
 		$sql.= " fk_poliza=".(isset($this->fk_poliza)?$this->fk_poliza:"null")."";
         

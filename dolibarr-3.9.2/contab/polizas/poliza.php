@@ -67,6 +67,10 @@ if (file_exists(DOL_DOCUMENT_ROOT.'/contab/class/contabpolizasdet.class.php')) {
 	require_once DOL_DOCUMENT_ROOT.'/custom/contab/class/contabpolizasdet.class.php';
 }
 
+if (file_exists(DOL_DOCUMENT_ROOT.'/contab/class/Contabsociete.class.php')) {
+	require_once DOL_DOCUMENT_ROOT.'/contab/class/Contabsociete.class.php';
+} 
+
 if (file_exists(DOL_DOCUMENT_ROOT.'/contab/class/contabcatctas.class.php')) {
 	require_once DOL_DOCUMENT_ROOT.'/contab/class/contabcatctas.class.php';
 } else {
@@ -278,6 +282,14 @@ if ($action == 'createpol') {
 				$np->numcheque = GETPOST("numcheque");
 				$np->fk_facture = GETPOST("fk_facture");
 				$np->fk_proveedor = GETPOST("proveedor");
+
+
+
+				if(GETPOST('contabilizar_pol')){
+					$np->contabilizar_pol=1;
+				}else{
+					$np->contabilizar_pol=0;
+				}
 				$np->ant_ctes = "";
 				$np->societe_type = $soc_type;
 
@@ -383,16 +395,16 @@ if ($action == 'createpol') {
 			}
 		} else {
 			if($mos==3){
-				$msg = "No se puede crear una poliza en un perdiodo contable ya cerrado.";
+				$msg = "No se puede crear una poliza en un periodo contable ya cerrado.";
 			}else{
-				$msg = "No se puede crear una poliza en un perdiodo contable que no existe.";
+				$msg = "No se puede crear una poliza en un periodo contable que no existe.";
 			}
 			$action = "newpol";
 		}
 	}
 	$action = "";
 } else if ($action == 'update_enc' && GETPOST('updateenc')) {
-
+	
 	if(DOL_VERSION>='3.7' && DOL_VERSION<'3.9'){
 		$fecha = strtotime($_POST["fecha"]);	
 	}else{
@@ -526,10 +538,19 @@ if ($action == 'createpol') {
 		
 		$cc->anombrede = GETPOST('anombrede');
 		$cc->numcheque = GETPOST('numcheque');
+
+
+
 		if(GETPOST('pol_ajuste') && date("m",$fecha)==12){
-		$cc->pol_ajuste=1;
+			$cc->pol_ajuste=1;
 		}else{
 			$cc->pol_ajuste=0;
+		}
+
+		if(GETPOST('contabilizar_pol')==1){
+			$cc->contabilizar_pol=1;
+		}else{
+			$cc->contabilizar_pol=0;
 		}
 		//print "   ".$cc->fecha." ".$cc->fecha;
  
@@ -555,11 +576,11 @@ if ($action == 'createpol') {
 			print "<script>alert('Fecha invalida. Datos no modificados'); window.location = '".DOL_URL_ROOT."/contab/polizas/fiche.php';"."</script>";
 		}
 	} else {
-		//$msg = "No se pueden hacer cambios en polizas de perdiodos contables ya cerrados.";
+		//$msg = "No se pueden hacer cambios en polizas de periodos contables ya cerrados.";
 		if($mos==3){
-			$msg = "No se puede crear una poliza en un perdiodo contable ya cerrado.";
+			$msg = "No se puede crear una poliza en un periodo contable ya cerrado.";
 		}else{
-			$msg = "No se puede crear una poliza en un perdiodo contable que no existe.";
+			$msg = "No se puede crear una poliza en un periodo contable que no existe.";
 		}
 		$action = "";
 	}
@@ -583,7 +604,7 @@ if ($action == 'createpol') {
 		
 		print "<script>window.location.href='poliza.php?id=".$id."&idpd=$poldet->id&action=editline&facid=".$facid."&anio=".$anio."&mes=".$mes."'</script>";
 	} else {
-		$msg = "No se pueden hacer cambios en polizas de perdiodos contables ya cerrados.";
+		$msg = "No se pueden hacer cambios en polizas de periodos contables ya cerrados.";
 		$action = "";
 	}	
 	$action = "";
@@ -599,9 +620,11 @@ if ($action == 'createpol') {
 		$haber= $c2->haber;
 		$desc= $c2->desc;
 		$uuid= $c2->uuid;
+		$proveedor= $c2->fk_proveedor;
+		$iva= $c2->iva;
 		
 	} else {
-		$msg = "No se pueden hacer cambios en pólizas de perdiodos contables ya cerrados.";
+		$msg = "No se pueden hacer cambios en pólizas de periodos contables ya cerrados.";
 		$action = "";
 	}
 } else if ($action == 'addenc') {
@@ -625,7 +648,7 @@ if ($action == 'createpol') {
 		$cc->societe_type = $soc_type;
 		$cc->create($user);
 	} else {
-		$msg = "No se pueden hacer cambios en pólizas de perdiodos contables ya cerrados.";
+		$msg = "No se pueden hacer cambios en pólizas de periodos contables ya cerrados.";
 		$action = "";
 	}	
 } else if ($action == 'addline') {
@@ -636,14 +659,16 @@ if ($action == 'createpol') {
 		
 		$cc->asiento = GETPOST('asiento');
 		$cc->cuenta = GETPOST('cuenta');
-		$cc->debe = GETPOST('debe');
-		$cc->haber = GETPOST('haber');
+		$cc->debe = price2num(GETPOST('debe'));
+		$cc->haber = price2num(GETPOST('haber'));
+
 		$cc->desc = GETPOST('desc');
 		$cc->uuid = GETPOST('uuid');
 		$cc->fk_poliza = GETPOST('id');
+
 		$cc->create($user);
 	} else {
-		$msg = "No se pueden hacer cambios en polizas de perdiodos contables ya cerrados.";
+		$msg = "No se pueden hacer cambios en polizas de periodos contables ya cerrados.";
 		$action = "";
 	}
 	}
@@ -654,18 +679,30 @@ if ($action == 'createpol') {
 		$cc2->fetch($idpd);
 		
 		$cc2->cuenta = $db->escape(GETPOST('cuenta'));
-		$cc2->debe = GETPOST('debe');
-		$cc2->haber = GETPOST('haber');
+		$cc2->debe = price2num(GETPOST('debe'));
+		$cc2->haber = price2num(GETPOST('haber'));
 		$cc2->desc = GETPOST('desc');
 		$cc2->uuid = GETPOST('uuid');
+		$cc2->fk_proveedor = GETPOST('proveedor');
+		$cc2->iva = GETPOST('iva');
+		$iva=GETPOST('iva');
+		if ($iva=="on") {
+			$cc2->iva =1;
+		}else{
+			$cc2->iva =0;
+		}
+
+
 		//print $cc2->desc.'<---'; exit();
 		$sqm="SELECT count( * ) as cant
 		FROM ".MAIN_DB_PREFIX."contab_cat_ctas
 		WHERE cta LIKE '".GETPOST('cuenta').".%'
 		AND entity =".$conf->entity;
 		//print $sqm."<br>";
+
 		$rsm=$db->query($sqm);
 		$rmm=$db->fetch_object($rsm);
+
 		if($rmm->cant==0){
 			$sqm="SELECT count(rowid) as existe FROM ".MAIN_DB_PREFIX."contab_polizas_log
 					WHERE fk_user=".$user->id." AND fk_poliza=".$id;
@@ -690,7 +727,7 @@ if ($action == 'createpol') {
 			$action='editline';
 		}
 	} else {
-		$msg = "No se pueden hacer cambios en polizas de perdiodos contables ya cerrados.";
+		$msg = "No se pueden hacer cambios en polizas de periodos contables ya cerrados.";
 	}
 	}
 	$action = "";
@@ -720,7 +757,7 @@ if ($action == 'createpol') {
 			}
 		}
 	} else {
-		$msg = "No se pueden hacer cambios en polizas de perdiodos contables ya cerrados.";
+		$msg = "No se pueden hacer cambios en polizas de periodos contables ya cerrados.";
 	}
 	
 	$action = "";
@@ -740,7 +777,7 @@ if ($action == 'createpol') {
 			print "<script>window.location.href='fiche.php'</script>";
 		}
 	} else {
-		$msg = "No se pueden hacer cambios en polizas de perdiodos contables ya cerrados.";
+		$msg = "No se pueden hacer cambios en polizas de periodos contables ya cerrados.";
 	}
 	$action = "";
 }
@@ -901,12 +938,19 @@ if ($action == "newpol") {
 			<input type="hidden" name="anio" value="<?=$anio?>" />
 
 			<?php 
-			/*print '<script>
+			print '<script>
 				$( document ).ready(function() {
-					document.getElementById("fecha").readOnly = true;
+					$( "#tipo_pol" ).change(function() {
+		
+					  if ($(this).val()=="E") {
+					  	$("#hid").hide();
+					  }else{
+					  	$("#hid").show();
+					  }
+					});
 				});
 				
-			</script>';*/
+			</script>';
 			?>
 			
 
@@ -994,6 +1038,10 @@ if ($action == "newpol") {
 						<input type="file" name="file[]" multiple />
 					</td>
 				</tr>
+				<tr id="hid"  >
+					<td>Contabilizar</td>
+					<td colspan="7"><input type="checkbox" name="contabilizar_pol" id="contabilizar_pol" ></td>
+				</tr>
 				<?php
 
 				$sqm="SELECT count(*) as existe
@@ -1001,40 +1049,19 @@ if ($action == "newpol") {
 						WHERE mes=13 AND entity=".$conf->entity;
 				$rqm=$db->query($sqm); 
 				$rsm=$db->fetch_object($rqm);
+
 				if($rsm->existe>0){
 				?>
-				<tr>
-					<td>Periodo de Ajuste</td>
-					<td colspan="7"><input type="checkbox" name="pol_ajuste" value="1" ></td>
-				</tr>
+
+					<tr>
+						<td>Periodo de Ajuste</td>
+						<td colspan="7"><input type="checkbox" name="pol_ajuste" value="1" ></td>
+					</tr>
 				<?php 
 				}
-				$res=$db->query("SELECT a.nom,a.rowid FROM llx_contab_societe as a ");
-				if ($res) {
-					if ($db->num_rows($res)>0) {
-						print '
-							<tr>
-								<td>Proveedor</td>
-								<td>
-									<select name="proveedor">
-									';
-										print '<option value="-1"></option>';
-										while ($obj=$db->fetch_object($res)) {
-											if ($proveedor==$obj->rowid) {
-												print '<option value="'.$obj->rowid.'" selected>'.$obj->nom.'</option>';
-											}else{
-												print '<option value="'.$obj->rowid.'">'.$obj->nom.'</option>';
-											}
-											
-										}
+				
 
-									print '
-									</select>
-								</td>
-							</tr>
-						';
-					}
-				}
+				
 				?>
 				<tr>
 					<td colspan="8">&nbsp;</td>
@@ -1053,7 +1080,7 @@ if ($action == "newpol") {
 		</form>
 <?php 	
 	} else {
-		$msg = "No se puede hacer cambios en perdiodos contables ya cerrados.";
+		$msg = "No se puede hacer cambios en periodos contables ya cerrados.";
 		$action = "";
 	}
 } else if ($action == "editenc") {
@@ -1078,6 +1105,7 @@ if ($action == "newpol") {
 			$soc_type = $c->societe_type;
 			$ant_ctes = $c->ant_ctes;
 			$polajuste = $c->pol_ajuste;
+			$contabilizar_pol = $c->contabilizar_pol;
 			$fk_proveedor = $c->fk_proveedor;
 		}
 
@@ -1117,13 +1145,20 @@ if ($action == "newpol") {
 			<input type="hidden" name="soc_type" value="<?=$soc_type;?>" />
 			<input type="hidden" name="ant_ctes" value="<?=$ant_ctes;?>" />
 
-			<?php /*
+			<?php 
 			print '<script>
 				$( document ).ready(function() {
-					document.getElementById("fecha").readOnly = true;
+					$( "#tipo_pol" ).change(function() {
+					
+					  if ($(this).val()=="E") {
+					  	$("#hid").hide();
+					  }else{
+					  	$("#hid").show();
+					  }
+					});
 				});
 				
-			</script>';*/
+			</script>';
 			?>
 			
 			
@@ -1250,44 +1285,39 @@ if ($action == "newpol") {
 						WHERE mes=13 AND entity=".$conf->entity;
 				$rqm=$db->query($sqm); 
 				$rsm=$db->fetch_object($rqm);
+				$aa2='';
+				$aa3='';
+				if ( $tipo_pol !="E") {
+					if ($contabilizar_pol==1) {
+						$aa2=' checked';
+					}
+				}else{
+					$aa3='style="display: none;"';
+				}
+				print '
+					<tr id="hid" '.$aa3.' >
+						<td>Contabilizar</td>
+						<td colspan="7"><input type="checkbox" name="contabilizar_pol" id="contabilizar_pol" value="1" '.$aa2.' ></td>
+					</tr>
+				';
+
+
 				if($rsm->existe>0){
 					$aa='';
 					if($polajuste==1){
 						$aa=' checked';
 					}
+					
 				?>
+
 				<tr>
 					<td>Periodo de Ajuste</td>
 					<td colspan="7"><input type="checkbox" name="pol_ajuste" value="1" <?=$aa?>></td>
 				</tr>
+				
 				<?php 
 				}
-				$res=$db->query("SELECT a.nom,a.rowid FROM llx_contab_societe as a ");
-				if ($res) {
-					if ($db->num_rows($res)>0) {
-						print '
-							<tr>
-								<td>Proveedor</td>
-								<td>
-									<select name="proveedor">
-									';
-										print '<option value="-1"></option>';
-										while ($obj=$db->fetch_object($res)) {
-											if ($fk_proveedor==$obj->rowid) {
-												print '<option value="'.$obj->rowid.'" selected>'.$obj->nom.'</option>';
-											}else{
-												print '<option value="'.$obj->rowid.'">'.$obj->nom.'</option>';
-											}
-											
-										}
-
-									print '
-									</select>
-								</td>
-							</tr>
-						';
-					}
-				}
+				
 
 				?>
 				<tr>
@@ -1301,7 +1331,7 @@ if ($action == "newpol") {
 		</form>
 <?php
 	} else {
-		$msg = "No se puede hacer cambios en perdiodos contables ya cerrados.";
+		$msg = "No se puede hacer cambios en periodos contables ya cerrados.";
 		$action = "";
 	}
   }else{
@@ -1349,7 +1379,7 @@ if ($action == "newpol") {
 					<td>
 						Asiento:
 					</td>
-					<td> 
+					<td style="width: 20%;"> 
 						<input name="asiento" id="asiento" type="text" value="<?=$asiento; ?>" >
 					</td>
 
@@ -1498,8 +1528,8 @@ if ($action == "newpol") {
 					<td > 
 						<!--<input name="cuenta" id="cuenta" type="text" value="<?=$cuenta; ?>" >-->
 						<?php 
-						$sqlc="SELECT cta,descta
-							FROM ".MAIN_DB_PREFIX."contab_cat_ctas
+						$sqlc="SELECT a.cta as cta, a.descta as descta 
+							FROM ".MAIN_DB_PREFIX."contab_cat_ctas as a
 							WHERE entity=".$conf->entity;
 						$resc=$db->query($sqlc);
 						?>
@@ -1545,6 +1575,48 @@ if ($action == "newpol") {
 					<td>UUID: </td>
 					<td colspan="7"><input name="uuid" id="uuid" type="text" size="125" value="<?=$uuid; ?>" ></td>
 				</tr>
+		
+<?php
+				$res=$db->query("SELECT a.nom,a.rowid FROM llx_contab_societe as a ");
+				if ($res) {
+					if ($db->num_rows($res)>0) {
+						print '
+							<tr>
+								<td>Proveedor</td>
+								<td colspan="7">
+									<select name="proveedor">
+									';
+										print '<option value="-1"></option>';
+										while ($obj=$db->fetch_object($res)) {
+											if ($proveedor==$obj->rowid) {
+												print '<option value="'.$obj->rowid.'" selected>'.$obj->nom.'</option>';
+											}else{
+												print '<option value="'.$obj->rowid.'">'.$obj->nom.'</option>';
+											}
+											
+										}
+
+									print '
+									</select>
+								</td>
+							</tr>
+						';
+					}
+				}
+				
+				if ($iva==1) {
+					$check="checked";
+				}
+				print '
+					<tr>
+						<td>Desglosar IVA</td>
+						<td colspan="7">
+							<input type="checkbox" id="iva" name="iva" '.$check.'>
+						</td>
+					</tr>
+				';
+?>
+			
 <?php
 				
 
@@ -1571,7 +1643,7 @@ if ($action == "newpol") {
 		
 <?php 
 	} else {
-		$msg = "No se puede hacer cambios en perdiodos contables ya cerrados.";
+		$msg = "No se puede hacer cambios en periodos contables ya cerrados.";
 		$action = "";
 	}
  }else{
@@ -1609,7 +1681,7 @@ if ($action == "delpol") {
 		</form>
 <?php 
 	} else {
-		$msg = "No se puede hacer cambios en perdiodos contables ya cerrados.";
+		$msg = "No se puede hacer cambios en periodos contables ya cerrados.";
 		$action = "";
 	}
 	}else{
@@ -1656,7 +1728,7 @@ if ($action == "delpol") {
 		</form>
 <?php 
 	} else {
-		$msg = "No se puede hacer cambios en perdiodos contables ya cerrados.";
+		$msg = "No se puede hacer cambios en periodos contables ya cerrados.";
 		$action = "";
 	}
   }else{
@@ -1793,7 +1865,7 @@ if ($pol->id > 0 && $action!='editenc') {
 		<td style="text-align: right;">
 				<a href="addcuenta.php?tpenvio=pol&id=<?=$id?>" >Agregar cuenta</a>
 		</td>
-		<td style="text-align: right;">
+		<td style="text-align: right;" colspan="2">
 			<a href="poliza.php?id=<?=$pol->id; ?>&amp;action=delpol<?=($esfaccte == 1 ? '&fc='.$esfaccte : '');?><?=($esfacprov == 1 ? '&fp='.$esfacprov : '');?><?=($socid > 0 ? '&socid='.$socid : '');?>&facid=<?=$facid;?>&anio=<?=$anio?>&mes=<?=$mes?>">Borrar Póliza</a>
 		</td>
 	</tr>
@@ -1836,7 +1908,7 @@ if ($pol->id > 0 && $action!='editenc') {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;			
 			</td>
 			<td colspan = "2">Fecha: <?=date("Y-m-d",$pol->fecha);?></td>
-			<td colspan = "2">
+			<td colspan = "3">
 				Documento Relacionado: <a href="<?=DOL_URL_ROOT.$pagina;?>?facid=<?=$facid;?>"><?php echo $facnumber; ?></a>
 			</td>
 		</tr>
@@ -1844,7 +1916,7 @@ if ($pol->id > 0 && $action!='editenc') {
 			if($nomsoc!=''){
 				?>
 				<tr <?php print $bc[$var]; ?>>
-				<td colspan = "7">
+				<td colspan = "8">
 					Tercero: <strong><?php echo $nomsoc; ?></strong>
 				</td>
 				</tr>
@@ -1857,7 +1929,7 @@ if ($pol->id > 0 && $action!='editenc') {
 				&nbsp;
 				Comentario: <strong><?=substr($pol->comentario,0,150); ?></strong>
 			</td>
-			<td colspan = "3" >
+			<td colspan = "4" >
 
 			Archivos adjuntos:<br/>
 			<?php
@@ -1878,7 +1950,7 @@ if ($pol->id > 0 && $action!='editenc') {
 			</td>
 		</tr>
 		<tr <?=$bc[$var]; ?>>
-			<td colspan = "7">
+			<td colspan = "8">
 				Cheque a Nombre: <strong><?=substr($pol->anombrede,0,150); ?></strong>
 				&nbsp;
 				Núm. Cheque: <strong><?=substr($pol->numcheque,0,150); ?></strong>
@@ -1888,7 +1960,7 @@ if ($pol->id > 0 && $action!='editenc') {
 		if($pol->pol_ajuste==1){ 
 		?>
 		<tr <?=$bc[$var]; ?>>
-			<td colspan = "6">
+			<td colspan = "7">
 				<strong>Poliza del periodo de ajuste</strong>
 			</td>
 		</tr>
@@ -1903,6 +1975,7 @@ if ($pol->id > 0 && $action!='editenc') {
 		<td>Cuenta</td>
 		<td>Concepto</td>
 		<td>UUID</td>
+		<td>Proveedor</td>
 		<td style="text-align: right; width: 10%;">Debe</td>
 		<td style="text-align: right; width: 10%;">Haber</td>
 		<td colspan="2" " style="text-align: right;"><a href="poliza.php?id=<?=$pol->id; ?>&amp;action=newpolline<?=($esfaccte == 1 ? '&fc='.$esfaccte : '');?><?=($esfacprov == 1 ? '&fp='.$esfacprov : '');?><?=($socid > 0 ? '&socid='.$socid : '');?>&facid=<?=$facid;?>&anio=<?=$pol->anio?>&mes=<?=$pol->mes?>">Nuevo Asiento</a> </td>
@@ -1945,6 +2018,19 @@ if ($pol->id > 0 && $action!='editenc') {
 				?></td>
 				<td><?=$poldet->desc; ?></td>
 				<td><?=$poldet->uuid; ?></td>
+				<?php
+					if ($poldet->fk_proveedor>0) {
+						echo "<td>";
+							$societe=new Contabsociete($db);
+							$societe->fetch($poldet->fk_proveedor);
+							print $societe->getNomUrl();
+						echo "</td>";
+					}else{
+						echo "<td>";
+							print "N/A";
+						echo "</td>";
+					}
+				?>
 				<td style="text-align: right;"><?=($poldet->debe > 0 ? $langs->getCurrencySymbol($conf->currency).' '.number_format($poldet->debe, 2) : ""); ?></td>
 				<td style="text-align: right;"><?=($poldet->haber > 0 ? $langs->getCurrencySymbol($conf->currency).' '.number_format($poldet->haber, 2) : ""); ?></td>
 <?php
@@ -1968,7 +2054,7 @@ if ($pol->id > 0 && $action!='editenc') {
 		}
 		?>
 					<tr>
-						<td colspan="4" align="right">
+						<td colspan="5" align="right">
 						<strong>Total</strong>
 						</td>
 						<td style="text-align: right;"><?=$langs->getCurrencySymbol($conf->currency).' '.number_format($totdebe, 2)?></td>

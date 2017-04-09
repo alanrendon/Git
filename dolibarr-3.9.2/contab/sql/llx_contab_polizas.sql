@@ -17,3 +17,4 @@ CREATE TABLE IF NOT EXISTS `llx_contab_polizas` (
 ) ;
 
 ALTER TABLE llx_contab_polizas ADD  `fk_proveedor` int(11);
+ALTER TABLE llx_contab_polizas ADD  `contabilizar_pol` int(11);

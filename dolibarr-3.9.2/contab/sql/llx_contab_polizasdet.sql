@@ -9,3 +9,5 @@ CREATE TABLE IF NOT EXISTS `llx_contab_polizasdet` (
   PRIMARY KEY (`rowid`),
   KEY `idx` (`cuenta`)  
 );
+
+ALTER TABLE `llx_contab_polizasdet` ADD `iva` tinyint(4);
