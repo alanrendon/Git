@@ -67,6 +67,8 @@ $offset = $limit * $page;
 
 
 $proveedor=GETPOST("proveedor");
+$format=GETPOST("format");
+
 $month=GETPOST("month");
 $year=GETPOST('year');
 $type_diot=GETPOST('type_diot','int');
@@ -203,95 +205,129 @@ if ( (empty($action) || $action == 'view')  )
 {
 	print '<script type="text/javascript" language="javascript">
 	jQuery(document).ready(function() {
-	    $("#type_diot").change(function() {
+	    $("#type_diot,#format").change(function() {
 	    	document.formsoc.submit();
 	    });
+	    
 	});
 	</script>';
 	//print load_fiche_titre("Pólizas - Consulta y Registro",$page, $_SERVER["PHP_SELF"]);
 	print_barre_liste("Pólizas - Consulta y Registro", $page, $_SERVER["PHP_SELF"]);    
 	dol_fiche_head();
-    $res=$db->query("SELECT a.nom,a.rowid FROM llx_contab_societe as a ");
+    $res2=$db->query("SELECT a.nom,a.rowid FROM llx_contab_societe as a ");
     
-    if ($res) {
-		if ($db->num_rows($res)>0) {
+ 	$res=$db->query($sql);
+    
 
-			print '
-		<form method="POST" name="formsoc" action="diot.php" >
-			<table>
-				<tr>
-					<td>
-						<b>Proveedor</b>
-					</td>
-					<td style="width:100px;">
-						<select name="proveedor" class="flat">';
-							print '<option value>&nbsp;</option>';
-							while ($obj=$db->fetch_object($res)) {
-								if ($proveedor==$obj->rowid) {
-									print '<option value="'.$obj->rowid.'" selected>'.$obj->nom.'</option>';
-								}else{
-									print '<option value="'.$obj->rowid.'">'.$obj->nom.'</option>';
-								}
-							}
+	print '<div class="fichecenter">
+		<form method="POST" name="formsoc" action="diot.php" >';
+		print '<table class="nobordernopadding" width="100%" >';
+			print '<tbody>';
+				print '<tr>';
 						print '
-						</select>
-					</td>
-					<td style="width:50px;">
-						<b> Fecha </b>
-					</td>
-					<td>
-			';
-				print $formother->select_month($month,'month',1);
-			print ' </td>
-					<td>
-			';
-
-			print $formother->select_year($year,'year',1, 20, 5);
-			print ' </td>';
-
-			print '
-			<td>
-				<input type="submit" class="button" name="add" value="Buscar">
-			</td>';
-			print '
-			<td style="width:30px;">
-				
-			</td>';
-			if ( $month>0 && $year>0 ) {
-				print '
-				<td>
-					<select id="type_diot" name="type_diot" class="flat">';
-							if ($type_diot==1) {
-								print '<option value="1" selected>XML</option>';
-							}else{
-								print '<option value="1">XML</option>';
-							}
-							if ($type_diot==2) {
-								print '<option value="2" selected>Monto Original</option>';
-							}else{
-								print '<option value="2">Monto Original</option>';
-							}
-						
-						print '
-					</select>
-				</td>';
-				print '
-				<td>
-					<a class="button" href="get_diot_txt.php?proveedor='.$proveedor.'&mes='.$month.'&anio='.$year.'&diot='.$type_diot.'">Generar BATCH</a>
-					
-				</td>';
-			}
-			
-
-			
-			print '
-				</tr>
-			</table>
+						<td align="left" class="nowrap borderright">
+							<table>
+								<tbody>
+									<tr>
+										<td>
+											<b>Proveedor</b>
+										</td>
+										<td align="left">
+											<div class="formleftzone">
+												<select name="proveedor" class="flat">';
+													print '<option value>&nbsp;</option>';
+													while ($obj=$db->fetch_object($res2)) {
+														if ($proveedor==$obj->rowid) {
+															print '<option value="'.$obj->rowid.'" selected>'.$obj->nom.'</option>';
+														}else{
+															print '<option value="'.$obj->rowid.'">'.$obj->nom.'</option>';
+														}
+													}
+												print '
+												</select>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td style="width:50px;">
+											<b> Fecha </b>
+										</td>
+										<td>';
+											print $formother->select_month($month,'month',1);
+											print $formother->select_year($year,'year',1, 20, 5);
+										print '
+										</td>
+									</tr>
+									<tr>
+										<td colspan=2>
+											<input type="submit" class="button" name="add" value="Buscar">
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>';
+						if ( $month>0 && $year>0 && $db->num_rows($res)>0 ) {
+							print '
+							<td align="left" class="nowrap">
+								<table>
+									<tbody>
+										
+										<tr>
+											<td>
+												<b>Tipo</b>
+											</td>
+											<td>
+												<select id="type_diot" name="type_diot" class="flat">';
+													
+													if ($type_diot==2) {
+														print '<option value="2" selected>Monto Original</option>';
+													}else{
+														print '<option value="2">Monto Original</option>';
+													}
+													if ($type_diot==1) {
+														print '<option value="1" selected>XML</option>';
+													}else{
+														print '<option value="1">XML</option>';
+													}
+													
+													if ($format==1) {
+														$format1= "selected";
+													}else{
+														$format2= "selected";
+													}
+												print '
+											</select>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<b>Formato</b>
+											</td>
+											<td>
+												<select name="format" id="format" class="flat">
+													<option value=1 '.$format1.'>
+														TXT
+													</option>
+													<option value=2 '.$format2.'>
+														Excel
+													</option>
+												</select>
+											</td>
+										</tr>
+										<tr>
+											<td >
+												<a class="button" href="get_diot_txt.php?proveedor='.$proveedor.'&mes='.$month.'&anio='.$year.'&diot='.$type_diot.'&format='.$format.'">Generar BATCH</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>';
+						}
+				print '</tr>';
+			print '</tbody>';
+		print '</table>
 		</form>';
-			
-		}
-	}
-
+	print '</div>';
 
 	
 		
@@ -308,7 +344,7 @@ if ( (empty($action) || $action == 'view')  )
 			print_liste_field_titre("Total Haber");
 			print_liste_field_titre("Ver Detalle");
 		print '</tr">';
-		$res=$db->query($sql);
+		
 		if ($res) {
 			if ($db->num_rows($res)>0) {
 				while ($obj=$db->fetch_object($res)) {

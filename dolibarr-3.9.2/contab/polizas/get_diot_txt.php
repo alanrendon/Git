@@ -199,6 +199,13 @@
 	$xml_array     =array(); 
 	$fk_proveedor=GETPOST("proveedor");
 	$diot=GETPOST("diot","int");
+	$format=GETPOST("format");
+
+	if ($format==2) {
+		require_once  "../class/PHPExcel.php";
+	}
+
+
 	if (isset($_GET['anio']) && isset($_GET['mes'])) {
 		$anio = (int)$_GET['anio'];
 		$mes  = (int)$_GET['mes'];
@@ -210,9 +217,19 @@
 
 	$polizas_diot= getPolizas_diot($anio, $mes,$fk_proveedor);
 
+	if ($format==1) {
+		header('Content-type: text/plain');
+	    header('Content-Disposition: attachment; filename=DIOT_POLIZAS_'.$anio.'-'.$mes.'.txt');
+	}else{
+		$objPHPExcel = new PHPExcel();
+	    $objPHPExcel->getProperties()->setCreator("Dolibarr")
+					->setTitle('DIOT_POLIZAS_'.$anio.'-'.$mes)
+					->setSubject("Office 2007 XLSX")
+					->setDescription("Pólizas XLSX, generado usando clases PHP.")
+					->setKeywords("office 2007 openxml php")
+					->setCategory("Contabilidad");
+	}
 
-	header('Content-type: text/plain');
-    header('Content-Disposition: attachment; filename=DIOT_POLIZAS_'.$anio.'-'.$mes.'.txt');
     //header('Content-type: application/ms-excel');
 	//header('Content-Disposition: attachment; filename=DIOT_POLIZAS_'.$anio.'-'.$mes.'.xls');
 	foreach ($polizas_diot as $poli_key => $poli_value) {
@@ -387,6 +404,7 @@
 	}
 	$xml_array =$aux;
     //$file = fopen('DIOT_POLIZAS_'.$anio.'-'.$mes.'.txt', "a");
+    $i=1;
 	foreach ($xml_array as $xml_key => $xml_value) {
 		/*echo<<<EOT
 		{$xml_value['key_to']}|{$xml_value['key_ts']}|{$xml_value['rfc']}|||||{$xml_value['compIppSubTot']}|||||||||||||||
@@ -394,10 +412,62 @@
 		EOT;*/
 		$xml_value['compIppSubTot'] = $xml_value['compIppSubTot'] == 0 ?  '':$xml_value['compIppSubTot'];
 		$xml_value['compIppTot']    = $xml_value['compIppTot'] == 0 ?	  '':$xml_value['compIppTot'];
-		echo $xml_value['key_to'].'|'.$xml_value['key_ts'].'|'.$xml_value['rfc'].'|'.$xml_value['id_fiscal'].'|'.$xml_value['nombre_extranjero'].'|||'.round(floatval($xml_value['compIppSubTot']),0).'||0||||||||||'.$xml_value['compIppTot'].'|||';
-			if ($xml_key<(sizeof($xml_array)-1)) 
-				echo PHP_EOL;
+
 		
+
+		if ($format==2) {
+			$objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('A'.$i, $xml_value['key_to'])
+                    ->setCellValue('B'.$i, $xml_value['key_ts'])
+                    ->setCellValue('C'.$i, $xml_value['rfc'])
+                    ->setCellValue('D'.$i, $xml_value['id_fiscal'])
+                    ->setCellValue('E'.$i, $xml_value['nombre_extranjero'])
+                    ->setCellValue('F'.$i, "")
+                    ->setCellValue('G'.$i, "")
+                    ->setCellValue('H'.$i,  round(floatval($xml_value['compIppSubTot']),0) )
+                    ->setCellValue('I'.$i, "")
+                    ->setCellValue('J'.$i, "0")
+                    ->setCellValue('K'.$i, "")
+                    ->setCellValue('L'.$i, "")
+                    ->setCellValue('M'.$i, "")
+                    ->setCellValue('N'.$i, "")
+                    ->setCellValue('O'.$i, "")
+                    ->setCellValue('P'.$i, "")
+                    ->setCellValue('Q'.$i, "")
+                    ->setCellValue('R'.$i, "")
+                    ->setCellValue('S'.$i, "")
+                    ->setCellValue('T'.$i, $xml_value['compIppTot'])
+                    ->setCellValue('V'.$i, "")
+                    ->setCellValue('W'.$i, "");  
+		}else{
+			echo $xml_value['key_to'].'|'.$xml_value['key_ts'].'|'.$xml_value['rfc'].'|'.$xml_value['id_fiscal'].'|'.$xml_value['nombre_extranjero'].'|||'.round(floatval($xml_value['compIppSubTot']),0).'||0||||||||||'.$xml_value['compIppTot'].'|||';
+				if ($xml_key<(sizeof($xml_array)-1)) 
+					echo PHP_EOL;
+		}
+		$i++;
+		
+	}
+
+	if ($format==2) {
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(5);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(5);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(5);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(5);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(5);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(5);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(5);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(5);
+		$objPHPExcel->setActiveSheetIndex(0);
+
+	    header('Content-Type: application/vnd.ms-excel');
+	    header('Content-Disposition: attachment;filename="'.'DIOT_POLIZAS_'.$anio.'-'.$mes. ".xls".'"');
+	    header('Cache-Control: max-age=0');
+
+	    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+	    $objWriter->save('php://output');
+	    exit;
 	}
 	//fclose($file);
 
