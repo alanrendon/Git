@@ -316,7 +316,7 @@ if ( (empty($action) || $action == 'view')  )
 										</tr>
 										<tr>
 											<td >
-												<a class="button" href="get_diot_txt.php?proveedor='.$proveedor.'&mes='.$month.'&anio='.$year.'&diot='.$type_diot.'&format='.$format.'">Generar BATCH</a>
+												<a class="button" href="get_diot_txt.php?proveedor='.$proveedor.'&mes='.$month.'&anio='.$year.'&diot='.$type_diot.'&format='.$format.'">Generar Archivo</a>
 											</td>
 										</tr>
 									</tbody>

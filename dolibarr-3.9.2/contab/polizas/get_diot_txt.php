@@ -322,12 +322,14 @@
 
 					if ($haber-$debe==0) {
 						$xml_array[$i]['compIppSubTot']     =round(floatval($haber),0);
-						
+						$xml_array[$i]['iva']=$haber;
 					}else{
 						if ($haber==0) {
 							$xml_array[$i]['compIppSubTot']     =round(floatval(($debe) ),0);
+							$xml_array[$i]['iva']=$debe;
 						}else{
 							$xml_array[$i]['compIppSubTot']     =round(floatval(($haber-$debe) ),0);
+							$xml_array[$i]['iva']=$haber-$debe;
 						}
 						
 					}
@@ -384,7 +386,30 @@
   
 	$xml_array=burbuja($xml_array,sizeof($xml_array));
 	
+	if ($xml_array && $format==2) {
+		$meses = array('ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO',
+               'AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE');
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:D2');
+		$objPHPExcel->setActiveSheetIndex(0)
+	                ->setCellValue('A1', $conf->global->MAIN_INFO_SOCIETE_NOM);
+	    $objPHPExcel->setActiveSheetIndex(0)
+	                ->setCellValue('A2', "REPORTE DIOT DEL MES DE ".$meses[$mes-1]." ".$anio );
+		
+	    $objPHPExcel->getActiveSheet()
+	    ->getStyle('C3:F3')
+	    ->getAlignment()
+	    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 
+
+		$objPHPExcel->setActiveSheetIndex(0)
+	                ->setCellValue('A3', "")
+	                ->setCellValue('B3', "")
+	                ->setCellValue('C3', "RFC")
+	                ->setCellValue('D3', "PROVEEDOR")
+	                ->setCellValue('E3', "IMPORTE" )
+	                ->setCellValue('F3', "IVA");  
+	}
 
 
 
@@ -404,7 +429,7 @@
 	}
 	$xml_array =$aux;
     //$file = fopen('DIOT_POLIZAS_'.$anio.'-'.$mes.'.txt', "a");
-    $i=1;
+    $i=4;
 	foreach ($xml_array as $xml_key => $xml_value) {
 		/*echo<<<EOT
 		{$xml_value['key_to']}|{$xml_value['key_ts']}|{$xml_value['rfc']}|||||{$xml_value['compIppSubTot']}|||||||||||||||
@@ -416,29 +441,14 @@
 		
 
 		if ($format==2) {
+
 			$objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, $xml_value['key_to'])
                     ->setCellValue('B'.$i, $xml_value['key_ts'])
                     ->setCellValue('C'.$i, $xml_value['rfc'])
-                    ->setCellValue('D'.$i, $xml_value['id_fiscal'])
-                    ->setCellValue('E'.$i, $xml_value['nombre_extranjero'])
-                    ->setCellValue('F'.$i, "")
-                    ->setCellValue('G'.$i, "")
-                    ->setCellValue('H'.$i,  round(floatval($xml_value['compIppSubTot']),0) )
-                    ->setCellValue('I'.$i, "")
-                    ->setCellValue('J'.$i, "0")
-                    ->setCellValue('K'.$i, "")
-                    ->setCellValue('L'.$i, "")
-                    ->setCellValue('M'.$i, "")
-                    ->setCellValue('N'.$i, "")
-                    ->setCellValue('O'.$i, "")
-                    ->setCellValue('P'.$i, "")
-                    ->setCellValue('Q'.$i, "")
-                    ->setCellValue('R'.$i, "")
-                    ->setCellValue('S'.$i, "")
-                    ->setCellValue('T'.$i, $xml_value['compIppTot'])
-                    ->setCellValue('V'.$i, "")
-                    ->setCellValue('W'.$i, "");  
+                    ->setCellValue('D'.$i, "")
+                    ->setCellValue('E'.$i,  round(floatval($xml_value['compIppSubTot']),0) )
+                    ->setCellValue('F'.$i,  round(floatval($xml_value['compIppSubTot']*0.136),2)   );  
 		}else{
 			echo $xml_value['key_to'].'|'.$xml_value['key_ts'].'|'.$xml_value['rfc'].'|'.$xml_value['id_fiscal'].'|'.$xml_value['nombre_extranjero'].'|||'.round(floatval($xml_value['compIppSubTot']),0).'||0||||||||||'.$xml_value['compIppTot'].'|||';
 				if ($xml_key<(sizeof($xml_array)-1)) 
@@ -452,13 +462,9 @@
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
 	    $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(5);
 	    $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-	    $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(5);
-	    $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(5);
-	    $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(5);
-	    $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(5);
-	    $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(5);
-	    $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(5);
-	    $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(5);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+	    $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
 		$objPHPExcel->setActiveSheetIndex(0);
 
 	    header('Content-Type: application/vnd.ms-excel');
