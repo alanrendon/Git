@@ -430,6 +430,8 @@
 	$xml_array =$aux;
     //$file = fopen('DIOT_POLIZAS_'.$anio.'-'.$mes.'.txt', "a");
     $i=4;
+    $tot_imp=0;
+    $tot_iva=0;
 	foreach ($xml_array as $xml_key => $xml_value) {
 		/*echo<<<EOT
 		{$xml_value['key_to']}|{$xml_value['key_ts']}|{$xml_value['rfc']}|||||{$xml_value['compIppSubTot']}|||||||||||||||
@@ -441,14 +443,16 @@
 		
 
 		if ($format==2) {
-
+			$ban=1;
 			$objPHPExcel->setActiveSheetIndex(0)
                     ->setCellValue('A'.$i, $xml_value['key_to'])
                     ->setCellValue('B'.$i, $xml_value['key_ts'])
                     ->setCellValue('C'.$i, $xml_value['rfc'])
                     ->setCellValue('D'.$i, "")
                     ->setCellValue('E'.$i,  round(floatval($xml_value['compIppSubTot']),0) )
-                    ->setCellValue('F'.$i,  round(floatval($xml_value['compIppSubTot']*0.136),2)   );  
+                    ->setCellValue('F'.$i,  round(floatval($xml_value['compIppSubTot']*0.16),2)   );
+            $tot_imp+=$xml_value['compIppSubTot'];
+            $tot_iva+=$xml_value['compIppSubTot']*0.16;
 		}else{
 			echo $xml_value['key_to'].'|'.$xml_value['key_ts'].'|'.$xml_value['rfc'].'|'.$xml_value['id_fiscal'].'|'.$xml_value['nombre_extranjero'].'|||'.round(floatval($xml_value['compIppSubTot']),0).'||0||||||||||'.$xml_value['compIppTot'].'|||';
 				if ($xml_key<(sizeof($xml_array)-1)) 
@@ -459,6 +463,13 @@
 	}
 
 	if ($format==2) {
+		if ($ban==1) {
+			$objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue('C'.$i, "TOTALES")
+                    ->setCellValue('D'.$i, "")
+                    ->setCellValue('E'.$i,  round(floatval($tot_imp),0) )
+                    ->setCellValue('F'.$i,  round(floatval($tot_iva),2) );  
+		}
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
 	    $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(5);
 	    $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
