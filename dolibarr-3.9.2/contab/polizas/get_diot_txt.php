@@ -70,7 +70,7 @@
 	}
 
 
-	function getPolizas_diot($anio, $mes,$id_prov="") {
+	function getPolizas_diot($anio, $mes,$id_prov="",$format) {
         $rows = array();
         global $db,$conf;
         $periodomes = 'poliza.mes';
@@ -111,12 +111,15 @@
 				poliza.numcheque,
 				poliza.societe_type,
 				b.fk_proveedor,
+				a.nom,
 
 			IF (p.estado IS NULL, 0, p.estado) AS estado
 			FROM
 				llx_contab_polizas AS poliza
 			INNER JOIN llx_contab_polizasdet as b on b.fk_poliza=poliza.rowid
+			LEFT JOIN llx_contab_societe as a ON a.rowid=b.fk_proveedor
 			LEFT JOIN llx_contab_periodos AS p ON p.anio = poliza.anio
+			
 			AND p.mes = ' . $periodomes . '
 			WHERE
 				(poliza.tipo_pol = "E" OR poliza.contabilizar_pol=1)
@@ -136,11 +139,22 @@
 			GROUP BY
 				poliza.rowid,
 				b.fk_proveedor
-			ORDER BY
+			';
+
+		if ($format==1) {
+			$sql.='
+				ORDER BY
 				poliza.fechahora ASC,
 				poliza.societe_type ASC,
 				poliza.cons ASC,
 				poliza.tipo_pol DESC';
+		}else{
+			$sql.='
+				ORDER BY
+					a.nom ASC
+			';
+		}
+	
         $query = $db->query($sql);
         if ($query) {
             $rows = array();
@@ -215,7 +229,7 @@
     	$mes   = $fecha->mes;
 	}
 
-	$polizas_diot= getPolizas_diot($anio, $mes,$fk_proveedor);
+	$polizas_diot= getPolizas_diot($anio, $mes,$fk_proveedor,$format);
 
 	if ($format==1) {
 		header('Content-type: text/plain');
@@ -318,6 +332,7 @@
 					$xml_array[$i]['key_ts']            =$code_tip_op;
 					$xml_array[$i]['id_fiscal']         ="";
 					$xml_array[$i]['nombre_extranjero'] ="";
+					$xml_array[$i]['nombre_extranjero2'] =$nombre_extranjero;
 
 
 					if ($haber-$debe==0) {
@@ -383,8 +398,10 @@
 
 	
 	$aux=array();
-  
-	$xml_array=burbuja($xml_array,sizeof($xml_array));
+  	if ($format==1) {
+  		$xml_array=burbuja($xml_array,sizeof($xml_array));
+  	}
+	
 	
 	if ($xml_array && $format==2) {
 		$meses = array('ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO',
@@ -448,7 +465,7 @@
                     ->setCellValue('A'.$i, $xml_value['key_to'])
                     ->setCellValue('B'.$i, $xml_value['key_ts'])
                     ->setCellValue('C'.$i, $xml_value['rfc'])
-                    ->setCellValue('D'.$i, "")
+                    ->setCellValue('D'.$i, $xml_value['nombre_extranjero2'])
                     ->setCellValue('E'.$i,  round(floatval($xml_value['compIppSubTot']),0) )
                     ->setCellValue('F'.$i,  round(floatval($xml_value['compIppSubTot']*0.16),2)   );
             $tot_imp+=$xml_value['compIppSubTot'];
