@@ -487,7 +487,7 @@ class Factory extends CommonObject
 							$costMatPrima=($conversionMN*$pt); 	////////////Costo materia prima /////////////////////////			
 							$utilidadMP=(($costMatPrima*$rs2->porcent)/100); ////////////////Utilidad de materia rima////////////////////
 							$costUnitMat=$costMatPrima+$utilidadMP; ////////costo unitario de materia////////////////7			
-							echo "--".$costUnitMat;	
+							//echo "--".$costUnitMat;	
 							/////////FIN del costo unitario de material////////////								
 							$costoUnitarioTrat = 0;
 							//$tre = $rs3->treatment;
@@ -1373,7 +1373,7 @@ class Factory extends CommonObject
 		$sql.= ", ".MAIN_DB_PREFIX."product_factory as pf";
 		$sql.= " WHERE p.rowid = pf.fk_product_children";
 		$sql.= " AND pf.fk_product_father = ".$fk_parent;
-
+		
 		$res  = $this->db->query($sql);
 		if ($res)
 		{
@@ -1679,6 +1679,7 @@ class Factory extends CommonObject
 	function get_sousproduits_arbo()
 	{
 		$parent = $this->getParent();
+
 		foreach($parent as $key => $value)
 		{
 			foreach($this->getChildsArbo($value[0]) as $keyChild => $valueChild)

@@ -226,7 +226,7 @@ if ($id || $ref)
 		$bproduit = ($object->isproduct()); 
 
 		// Reference
-		print '<td width="25%">'.$langs->trans("Ref").'</td><td>';
+		//print '<td width="25%">'.$langs->trans("Ref").'</td><td>';
 		print $form->showrefnav($object,'ref','',1,'ref');
 		print '</td></tr>';
 
@@ -769,7 +769,7 @@ if ($id || $ref)
 						print '<td align="right">'.price($objp->pmp).'</td>';
 						print '<td align="right">'.price($objp->price).'</td>';
 
-/*
+							/*
 						print '<td align="right">';
 							print '<select name="treatment_'.$i.'" >';
 								print '<option value="0"></option>';

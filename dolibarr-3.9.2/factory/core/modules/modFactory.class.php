@@ -191,6 +191,7 @@ class modFactory extends DolibarrModules
 					'target'=>'',
 					'user'=>2);
 		$r++;
+
 		
 		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=products,fk_leftmenu=stock',
 				'type'=>'left',
@@ -205,6 +206,8 @@ class modFactory extends DolibarrModules
 				'target'=>'',
 				'user'=>2);
 		$r++;
+
+		
 		
 		$this->menu[$r]=array(    'fk_menu'=>'fk_mainmenu=commercial,fk_leftmenu=propals',            // Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode of parent menu
                  'type'=>'left',                    // This is a Left menu entry
@@ -311,6 +314,36 @@ class modFactory extends DolibarrModules
                  'target'=>'',
                  'user'=>2);
          $r++;
+         $this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=products,fk_leftmenu=product',
+				'type'=>'left',
+				'titre'=>'Creación Rapida',
+				'mainmenu'=>'',
+				'leftmenu'=>'',
+				'url'=>'/factory/product_card.php?action=create',
+				'langs'=>'factory@factory',
+				'position'=>110,
+				'enabled'=>'1',
+				'perms'=>'1',
+				'target'=>'',
+				'user'=>2);
+		$r++;
+
+         $this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=products,fk_leftmenu=product',
+				'type'=>'left',
+				'titre'=>'Edición Rapida',
+				'mainmenu'=>'',
+				'leftmenu'=>'',
+				'url'=>'/factory/product_card.php',
+				'langs'=>'factory@factory',
+				'position'=>110,
+				'enabled'=>'1',
+				'perms'=>'1',
+				'target'=>'',
+				'user'=>2);
+		$r++;
+
+		
+
        
 					
 		// additional tabs
