@@ -58,7 +58,7 @@
                     <div class="clearfix"></div>
                     <br />
                     <div>
-                      <h1><i class="fa fa-cube"></i> Contab PRO 1.0</h1>
+                      <h1><i class="fa fa-cube"></i> Módulo de Contabilidad</h1>
                     </div>
                   </div>
                 </form>

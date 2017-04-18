@@ -455,6 +455,7 @@ $periodos        = $periodo->get_all_Periodos_anio();
                                     </tr>
                                   </thead>
                                   <tbody>
+                                  
                                     <?php foreach($arreglo_Polizas as $key): ?>
                                         <?php $ajuste = $key['ajuste']==1 ?  'Ajuste ':''; ?>
                                         <?php $arrasiento = $asiento->get_asientoPoliza($key['id']); ?>
@@ -591,8 +592,9 @@ $periodos        = $periodo->get_all_Periodos_anio();
         $(".clonar-link").click(clonarPoliza);
         $(".remove-recurrente-link").click(removerRecurrente);
         $( '#datatable' ).DataTable({
-            "order": [[ 3, "desc" ]],
-			"aoColumnDefs": [{ 'bSortable': false, 'aTargets': [ 3] }],
+			"aoColumnDefs": [
+				{ 'bSortable': false, 'aTargets': [ 3 ] }
+			],
 			"language": {
 				"lengthMenu": "Mostrar _MENU_ resultados",
 				"zeroRecords": "No se encontraron registros",

@@ -34,9 +34,7 @@ if(isset($_POST['periodo'])){
 
     }
 }
-
 $pol=$diario->get_pol_diario($periodo);
-
 ?>
 <!DOCTYPE html>
 <html lang="es">

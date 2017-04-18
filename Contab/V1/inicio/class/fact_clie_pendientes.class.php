@@ -71,8 +71,6 @@ class FacPolizaPendiente extends conexion {
 		return $rows;
 	}
 
-	
-
 	public function getCondiciones_de_Pago() {
 		$a     =array();
 		$sql   = "Select * FROM ".PREFIX."contab_payment_term Where entity = ".ENTITY;
@@ -257,6 +255,7 @@ class FacPolizaPendiente extends conexion {
 						nom,
 						a.rowid,
 						a.paye
+
 					FROM
 						".PREFIX."facture a,
 						".PREFIX."societe b
@@ -301,6 +300,8 @@ class FacPolizaPendiente extends conexion {
         }
 		return $row;
 	}
+
+
 	public function get_paimenet($id){
 		$row = array();
 		$sql="SELECT code,libelle
@@ -311,6 +312,8 @@ class FacPolizaPendiente extends conexion {
 		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 		return $row;
 	}
+
+
 	public function get_cond_reglement($id){
 				$row = array();
 		$sql="SELECT code,libelle
@@ -321,6 +324,7 @@ class FacPolizaPendiente extends conexion {
 		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 		return $row;
 	}
+
 	public function convierte_pagos($pago){
 		$pago = str_replace("Carte Bancaire","Tarjeta",$pago);
 		$pago = str_replace("Chèque","Cheque",$pago);
@@ -331,6 +335,7 @@ class FacPolizaPendiente extends conexion {
 		$pago = str_replace("Virement","Transferencia bancaria",$pago);
 		return  ($pago);
 	}
+
 	public function convierte_condiciones($pago){
 		$pago = str_replace("A réception de facture","	A la recepción",$pago);
 		$pago = str_replace("30 jours","30 días",$pago);
@@ -342,6 +347,7 @@ class FacPolizaPendiente extends conexion {
 		$pago = str_replace("50 et 50","	50/50",$pago);
 		return  ($pago);
 	}
+	
 	public function get_pagos_facture($id){
 		$pag = array();
 		$sql="SELECT a.amount,b.datep,code,libelle

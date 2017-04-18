@@ -19,7 +19,7 @@ class Asiento extends conexion {
 					".PREFIX."contab_polizasdet AS asiento
 				WHERE
 					asiento.fk_poliza = '".$id_poliza."'";
-		
+
 		$query= $this->db->query($sql); 
 		if ($query) {
 			$rows = array();

@@ -611,7 +611,7 @@ function f_get_partidas_facture(facturasid){
             */
 
             //21 y 2
-            if ($("#compra_debe").length ) {
+            /*if ($("#compra_debe").length ) {
                 $("#compra_debe").val($("#total_ht").val());
             }
             
@@ -639,7 +639,7 @@ function f_get_partidas_facture(facturasid){
             if ($("#iva_haber_pendiente").length ) {
                 $('#iva_haber_pendiente').val($('#total_tva').val());
             }
-
+            */
             $(".txt_debe").change(inputSumatxt_debe);
             $(".txt_haber").change(inputSumatxt_haber);
             $("input[name='descripcion[]']").val($("#txt_concepto").val());

@@ -85,7 +85,6 @@ $pedidos           = $pedido->get_data_order();
                                         <input name='pedidoid[]' type='checkbox' value='<?php echo $ped->rowid; ?>'>
                                     </td>
                                 </tr>
-                        		
                         	<?php endforeach ?>
                         </tbody>
                     </table>

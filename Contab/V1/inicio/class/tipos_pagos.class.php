@@ -2,9 +2,9 @@
 require_once $url[0]."conex/conexion.php";
 
 class tipos_pagos extends conexion {     
-	public function __construct() { 
-		parent::__construct(); 
-	} 
+  public function __construct() { 
+    parent::__construct(); 
+  } 
 
   
 

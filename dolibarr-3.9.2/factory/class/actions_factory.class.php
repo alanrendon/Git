@@ -149,7 +149,7 @@ class ActionsFactory // extends CommonObject
                     })';
             print '</script>';
             
-
+            require_once DOL_DOCUMENT_ROOT."/factory/class/factory.class.php";
             $object2 = new Product($db);
 			$extrafields = new ExtraFields($db);
 
@@ -159,7 +159,7 @@ class ActionsFactory // extends CommonObject
 
 
 			print '<tr><td><br></td></tr></table>
-			<br><br><hr><br><br>
+			<br>
 			<table class="border" width="100%">';
 
 			print '<tr class="liste_titre nodrag nodrop">';
@@ -171,7 +171,8 @@ class ActionsFactory // extends CommonObject
 				print '</td>';
 				print '<td align="center" ><span class="hideonsmartphone">'.$extrafields->attribute_label["lar"].'</span>';
 				print '</td>';
-				print '<td align="center" ><span class="hideonsmartphone">'.$extrafields->attribute_label["total_prod"].'</span>';
+				print '<td align="center" ><span class="hideonsmartphone">MP</span>';
+				print '<td align="center" ><span class="hideonsmartphone">TRA</span>';
 				print '</td>';
 				print '<td align="center" ><span class="hideonsmartphone">HM</span>';
 				print '</td>';
@@ -208,7 +209,24 @@ class ActionsFactory // extends CommonObject
 					print '</td>';
 					print '<td align="center" ><span class="hideonsmartphone">'.number_format($object2->array_options["options_lar"],2).'</span>';
 					print '</td>';
-					print '<td align="center" ><span class="hideonsmartphone">'.number_format($object2->array_options["options_total_prod"],2).'</span>';
+					$factory = new Factory($db);
+	            	$factory->id =$obj->rowid;
+	            	$factory->get_sousproduits_arbo();
+	            	$pr = $factory->get_arbo_each_prod();
+
+	            	foreach ($pr as $key => $value) {
+	            		if ($value["type"]==0) {
+	            			$ar[0]=dol_trunc($value["label"],10);
+	            		}
+	            		if ($value["type"]==1) {
+	            			$ar[1]=dol_trunc($value["label"],10);
+	            		}
+	            	}
+
+
+					print '<td align="center" ><span class="hideonsmartphone">'.$ar[0].'</span>';
+					print '</td>';
+					print '<td align="center" ><span class="hideonsmartphone">'.$ar[1].'</span>';
 					print '</td>';
 					print '<td align="center" ><span class="hideonsmartphone">'.number_format($object2->array_options["options_hmcnc"],2).'</span>';
 					print '</td>';
@@ -262,7 +280,8 @@ class ActionsFactory // extends CommonObject
 
 
                 //
-                $html= '<br><br><form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
+                $html= '<br>
+                <form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
                		$html.= '<input type="hidden" name="id" value="'.$object->id.'">';
 		            $html.= '<input type="hidden" name="act" value="update">';
 		            
@@ -270,11 +289,12 @@ class ActionsFactory // extends CommonObject
 		            $html.= '<input type="hidden" name="cargar_clave" value="'.$_REQUEST["cargar_clave"].'">';
 		            $html.= '<input type="hidden" name="id_obj" value="'.$prod->id.'">';
 		            
+		            $label2=$prod->ref.' - '.$prod->label;
 
 		            $html.= '<table class="border allwidth">';
-		            $html.= '<tr class="liste_titre nodrag nodrop">';
+		            /*$html.= '<tr class="liste_titre nodrag nodrop">';
 		            	$html.= '<td colspan=2><b>'.$prod->ref.' - '.$prod->label.'</b></td>';
-		            $html.= '</tr >';
+		            $html.= '</tr >';*/
 		            if (! empty($modCodeProduct->code_auto)) $tmpcode=$modCodeProduct->getNextValue($prod,$type);
 		            $html.= '<td class="fieldrequired" width="20%">'.$langs->trans("Ref").'</td><td colspan="3"><input name="ref2" size="32" maxlength="128" value="'.$prod->ref.'">';
 		            if ($refalreadyexists)
@@ -289,11 +309,7 @@ class ActionsFactory // extends CommonObject
 		                </td></tr>';
 
 
-		            foreach ($extrafields->attribute_label as $key => $value) {
-		                if ($key!="total_prod" and $key!="anc" and $key!="lar" ) {
-		                    unset($extrafields->attribute_label[$key]);
-		                }
-		            }
+
 
 		            // Other attributes
 		            $parameters=array('colspan' => 3);
@@ -320,16 +336,37 @@ class ActionsFactory // extends CommonObject
 		                        </td>
 		                    </tr>
 		        
-		                   <tr>
+		                    <tr>
 		                        <td>'.$extrafields->attribute_label["total_prod"].'</td>
 		                        <td colspan="3">
 		                            <input type="text" class="flat" name="options_total_prod" size="10" maxlength="10" value="'.$prod->array_options["options_total_prod"].'">
 		                        </td>
 		                    </tr>
-		                ';
+
+			                <tr></tr>
+		                    <tr>
+		                        <td>'.$extrafields->attribute_label["hmcnc"].'</td>
+		                        <td colspan="3">
+		                            <input type="text" class="flat" id="options_hmcnc" name="options_hmcnc" size="10" maxlength="10" value="'.(empty($prod->array_options["options_hmcnc"])?0:number_format($prod->array_options["options_hmcnc"],2)).'">
+		                        </td>
+		                    </tr>
+		                
+		                   <tr>
+		                        <td>'.$extrafields->attribute_label["hecnc"].'</td>
+		                        <td colspan="3">
+		                            <input type="text" class="flat" id="options_hecnc" name="options_hecnc" size="10" maxlength="10" value="'.(empty($prod->array_options["options_hecnc"])?0:number_format($prod->array_options["options_hecnc"],2)).'">
+		                        </td>
+		                    </tr>
+		                
+		                   <tr>
+		                        <td>'.$extrafields->attribute_label["hr"].'</td>
+		                        <td colspan="3">
+		                            <input type="text" class="flat" id="options_hr" name="options_hr" size="10" maxlength="10" value="'.(empty($prod->array_options["options_hr"])?0:number_format($prod->array_options["options_hr"],2)).'">
+		                        </td>
+		                    </tr>
+			                ';
 		                $option_anc=$prod->array_options["options_anc"];
 		                $options_lar=$prod->array_options["options_lar"];
-		                $options_total_prod=$prod->array_options["options_total_prod"];
 		            }
 		            $html.= '</table>';
 		            $html.= '<div class="center"><br>';
@@ -337,31 +374,10 @@ class ActionsFactory // extends CommonObject
 		            $html.= '</div>';
 	            $html.= '</form>';
 
-	            echo $html;
+	            //echo $html;
 
-	            if ($option_anc>0 && $options_lar>0 && $options_total_prod>0 && !empty($prod->ref) && !empty($prod->label) ) {
-	                if ($prod->status_buy==0  ) {
-	                    
-	                    print_fiche_titre("Face 2 - Tratamiento",'','');
-	                 	dol_fiche_head();
-                        print '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
-							print '<input type="hidden" name="act" value="add_line">';
-							print '<input type="hidden" name="id" value="'.$object->id.'">';
-							print '<input type="hidden" name="select_clave" value="'.$_REQUEST["select_clave"].'">';
-							print '<input type="hidden" name="cargar_clave" value="'.$_REQUEST["cargar_clave"].'">';
-							print '<input type="hidden" name="id_obj" value="'.$prod->id.'">';
-
-                            print '<b>Producto:</b>'.$this->select_dol_products(GETPOST("id_line"), 'id_line',1," WHERE fk_product_type=1 and rowid<>".$prod->id." ");
-                            //print '<br><b>Cantidad: </b><input name="cantidad" size="10"  value="'.GETPOST("cantidad").'">';
-                            print '<br><br><input type="submit" class="button" value="Cargar">';
-                        print '</form>';   
-                        dol_fiche_end(); 
-	                 
-	                }
-
-
-
-
+	            if ($option_anc>0 && $options_lar>0  && !empty($prod->ref) && !empty($prod->label) ) {
+	                
 	                $prodsfather = $factory->getFather(); //Parent Products
 
 	                // pour connaitre les produits composant le produits
@@ -372,62 +388,81 @@ class ActionsFactory // extends CommonObject
 	                $prods_arbo = $factory->get_arbo_each_prod();
 	                $ban_trat=0;
 	                foreach ($prods_arbo as $key => $value) {
-	                    if ($value["type"]) {
+	                    if ($value["type"]==0) {
 	                        $ban_trat=1;
 	                    }
 	                }
-	                echo "<br>";
-	                if ($object->status_buy==0  && $ban_trat==1 ) {
+	                $html.= "<br>";
+	                if ($object->status_buy==0  ) {
 	                    
-	                    print_fiche_titre("Face 3 - Materia Prima",'','');
-	                    dol_fiche_head();
+	                    $html.=load_fiche_titre("Face 2 - Materia Prima",'','');
+	                    $html.=dol_get_fiche_head();
 
-	                        print '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
-	                            print '<input type="hidden" name="act" value="add_line">';
-		            			print '<input type="hidden" name="id" value="'.$object->id.'">';
-	         					print '<input type="hidden" name="select_clave" value="'.$_REQUEST["select_clave"].'">';
-								print '<input type="hidden" name="cargar_clave" value="'.$_REQUEST["cargar_clave"].'">';
-								print '<input type="hidden" name="id_obj" value="'.$prod->id.'">';
-	                            print '<b>Producto:</b>'.$this->select_dol_products(GETPOST("id_line"), 'id_line',1," WHERE fk_product_type<>1 and rowid<>".$object->id." ");
+	                        $html.= '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
+	                            $html.= '<input type="hidden" name="act" value="add_line">';
+		            			$html.= '<input type="hidden" name="id" value="'.$object->id.'">';
+	         					$html.= '<input type="hidden" name="select_clave" value="'.$_REQUEST["select_clave"].'">';
+								$html.= '<input type="hidden" name="cargar_clave" value="'.$_REQUEST["cargar_clave"].'">';
+								$html.= '<input type="hidden" name="id_obj" value="'.$prod->id.'">';
+	                            $html.= '<b>Producto:</b>'.$this->select_dol_products(GETPOST("id_line"), 'id_line',1," WHERE fk_product_type<>1 and rowid<>".$object->id." ");
 	                            //print '<br><b>Cantidad: </b><input name="cantidad" size="10"  value="'.GETPOST("cantidad").'">';
-	                            print '<br><br><input type="submit" class="button" value="Cargar">';
-	                        print '</form>';    
-	                    dol_fiche_end();
+	                            $html.= '<br><br><input type="submit" class="button" value="Cargar">';
+	                        $html.= '</form>';    
+	                    $html.=dol_get_fiche_end(); 
 	                }
+
 	                echo "<br>";
-	                print_fiche_titre("Integración",'','');
-		            print '<form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
-		            print '<input type="hidden" name="act" value="del_line">';
-		            print '<input type="hidden" name="id" value="'.$object->id.'">';
-		            print '<input type="hidden" name="select_clave" value="'.$_REQUEST["select_clave"].'">';
-					print '<input type="hidden" name="cargar_clave" value="'.$_REQUEST["cargar_clave"].'">';
-					print '<input type="hidden" name="id_obj" value="'.$prod->id.'">';
-		            print '<table class="border" >';
-		                print '<tr class="liste_titre">';
-		                print '<td class="liste_titre" width=100px align="left">'.$langs->trans("Ref").'</td>';
-		                print '<td class="liste_titre" width=200px align="left">'.$langs->trans("Label").'</td>';
-		                print '<td class="liste_titre" width=50px align="center">'.$langs->trans("QtyNeed").'</td>';
+	                if ($prod->status_buy==0 && $ban_trat==1  ) {
+	                    
+	                    $html.=load_fiche_titre("Face 3 - Tratamiento",'','');
+	                 	$html.=dol_get_fiche_head();
+                        $html.= '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
+							$html.= '<input type="hidden" name="act" value="add_line">';
+							$html.= '<input type="hidden" name="id" value="'.$object->id.'">';
+							$html.= '<input type="hidden" name="select_clave" value="'.$_REQUEST["select_clave"].'">';
+							$html.= '<input type="hidden" name="cargar_clave" value="'.$_REQUEST["cargar_clave"].'">';
+							$html.= '<input type="hidden" name="id_obj" value="'.$prod->id.'">';
+
+                            $html.= '<b>Producto:</b>'.$this->select_dol_products(GETPOST("id_line"), 'id_line',1," WHERE fk_product_type=1 and rowid<>".$prod->id." ");
+                            //print '<br><b>Cantidad: </b><input name="cantidad" size="10"  value="'.GETPOST("cantidad").'">';
+                            $html.= '<br><br><input type="submit" class="button" value="Cargar">';
+                        $html.= '</form>';   
+                        $html.=dol_get_fiche_end(); 
+	                 
+	                }
+	                //print_fiche_titre("Integración",'','');
+		             $html.= '<form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
+		             $html.= '<input type="hidden" name="act" value="del_line">';
+		             $html.= '<input type="hidden" name="id" value="'.$object->id.'">';
+		             $html.= '<input type="hidden" name="select_clave" value="'.$_REQUEST["select_clave"].'">';
+					 $html.= '<input type="hidden" name="cargar_clave" value="'.$_REQUEST["cargar_clave"].'">';
+					 $html.= '<input type="hidden" name="id_obj" value="'.$prod->id.'">';
+		             $html.= '<table class="border" >';
+		                 $html.= '<tr class="liste_titre">';
+		                 $html.= '<td class="liste_titre" width=100px align="left">'.$langs->trans("Ref").'</td>';
+		                 $html.= '<td class="liste_titre" width=200px align="left">'.$langs->trans("Label").'</td>';
+		                 $html.= '<td class="liste_titre" width=50px align="center">'.$langs->trans("QtyNeed").'</td>';
 		                // on affiche la colonne stock m�me si cette fonction n'est pas active
-		                print '<td class="liste_titre" width=50px align="center">'.$langs->trans("Stock").'</td>'; 
+		                 $html.= '<td class="liste_titre" width=50px align="center">'.$langs->trans("Stock").'</td>'; 
 		                if ($conf->stock->enabled)
 		                {   // we display vwap titles
-		                    print '<td class="liste_titre" width=100px align="right">'.$langs->trans("UnitPmp").'</td>';
-		                    print '<td class="liste_titre" width=100px align="right">'.$langs->trans("CostPmpHT").'</td>';
+		                     $html.= '<td class="liste_titre" width=100px align="right">'.$langs->trans("UnitPmp").'</td>';
+		                     $html.= '<td class="liste_titre" width=100px align="right">'.$langs->trans("CostPmpHT").'</td>';
 		                }
 		                else
 		                {   // we display price as latest purchasing unit price title
-		                    print '<td class="liste_titre" width=100px align="right">'.$langs->trans("UnitHA").'</td>';
-		                    print '<td class="liste_titre" width=100px align="right">'.$langs->trans("CostHA").'</td>';
+		                     $html.= '<td class="liste_titre" width=100px align="right">'.$langs->trans("UnitHA").'</td>';
+		                     $html.= '<td class="liste_titre" width=100px align="right">'.$langs->trans("CostHA").'</td>';
 		                }
-		                print '<td class="liste_titre" width=100px align="right">'.$langs->trans("UnitPriceHT").'</td>';
-		                print '<td class="liste_titre" width=100px align="right">'.$langs->trans("SellingPriceHT").'</td>';
-		                print '<td class="liste_titre" width=100px align="right">'.$langs->trans("ProfitAmount").'</td>';
-		                print '<td class="liste_titre" width=100px align="right">'.$langs->trans("TheoreticalWeight").'</td>';
-		                print '<td class="liste_titre" width=100px align="right">'.$langs->trans("SellPriceUnit").'</td>';
-		                print '<td class="liste_titre" width=100px align="right">'.$langs->trans("SellPrice").'</td>';
-		                print '<td class="liste_titre" width=100px align="center">Retirar</td>';
+		                 $html.= '<td class="liste_titre" width=100px align="right">'.$langs->trans("UnitPriceHT").'</td>';
+		                 $html.= '<td class="liste_titre" width=100px align="right">'.$langs->trans("SellingPriceHT").'</td>';
+		                 $html.= '<td class="liste_titre" width=100px align="right">'.$langs->trans("ProfitAmount").'</td>';
+		                 $html.= '<td class="liste_titre" width=100px align="right">'.$langs->trans("TheoreticalWeight").'</td>';
+		                 $html.= '<td class="liste_titre" width=100px align="right">'.$langs->trans("SellPriceUnit").'</td>';
+		                 $html.= '<td class="liste_titre" width=100px align="right">'.$langs->trans("SellPrice").'</td>';
+		                 $html.= '<td class="liste_titre" width=100px align="center">Retirar</td>';
 
-		                print '</tr>';
+		                 $html.= '</tr>';
 		                if (count($prods_arbo) > 0)
 		                {
 		                    $compositionpresente=1;
@@ -446,14 +481,14 @@ class ActionsFactory // extends CommonObject
 		                            $nbChildArbo="";
 		                            if (count($tmpChildArbo) > 0) $nbChildArbo=" (".count($tmpChildArbo).")";
 
-		                            print '<tr>';
-		                            print '<td align="left">'.$factory->getNomUrlFactory($value['id'], 1,'index').$nbChildArbo.'</td>';
-		                            print '<td align="left" title="'.$value['description'].'">';
-		                            print $value['label'].'</td>';
-		                            print '<td align="center">'.$value['nb'];
+		                             $html.= '<tr>';
+		                             $html.= '<td align="left">'.$factory->getNomUrlFactory($value['id'], 1,'index').$nbChildArbo.'</td>';
+		                             $html.= '<td align="left" title="'.$value['description'].'">';
+		                             $html.= $value['label'].'</td>';
+		                             $html.= '<td align="center">'.$value['nb'];
 		                            if ($value['globalqty'] == 1)
-		                                print "&nbsp;G";
-		                            print '</td>';
+		                                 $html.= "&nbsp;G";
+		                             $html.= '</td>';
 
 		                            $productstatic = new Product($db);
 		                            $padre9= new factory($db);//soon
@@ -473,16 +508,16 @@ class ActionsFactory // extends CommonObject
 
 		                                    $productstatic->load_stock();
 
-		                                    print '<td align=center></td>';
+		                                     $html.= '<td align=center></td>';
 
 		                                }
 		                                else{
-		                                    print '<td></td>';
+		                                     $html.= '<td></td>';
 		                                } 
 		                                    
 		                            }
 		                            else{
-		                                print '<td></td>';
+		                                 $html.= '<td></td>';
 		                            }
 
 		                            $precioUnit=0;              
@@ -544,54 +579,171 @@ class ActionsFactory // extends CommonObject
 		                                }
 		                            }       
 		                            
-		                            print '<td align="right">'.price($pmp).'</td>'; // display else vwap or else latest purchasing price
-		                            print '<td align="right">'.price($pmp*$value['nb']).'</td>'; // display total line
-		                            print '<td align="right">'.price($price).'</td>';
-		                            print '<td align="right">'.price($price*$value['nb']).'</td>';
-		                            print '<td align="right">'.price(($price-$pmp)*$value['nb']).'</td>'; 
-		                            print '<td align="right">'.number_format($pesoTeori,2).'</td>'; //peso teorico= espesor * ancho * largo * factor / 1000000
-		                            print '<td align="right">'.number_format($precioUnit,2).'</td>'; //precio unitario
-		                            print '<td align="right">'.number_format(($precioUnit*$value['nb']),2).'</td>'; //precio total
-		                            print '<td align="center"><input type="checkbox" name="prod_id_chk'.$i.'" value="'.$value['id'].'"></td>';
+		                             $html.= '<td align="right">'.price($pmp).'</td>'; // display else vwap or else latest purchasing price
+		                             $html.= '<td align="right">'.price($pmp*$value['nb']).'</td>'; // display total line
+		                             $html.= '<td align="right">'.price($price).'</td>';
+		                             $html.= '<td align="right">'.price($price*$value['nb']).'</td>';
+		                             $html.= '<td align="right">'.price(($price-$pmp)*$value['nb']).'</td>'; 
+		                             $html.= '<td align="right">'.number_format($pesoTeori,2).'</td>'; //peso teorico= espesor * ancho * largo * factor / 1000000
+		                             $html.= '<td align="right">'.number_format($precioUnit,2).'</td>'; //precio unitario
+		                             $html.= '<td align="right">'.number_format(($precioUnit*$value['nb']),2).'</td>'; //precio total
+		                             $html.= '<td align="center"><input type="checkbox" name="prod_id_chk'.$i.'" value="'.$value['id'].'"></td>';
 		                            
 		                            $mntTot=$mntTot+$price*$value['nb'];
 		                            $pmpTot=$pmpTot+$pmp*$value['nb']; // sub total calculation
 		                            $sumPriUnit+=round($precioUnit,2);
 		                            $sumPriTot+=round(($precioUnit*$value['nb']),2);
 		                            
-		                            print '</tr>';
+		                             $html.= '</tr>';
 
 		                            //var_dump($value);
-		                            //print '<pre>'.$productstatic->ref.'</pre>';
-		                            //print $productstatic->getNomUrl(1).'<br>';
-		                            //print $value[0];  // This contains a tr line.
+		                            // $html.= '<pre>'.$productstatic->ref.'</pre>';
+		                            // $html.= $productstatic->getNomUrl(1).'<br>';
+		                            // $html.= $value[0];  // This contains a tr line.
 		                            $i++;
 		                        }
-		                        print '<tr class="liste_total">';
-		                        print '<td colspan=5 align=right >'.$langs->trans("Total").'</td>';
-		                        print '<td align="right" >'.price($pmpTot).'</td>';
-		                        print '<td ></td>';
-		                        print '<td align="right" >'.price($mntTot).'</td>';
-		                        print '<td align="right" >'.price($mntTot-$pmpTot).'</td>';
-		                        print '<td colspan=3 ></td>';
-		                        print '<td align="center" ><input type="submit" class="button" value="Retirar"></td>';
-		                        //print '<td >'.round($sumPriUnit,2).'</td>';
-		                        //print '<td >'.round($sumPriTot,2).'</td>';
+		                         $html.= '<tr class="liste_total">';
+		                         $html.= '<td colspan=5 align=right >'.$langs->trans("Total").'</td>';
+		                         $html.= '<td align="right" >'.price($pmpTot).'</td>';
+		                         $html.= '<td ></td>';
+		                         $html.= '<td align="right" >'.price($mntTot).'</td>';
+		                         $html.= '<td align="right" >'.price($mntTot-$pmpTot).'</td>';
+		                         $html.= '<td colspan=3 ></td>';
+		                         $html.= '<td align="center" ><input type="submit" class="button" value="Retirar"></td>';
+		                        // $html.= '<td >'.round($sumPriUnit,2).'</td>';
+		                        // $html.= '<td >'.round($sumPriTot,2).'</td>';
 		                        
 		                }else{
-		                    print '<tr >';
-		                        print '<td colspan=13 >Sin Resultados</td>';
-		                    print '</tr>';
+		                     $html.= '<tr >';
+		                         $html.= '<td colspan=13 >Sin Resultados</td>';
+		                     $html.= '</tr>';
 		                }
-		            print '</table>';
-		            print '</form>';   
+		             $html.= '</table>';
+		             $html.= '</form>';   
 	            }
+	            echo $this->formconfirm2("",$label2,$html,"");
+	           
+	            
             }
 		}
 
 
 
 	}
+
+
+	 function formconfirm2($page, $title, $question, $action, $formquestion='', $selectedchoice="", $useajax=1, $height=670, $width=1000)
+    {
+        global $langs,$conf;
+        global $useglobalvars;
+
+        $more='';
+        $formconfirm='';
+        $inputok=array();
+        $inputko=array();
+        
+        // Clean parameters
+        $newselectedchoice=empty($selectedchoice)?"no":$selectedchoice;
+ 
+        
+		// JQUI method dialog is broken with jmobile, we use standard HTML.
+		// Note: When using dol_use_jmobile or no js, you must also check code for button use a GET url with action=xxx and check that you also output the confirm code when action=xxx
+		// See page product/card.php for example
+        if (! empty($conf->dol_use_jmobile)) $useajax=0;
+		if (empty($conf->use_javascript_ajax)) $useajax=0;
+        
+        if ($useajax)
+        {
+            $autoOpen=true;
+            $dialogconfirm='dialog-confirm';
+            $button='';
+            if (! is_numeric($useajax))
+            {
+                $button=$useajax;
+                $useajax=1;
+                $autoOpen=false;
+                $dialogconfirm.='-'.$button;
+            }
+            $pageyes=$page.(preg_match('/\?/',$page)?'&':'?').'action='.$action.'&confirm=yes';
+            $pageno=($useajax == 2 ? $page.(preg_match('/\?/',$page)?'&':'?').'confirm=no':'');
+            // Add input fields into list of fields to read during submit (inputok and inputko)
+            if (is_array($formquestion))
+            {
+                foreach ($formquestion as $key => $input)
+                {
+                	//print "xx ".$key." rr ".is_array($input)."<br>\n";
+                    if (is_array($input) && isset($input['name'])) array_push($inputok,$input['name']);
+                    if (isset($input['inputko']) && $input['inputko'] == 1) array_push($inputko,$input['name']);
+                }
+            }
+			// Show JQuery confirm box. Note that global var $useglobalvars is used inside this template
+            $formconfirm.= '<div id="'.$dialogconfirm.'" title="'.dol_escape_htmltag($title).'" >';
+            if (! empty($more)) {
+            	$formconfirm.= '<div class="confirmquestions">'.$more.'</div>';
+            }
+            $formconfirm.= ($question ? '<div class="confirmmessage"> '.$question . '</div>': '');
+            $formconfirm.= '</div>'."\n";
+
+            
+
+            $formconfirm.= "\n<!-- begin ajax form_confirm page=".$page." -->\n";
+            $formconfirm.= '<script type="text/javascript">'."\n";
+            $formconfirm.= 'jQuery(document).ready(function() {
+            $(function() {
+            	$( "#'.$dialogconfirm.'" ).dialog(
+            	{
+                    autoOpen: '.($autoOpen ? "true" : "false").',';
+ 
+        			$formconfirm.='
+                    resizable: false,
+                    height: "'.$height.'",
+                    width: "'.$width.'",
+                    modal: true,
+                    closeOnEscape: false,
+                    buttons: {
+                        
+                        "Cerrar": function() {
+                        	var options = "";
+                         	var inputko = '.json_encode($inputko).';
+                         	var pageno="'.dol_escape_js(! empty($pageno)?$pageno:'').'";
+                         	if (inputko.length>0) {
+                         		$.each(inputko, function(i, inputname) {
+                         			var more = "";
+                         			if ($("#" + inputname).attr("type") == "checkbox") { more = ":checked"; }
+                         			var inputvalue = $("#" + inputname + more).val();
+                         			if (typeof inputvalue == "undefined") { inputvalue=""; }
+                         			options += "&" + inputname + "=" + inputvalue;
+                         		});
+                         	}
+                         	var urljump=pageno + (pageno.indexOf("?") < 0 ? "?" : "") + options;
+                         	//alert(urljump);
+            				if (pageno.length > 0) { location.href = urljump; }
+                            $(this).dialog("close");
+                        }
+                    }
+                }
+                );
+
+            	var button = "'.$button.'";
+            	if (button.length > 0) {
+                	$( "#" + button ).click(function() {
+                		$("#'.$dialogconfirm.'").dialog("open");
+        			});
+                }
+            });
+            });
+            </script>';
+            $formconfirm.= "<!-- end ajax form_confirm -->\n";
+        }
+
+        return $formconfirm;
+    }
+
+
+
+
+
+
 	function select_dol_products($selected='', $htmlname='prod', $show_empty=0, $exclude='', $disabled=0, $include='', $enableonly='', $force_entity=0, $maxlength=0, $showstatus=0, $morefilter='', $show_every=0, $enableonlytext='', $morecss='', $noactive=0)
 	{
 	

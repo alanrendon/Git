@@ -209,12 +209,7 @@ if (empty($reshook))
                 $object->ref                    = $ref;
                 $object->label                  = GETPOST('label');
 
-                if (empty($object->ref))
-                {
-                    $error++;
-                    $mesg='Incluya una referencia';
-                    setEventMessages($mesg, "", 'errors');
-                }
+                
                 $object->description            = dol_htmlcleanlastbr(GETPOST('desc'));
                 $object->url                    = GETPOST('url');
                 $object->note                   = dol_htmlcleanlastbr(GETPOST('note'));
@@ -515,6 +510,80 @@ $formproduct = new FormProduct($db);
     if ($action == 'create'  && ($user->rights->produit->creer || $user->rights->service->creer))
     {
         //WYSIWYG Editor
+        print '<script type="text/javascript" language="javascript">
+        jQuery(document).ready(function() {
+            $("#ref").select();
+            $("#ref").keydown (function(e) {
+                if (e.which==40) {
+                    $("#label").select();
+                }
+            });  
+            $("#label").keydown (function(e) {
+                if (e.which==38) {
+                    $("#ref").select();
+                }
+                if (e.which==40) {
+                    $("#options_anc").select();
+                }
+            }); 
+            $("#options_anc").keydown (function(e) {
+                if (e.which==38) {
+                    $("#label").select();
+                }
+                if (e.which==40) {
+                    $("#options_lar").select();
+                }
+            });
+            $("#options_lar").keydown (function(e) {
+                if (e.which==38) {
+                    $("#options_anc").select();
+                }
+                if (e.which==40) {
+                    $("#options_total_prod").select();
+                }
+            });
+            $("#options_total_prod").keydown (function(e) {
+                if (e.which==38) {
+                    $("#options_lar").select();
+                }
+                if (e.which==40) {
+                    $("#options_hmcnc").select();
+                }
+            }); 
+
+            $("#options_hmcnc").keydown (function(e) {
+                if (e.which==38) {
+                    $("#options_total_prod").select();
+                }
+                if (e.which==40) {
+                    $("#options_hecnc").select();
+                }
+            }); 
+            $("#options_hecnc").keydown (function(e) {
+                if (e.which==38) {
+                    $("#options_hmcnc").select();
+                }
+                if (e.which==40) {
+                    $("#options_hr").select();
+                }
+                
+            }); 
+            $("#options_hr").keydown (function(e) {
+                if (e.which==38) {
+                    $("#options_hecnc").select();
+                }
+                if (e.which==40) {
+                    $("#crear").select();
+                }
+            }); 
+            $("#crear").keydown (function(e) {
+                if (e.which==38) {
+                    $("#options_hr").select();
+                }
+            }); 
+            
+        });
+        </script>';
 
         require_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
 
@@ -559,7 +628,7 @@ $formproduct = new FormProduct($db);
         print '<tr>';
         $tmpcode='';
         if (! empty($modCodeProduct->code_auto)) $tmpcode=$modCodeProduct->getNextValue($object,$type);
-        print '<td class="fieldrequired" width="20%">'.$langs->trans("Ref").'</td><td colspan="3"><input name="ref" size="32" maxlength="128" value="'.$object->ref.'">';
+        print '<td class="fieldrequired" width="20%">'.$langs->trans("Ref").'</td><td colspan="3"><input id="ref" name="ref" size="32" maxlength="128" value="'.$object->ref.'">';
         if ($refalreadyexists)
         {
             print $langs->trans("RefAlreadyExists");
@@ -568,19 +637,8 @@ $formproduct = new FormProduct($db);
 
         // Label
         print '<tr><td class="fieldrequired">'.$langs->trans("Label").'</td><td colspan="3">
-                <input name="label" size="40" maxlength="255" value="'.$object->label.'">
+                <input id="label" name="label" size="40" maxlength="255" value="'.$object->label.'">
             </td></tr>';
-
-
-        foreach ($extrafields->attribute_label as $key => $value) {
-            if ($key!="total_prod" and $key!="anc" and $key!="lar" ) {
-                unset($extrafields->attribute_label[$key]);
-            }
-        }
-
-
-
-
 
         // Other attributes
         $parameters=array('colspan' => 3);
@@ -592,7 +650,7 @@ $formproduct = new FormProduct($db);
                 <tr>
                     <td>'.$extrafields->attribute_label["anc"].'</td>
                     <td colspan="3">
-                        <input type="text" class="flat" name="options_anc" size="6" value="'.number_format($object->array_options["options_anc"],2).'"> 
+                        <input type="text" class="flat" id="options_anc" name="options_anc" size="6" value="'.number_format($object->array_options["options_anc"],2).'"> 
                     </td>
                 </tr>
             ';
@@ -600,7 +658,7 @@ $formproduct = new FormProduct($db);
                 <tr>
                     <td>'.$extrafields->attribute_label["lar"].'</td>
                     <td colspan="3">
-                        <input type="text" class="flat" name="options_lar" size="6" value="'.number_format($object->array_options["options_lar"],2).'"> 
+                        <input type="text" class="flat" id="options_lar" name="options_lar" size="6" value="'.number_format($object->array_options["options_lar"],2).'"> 
                     </td>
                 </tr>
             ';
@@ -608,7 +666,32 @@ $formproduct = new FormProduct($db);
                <tr>
                     <td>'.$extrafields->attribute_label["total_prod"].'</td>
                     <td colspan="3">
-                        <input type="text" class="flat" name="options_total_prod" size="10" maxlength="10" value="'.$object->array_options["options_total_prod"].'">
+                        <input type="text" class="flat" id="options_total_prod" name="options_total_prod" size="10" maxlength="10" value="'.(empty($object->array_options["options_total_prod"])?0:$object->array_options["options_total_prod"]).'">
+                    </td>
+                </tr>
+            ';
+            print '
+                <tr></tr>
+               <tr>
+                    <td>'.$extrafields->attribute_label["hmcnc"].'</td>
+                    <td colspan="3">
+                        <input type="text" class="flat" id="options_hmcnc" name="options_hmcnc" size="10" maxlength="10" value="'.(empty($object->array_options["options_hmcnc"])?0:$object->array_options["options_hmcnc"]).'">
+                    </td>
+                </tr>
+            ';
+            print '
+               <tr>
+                    <td>'.$extrafields->attribute_label["hecnc"].'</td>
+                    <td colspan="3">
+                        <input type="text" class="flat" id="options_hecnc" name="options_hecnc" size="10" maxlength="10" value="'.(empty($object->array_options["options_hecnc"])?0:$object->array_options["options_hecnc"]).'">
+                    </td>
+                </tr>
+            ';
+            print '
+               <tr>
+                    <td>'.$extrafields->attribute_label["hr"].'</td>
+                    <td colspan="3">
+                        <input type="text" class="flat" id="options_hr" name="options_hr" size="10" maxlength="10" value="'.(empty($object->array_options["options_hr"])?0:$object->array_options["options_hr"]).'">
                     </td>
                 </tr>
             ';
@@ -620,15 +703,13 @@ $formproduct = new FormProduct($db);
 
         print '<br>';
 
-
-
-        print '<br>';
-
+        print '<div class="center"><input id="crear" type="submit" class="button" value="'.$langs->trans("Create").'"></div>';
+        
+        print '</form>';
         dol_fiche_end();
 
-        print '<div class="center"><input type="submit" class="button" value="'.$langs->trans("Create").'"></div>';
 
-        print '</form>';
+ 
     }
 
     if ($object->id > 0)
@@ -636,7 +717,81 @@ $formproduct = new FormProduct($db);
         // Fiche en mode edition
         if ( $action == 'edit'  && ($user->rights->produit->creer || $user->rights->service->creer))
         {
-            //WYSIWYG Editor
+            print '
+            <script type="text/javascript" language="javascript">
+                jQuery(document).ready(function() {
+
+                    $("#ref").select();
+                    $("#ref").keydown (function(e) {
+                        if (e.which==40) {
+                            $("#label").select();
+                        }
+                    });  
+                    $("#label").keydown (function(e) {
+                        if (e.which==38) {
+                            $("#ref").select();
+                        }
+                        if (e.which==40) {
+                            $("#options_anc").select();
+                        }
+                    }); 
+                    $("#options_anc").keydown (function(e) {
+                        if (e.which==38) {
+                            $("#label").select();
+                        }
+                        if (e.which==40) {
+                            $("#options_lar").select();
+                        }
+                    });
+                    $("#options_lar").keydown (function(e) {
+                        if (e.which==38) {
+                            $("#options_anc").select();
+                        }
+                        if (e.which==40) {
+                            $("#options_total_prod").select();
+                        }
+                    });
+                    $("#options_total_prod").keydown (function(e) {
+                        if (e.which==38) {
+                            $("#options_lar").select();
+                        }
+                        if (e.which==40) {
+                            $("#options_hmcnc").select();
+                        }
+                    }); 
+
+                    $("#options_hmcnc").keydown (function(e) {
+                        if (e.which==38) {
+                            $("#options_total_prod").select();
+                        }
+                        if (e.which==40) {
+                            $("#options_hecnc").select();
+                        }
+                    }); 
+                    $("#options_hecnc").keydown (function(e) {
+                        if (e.which==38) {
+                            $("#options_hmcnc").select();
+                        }
+                        if (e.which==40) {
+                            $("#options_hr").select();
+                        }
+                        
+                    }); 
+                    $("#options_hr").keydown (function(e) {
+                        if (e.which==38) {
+                            $("#options_hecnc").select();
+                        }
+                        if (e.which==40) {
+                            $("#edit").select();
+                        }
+                    });
+                    $("#edit").keydown (function(e) {
+                        if (e.which==38) {
+                            $("#options_hr").select();
+                        }
+                    });
+                });
+            </script>';
             require_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
             $titre=$langs->trans("Edición Rápida");
             $picto=($object->type== Product::TYPE_SERVICE?'service':'product');
@@ -656,7 +811,7 @@ $formproduct = new FormProduct($db);
             print '<table class="border allwidth">';
 
             if (! empty($modCodeProduct->code_auto)) $tmpcode=$modCodeProduct->getNextValue($object,$type);
-            print '<td class="fieldrequired" width="20%">'.$langs->trans("Ref").'</td><td colspan="3"><input name="ref" size="32" maxlength="128" value="'.$object->ref.'">';
+            print '<td class="fieldrequired" width="20%">'.$langs->trans("Ref").'</td><td colspan="3"><input id="ref" name="ref" size="32" maxlength="128" value="'.$object->ref.'">';
             if ($refalreadyexists)
             {
                 print $langs->trans("RefAlreadyExists");
@@ -665,15 +820,11 @@ $formproduct = new FormProduct($db);
 
             // Label
             print '<tr><td class="fieldrequired">'.$langs->trans("Label").'</td><td colspan="3">
-                    <input name="label" size="40" maxlength="255" value="'.$object->label.'">
+                    <input id="label" name="label" size="40" maxlength="255" value="'.$object->label.'">
                 </td></tr>';
 
 
-            foreach ($extrafields->attribute_label as $key => $value) {
-                if ($key!="total_prod" and $key!="anc" and $key!="lar" ) {
-                    unset($extrafields->attribute_label[$key]);
-                }
-            }
+
 
             // Other attributes
             $parameters=array('colspan' => 3);
@@ -689,21 +840,46 @@ $formproduct = new FormProduct($db);
                     <tr>
                         <td>'.$extrafields->attribute_label["anc"].'</td>
                         <td colspan="3">
-                            <input type="text" class="flat" name="options_anc" size="6" value="'.number_format($object->array_options["options_anc"],2).'"> 
+                            <input type="text" class="flat" id="options_anc" name="options_anc" size="6" value="'.number_format($object->array_options["options_anc"],2).'"> 
                         </td>
                     </tr>
        
                     <tr>
                         <td>'.$extrafields->attribute_label["lar"].'</td>
                         <td colspan="3">
-                            <input type="text" class="flat" name="options_lar" size="6" value="'.number_format($object->array_options["options_lar"],2).'"> 
+                            <input type="text" class="flat" id="options_lar" name="options_lar" size="6" value="'.number_format($object->array_options["options_lar"],2).'"> 
                         </td>
                     </tr>
         
                    <tr>
                         <td>'.$extrafields->attribute_label["total_prod"].'</td>
                         <td colspan="3">
-                            <input type="text" class="flat" name="options_total_prod" size="10" maxlength="10" value="'.$object->array_options["options_total_prod"].'">
+                            <input type="text" class="flat" id="options_total_prod" name="options_total_prod" size="10" maxlength="10" value="'.(empty($object->array_options["options_total_prod"])?0:$object->array_options["options_total_prod"]).'">
+                        </td>
+                    </tr>
+                ';
+                print '
+                <tr></tr>
+                   <tr>
+                        <td>'.$extrafields->attribute_label["hmcnc"].'</td>
+                        <td colspan="3">
+                            <input type="text" class="flat" id="options_hmcnc" name="options_hmcnc" size="10" maxlength="10" value="'.(empty($object->array_options["options_hmcnc"])?0:number_format($object->array_options["options_hmcnc"],2)).'">
+                        </td>
+                    </tr>
+                ';
+                print '
+                   <tr>
+                        <td>'.$extrafields->attribute_label["hecnc"].'</td>
+                        <td colspan="3">
+                            <input type="text" class="flat" id="options_hecnc" name="options_hecnc" size="10" maxlength="10" value="'.(empty($object->array_options["options_hecnc"])?0:number_format($object->array_options["options_hecnc"],2)).'">
+                        </td>
+                    </tr>
+                ';
+                print '
+                   <tr>
+                        <td>'.$extrafields->attribute_label["hr"].'</td>
+                        <td colspan="3">
+                            <input type="text" class="flat" id="options_hr" name="options_hr" size="10" maxlength="10" value="'.(empty($object->array_options["options_hr"])?0:number_format($object->array_options["options_hr"],2)).'">
                         </td>
                     </tr>
                 ';
@@ -715,28 +891,11 @@ $formproduct = new FormProduct($db);
             
             //}
             print '<div class="center"><br>';
-            print '<input type="submit" class="button" value="'.$langs->trans("Save").'">';
+            print '<input type="submit" id="edit" class="button" value="'.$langs->trans("Save").'">';
             print '</div>';
             dol_fiche_end();
             print '</form>';
-            if ($option_anc>0 && $options_lar>0 && $options_total_prod>0 && !empty($object->ref) && !empty($object->label) ) {
-                if ($object->status_buy==0 &&  $action=="edit" ) {
-                    
-                    print_fiche_titre("Face 2 - Tratamiento",'','');
-                    dol_fiche_head();
-
-                        print '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
-                            print '<input type="hidden" name="action" value="add_line">';
-                            print '<input type="hidden" name="id" value="'.$id.'">';
-                            print '<b>Producto:</b>'.select_dol_products(GETPOST("id_line"), 'id_line',1," WHERE fk_product_type=1 and rowid<>".$object->id." ");
-                            //print '<br><b>Cantidad: </b><input name="cantidad" size="10"  value="'.GETPOST("cantidad").'">';
-                            print '<br><br><input type="submit" class="button" value="Cargar">';
-                        print '</form>';    
-                    dol_fiche_end();
-                }
-
-
-
+            if ($option_anc>0 && $options_lar>0 && $options_total_prod>0 && !empty($object->ref) && !empty($object->label)){
 
                 $prodsfather = $factory->getFather(); //Parent Products
 
@@ -749,14 +908,14 @@ $formproduct = new FormProduct($db);
                 $prods_arbo = $factory->get_arbo_each_prod();
                 $ban_trat=0;
                 foreach ($prods_arbo as $key => $value) {
-                    if ($value["type"]) {
+                    if ($value["type"]==0) {
                         $ban_trat=1;
                     }
                 }
 
-                if ($object->status_buy==0 && $action=="edit" && $ban_trat==1 ) {
+                if ($object->status_buy==0 && $action=="edit"  ) {
                     
-                    print_fiche_titre("Face 3 - Materia Prima",'','');
+                    print_fiche_titre("Face 2 - Materia Prima",'','');
                     dol_fiche_head();
 
                         print '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
@@ -765,6 +924,20 @@ $formproduct = new FormProduct($db);
 
                             print '<b>Producto:</b>'.select_dol_products(GETPOST("id_line"), 'id_line',1," WHERE fk_product_type<>1 and rowid<>".$object->id." ");
                             //print '<br><b>Cantidad: </b><input name="cantidad" size="10"  value="'.GETPOST("cantidad").'">';
+                            print '<br><br><input type="submit" class="button" value="Cargar">';
+                        print '</form>';    
+                    dol_fiche_end();
+                }
+
+                if ($object->status_buy==0 &&  $action=="edit" && $ban_trat==1 ) {
+                    
+                    print_fiche_titre("Face 3 - Tratamiento",'','');
+                    dol_fiche_head();
+
+                        print '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
+                            print '<input type="hidden" name="action" value="add_line">';
+                            print '<input type="hidden" name="id" value="'.$id.'">';
+                            print '<b>Producto:</b>'.select_dol_products(GETPOST("id_line"), 'id_line',1," WHERE fk_product_type=1 and rowid<>".$object->id." ");
                             print '<br><br><input type="submit" class="button" value="Cargar">';
                         print '</form>';    
                     dol_fiche_end();

@@ -111,6 +111,9 @@ $empresa_entity = $user_empresa->get_multiempresa(ENTITY);
                                         <li><a href="<?php echo $url[4].'ant_prov_pendientes.php'?>">Ant. Prov. Pendientes</a></li>
                                         <li><a href="<?php echo $url[4].'transfert_pendientes.php'?>">Movimientos Bancarios Pendientes</a></li>
                                         <li><a href="<?php echo $url[4].'commande_pedido.php'?>">Pedidos a proveedor</a></li>
+                                        <?php if ($divisa->check_if_active()): ?> 
+                                            <li><a href="<?php echo $url[4].'perdida_ganancia.php'?>">Pérdida/Ganancia</a></li> 
+                                        <?php endif ?> 
                                         
                                         <li><a href="<?php echo $url[4].'stock_pendientes.php'?>">Movimientos de Stock Pendientes</a></li>
                                         <li><a href="<?php echo $url[4].'gastos_pendientes.php'?>">Gastos Pendientes</a></li>
