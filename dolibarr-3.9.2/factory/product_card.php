@@ -82,6 +82,13 @@ $productid=0;
 if ($id || $ref)
 {
     $result = $object->fetch($id,$ref);
+    $sql="SELECT a.tratamiento FROM llx_product as a WHERE a.rowid=".$id;
+    $res=$db->query($sql);
+    if ($res) {
+        $res=$db->fetch_object($res);
+        $object->tratamiento=$res->tratamiento;
+    }
+    
     $productid=$object->id;
     $id=$object->id;
     $factory->id =$id;
@@ -127,6 +134,14 @@ if (empty($reshook))
     if ($action == 'add' && ($user->rights->produit->creer || $user->rights->service->creer))
     {
         $error=0;
+        $object->tratamiento           = GETPOST('tratamiento');
+
+        if ($object->tratamiento=="on") {
+            $object->tratamiento=1;
+        }else{
+            $object->tratamiento=0;
+        }
+
 
         if (! GETPOST('label'))
         {
@@ -147,8 +162,9 @@ if (empty($reshook))
 
             $object->ref                   = $ref;
             $object->label                 = GETPOST('label');
+            
 
-            $object->status                  = 1;
+            $object->status                = 1;
             $object->status_buy            = 0;
 
             // Set barcode_type_xxx from barcode_type id
@@ -176,6 +192,11 @@ if (empty($reshook))
             if ($id > 0)
             {
                 // Category association
+
+                $sql="UPDATE llx_product as a SET a.tratamiento=".$object->tratamiento." WHERE a.rowid=".$id;
+                $db->query($sql);
+
+
                 $categories = GETPOST('categories');
                 $object->setCategories($categories);
 
@@ -209,7 +230,12 @@ if (empty($reshook))
                 $object->ref                    = $ref;
                 $object->label                  = GETPOST('label');
 
-                
+                $object->tratamiento           = GETPOST('tratamiento');
+                if ($object->tratamiento=="on") {
+                    $object->tratamiento=1;
+                }else{
+                    $object->tratamiento=0;
+                }
                 $object->description            = dol_htmlcleanlastbr(GETPOST('desc'));
                 $object->url                    = GETPOST('url');
                 $object->note                   = dol_htmlcleanlastbr(GETPOST('note'));
@@ -273,6 +299,8 @@ if (empty($reshook))
                 {
                     if ($object->update($object->id, $user) > 0)
                     {
+                        $sql="UPDATE llx_product as a SET a.tratamiento=".$object->tratamiento." WHERE a.rowid=".$object->id;
+                        $db->query($sql);
                         // Category association
                         $categories = GETPOST('categories');
                         $object->setCategories($categories);
@@ -300,6 +328,11 @@ if (empty($reshook))
     if ($action=='add_line') {
 
         $id_line=GETPOST("id_line");
+        if ($_REQUEST["id_line2"]>0) {
+            $id_line=GETPOST("id_line2");
+        }
+
+
         $cantidad=1;
 
         if ($id_line>0) {
@@ -697,6 +730,20 @@ $formproduct = new FormProduct($db);
             ';
         }
 
+        $cad="";
+        if ($object->tratamiento==1) {
+            $cad="checked";
+        }
+
+        print '
+           <tr>
+                <td>Solo Tratamiento</td>
+                <td colspan="3">
+                    <input type="checkbox" name="tratamiento" '.$cad.'>
+                </td>
+            </tr>
+        ';
+
 
 
         print '</table>';
@@ -822,10 +869,6 @@ $formproduct = new FormProduct($db);
             print '<tr><td class="fieldrequired">'.$langs->trans("Label").'</td><td colspan="3">
                     <input id="label" name="label" size="40" maxlength="255" value="'.$object->label.'">
                 </td></tr>';
-
-
-
-
             // Other attributes
             $parameters=array('colspan' => 3);
             $reshook=$hookmanager->executeHooks('formObjectOptions',$parameters,$object,$action);    // Note that $action and $object may have been modified by hook
@@ -887,6 +930,19 @@ $formproduct = new FormProduct($db);
                 $options_lar=$object->array_options["options_lar"];
                 $options_total_prod=$object->array_options["options_total_prod"];
             }
+            $cad="";
+            if ($object->tratamiento==1) {
+                $cad="checked";
+            }
+
+            print '
+               <tr>
+                    <td>Solo Tratamiento</td>
+                    <td colspan="3">
+                        <input type="checkbox" name="tratamiento" '.$cad.'>
+                    </td>
+                </tr>
+            ';
             print '</table>';
             
             //}
@@ -913,7 +969,7 @@ $formproduct = new FormProduct($db);
                     }
                 }
 
-                if ($object->status_buy==0 && $action=="edit"  ) {
+                if ($object->status_buy==0 && $action=="edit" && $object->tratamiento==0 ) {
                     
                     print_fiche_titre("Face 2 - Materia Prima",'','');
                     dol_fiche_head();
@@ -929,7 +985,7 @@ $formproduct = new FormProduct($db);
                     dol_fiche_end();
                 }
 
-                if ($object->status_buy==0 &&  $action=="edit" && $ban_trat==1 ) {
+                if ($object->status_buy==0 &&  $action=="edit" && ($ban_trat==1 || $object->tratamiento==1) ) {
                     
                     print_fiche_titre("Face 3 - Tratamiento",'','');
                     dol_fiche_head();
@@ -937,7 +993,7 @@ $formproduct = new FormProduct($db);
                         print '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
                             print '<input type="hidden" name="action" value="add_line">';
                             print '<input type="hidden" name="id" value="'.$id.'">';
-                            print '<b>Producto:</b>'.select_dol_products(GETPOST("id_line"), 'id_line',1," WHERE fk_product_type=1 and rowid<>".$object->id." ");
+                            print '<b>Producto:</b>'.select_dol_products(GETPOST("id_line2"), 'id_line2',1," WHERE fk_product_type=1 and rowid<>".$object->id." ");
                             print '<br><br><input type="submit" class="button" value="Cargar">';
                         print '</form>';    
                     dol_fiche_end();

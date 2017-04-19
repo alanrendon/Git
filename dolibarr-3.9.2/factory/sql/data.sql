@@ -24,6 +24,7 @@
 -- entrepot contact
 --
 ALTER TABLE `llx_propal` ADD COLUMN `fk_status_factory` int(11) default 0;
+ALTER TABLE `llx_product` ADD COLUMN `tratamiento` tinyint(11) default 0;
 
 insert into llx_c_type_contact(rowid, element, source, code, libelle, active ) values (230, 'stock', 'internal', 'WAREHOUSERESP',  'Responsable Entrepot', 1);
 insert into llx_c_type_contact(rowid, element, source, code, libelle, active ) values (231, 'stock', 'internal', 'FACTORYRESP', 'Responsable Production', 1);

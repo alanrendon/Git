@@ -1373,7 +1373,7 @@ class Factory extends CommonObject
 		$sql.= ", ".MAIN_DB_PREFIX."product_factory as pf";
 		$sql.= " WHERE p.rowid = pf.fk_product_children";
 		$sql.= " AND pf.fk_product_father = ".$fk_parent;
-		
+
 		$res  = $this->db->query($sql);
 		if ($res)
 		{
@@ -1390,7 +1390,9 @@ class Factory extends CommonObject
 											7=>$rec['description'],
 											8=>array()			// pour stocker les enfants sans fiche le basard
 										);
+				
 				$listofchilds=$this->getChildsArbo($rec['id']);
+	
 				foreach($listofchilds as $keyChild => $valueChild)
 					$prods[$rec['rowid']][8] = $valueChild;  // on stock les enfants dans le 6e tableau
 			}

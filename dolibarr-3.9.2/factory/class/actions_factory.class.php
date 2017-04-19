@@ -212,7 +212,7 @@ class ActionsFactory // extends CommonObject
 					$factory = new Factory($db);
 	            	$factory->id =$obj->rowid;
 	            	$factory->get_sousproduits_arbo();
-	            	$pr = $factory->get_arbo_each_prod();
+	            	//$pr = $factory->get_arbo_each_prod();
 
 	            	foreach ($pr as $key => $value) {
 	            		if ($value["type"]==0) {
@@ -266,6 +266,13 @@ class ActionsFactory // extends CommonObject
 			    $langs->load("products");
 				$prod = new Product($db);
 				$prod->fetch($_REQUEST["id_obj"]);
+				$sql="SELECT a.tratamiento FROM llx_product as a WHERE a.rowid=".$_REQUEST["id_obj"];
+
+    			$res=$db->query($sql);
+				if ($res) {
+			        $res=$db->fetch_object($res);
+			        $prod->tratamiento=$res->tratamiento;
+			    }
 
             	require_once DOL_DOCUMENT_ROOT."/factory/class/factory.class.php";
             	$factory = new Factory($db);
@@ -368,6 +375,19 @@ class ActionsFactory // extends CommonObject
 		                $option_anc=$prod->array_options["options_anc"];
 		                $options_lar=$prod->array_options["options_lar"];
 		            }
+		             $cad="";
+			        if ($prod->tratamiento==1) {
+			            $cad="checked";
+			        }
+
+			        $html.= '
+			           <tr>
+			                <td>Solo Tratamiento</td>
+			                <td colspan="3">
+			                    <input type="checkbox" name="tratamiento" '.$cad.'>
+			                </td>
+			            </tr>
+			        ';
 		            $html.= '</table>';
 		            $html.= '<div class="center"><br>';
 		            $html.= '<input type="submit" class="button" value="'.$langs->trans("Save").'">';
@@ -393,7 +413,7 @@ class ActionsFactory // extends CommonObject
 	                    }
 	                }
 	                $html.= "<br>";
-	                if ($object->status_buy==0  ) {
+	                if ($prod->status_buy==0 && $prod->tratamiento==0 ) {
 	                    
 	                    $html.=load_fiche_titre("Face 2 - Materia Prima",'','');
 	                    $html.=dol_get_fiche_head();
@@ -412,7 +432,7 @@ class ActionsFactory // extends CommonObject
 	                }
 
 	                echo "<br>";
-	                if ($prod->status_buy==0 && $ban_trat==1  ) {
+	                if ($prod->status_buy==0 && ($ban_trat==1 || $prod->tratamiento==1) ) {
 	                    
 	                    $html.=load_fiche_titre("Face 3 - Tratamiento",'','');
 	                 	$html.=dol_get_fiche_head();
@@ -423,7 +443,7 @@ class ActionsFactory // extends CommonObject
 							$html.= '<input type="hidden" name="cargar_clave" value="'.$_REQUEST["cargar_clave"].'">';
 							$html.= '<input type="hidden" name="id_obj" value="'.$prod->id.'">';
 
-                            $html.= '<b>Producto:</b>'.$this->select_dol_products(GETPOST("id_line"), 'id_line',1," WHERE fk_product_type=1 and rowid<>".$prod->id." ");
+                            $html.= '<b>Producto:</b>'.$this->select_dol_products(GETPOST("id_line2"), 'id_line2',1," WHERE fk_product_type=1 and rowid<>".$prod->id." ");
                             //print '<br><b>Cantidad: </b><input name="cantidad" size="10"  value="'.GETPOST("cantidad").'">';
                             $html.= '<br><br><input type="submit" class="button" value="Cargar">';
                         $html.= '</form>';   
@@ -922,7 +942,12 @@ class ActionsFactory // extends CommonObject
 	            	$object_2->fetch($id_obj);
 	            	$object_2->oldcopy= clone $object_2;
 	                $object_2->ref                    = GETPOST("ref2");
-
+	                $object_2->tratamiento            = GETPOST('tratamiento');
+	                if ($object_2->tratamiento=="on") {
+	                    $object_2->tratamiento=1;
+	                }else{
+	                    $object_2->tratamiento=0;
+	                }
 	                $object_2->label                  = GETPOST('label');
 	                $object_2->description            = dol_htmlcleanlastbr(GETPOST('desc'));
 	                $object_2->url                    = GETPOST('url');
@@ -1000,7 +1025,8 @@ class ActionsFactory // extends CommonObject
 	                {
 	                    if ($object_2->update($id_obj, $user) > 0)
 	                    {
-	                    	
+	                    	$sql="UPDATE llx_product as a SET a.tratamiento=".$object_2->tratamiento." WHERE a.rowid=".$id_obj;
+                        $db->query($sql);
 	                        setEventMessages("Elemento Actualizado", "");
 	                        header("Location: ".$_SERVER["PHP_SELF"].'?id='.$id."&select_clave=".$select_clave."&cargar_clave=".$cargar_clave."&id_obj=".$id_obj);
 	                    	exit;
@@ -1014,6 +1040,9 @@ class ActionsFactory // extends CommonObject
 			require_once DOL_DOCUMENT_ROOT.'/product/class/product.class.php';
 			require_once DOL_DOCUMENT_ROOT."/factory/class/factory.class.php";
 	        $id_line=GETPOST("id_line");
+	        if ($_REQUEST["id_line2"]>0) {
+	            $id_line=GETPOST("id_line2");
+	        }
 	        $id_obj=GETPOST("id_obj");
 	        $id=GETPOST("id");
 	        $select_clave=GETPOST("select_clave");
