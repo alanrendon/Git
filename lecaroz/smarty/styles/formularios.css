@@ -1,0 +1,210 @@
+.formulario {}
+
+.formulario input
+{
+	font: 10pt Arial, Helvetica, sans-serif;
+	border-top: 2px solid transparent;
+	border-bottom: 2px solid transparent;
+	border-left: none;
+	border-right: none;
+	background-color: transparent;
+	color:#000;
+}
+
+.formulario input.over
+{
+	border-top: 2px solid gray;
+	border-bottom: 2px solid gray;
+}
+
+.formulario input.highlight
+{
+	border-top: 2px solid #b22222;
+	border-bottom: 2px solid #b22222;
+	background-color: white;
+}
+
+.formulario select
+{
+	font: 10pt Arial, Helvetica, sans-serif;
+	border-top: 2px solid transparent;
+	border-bottom: 2px solid transparent;
+	border-left: none;
+	border-right: none;
+	background-color: transparent;
+}
+
+.formulario select.over
+{
+	border-top: 2px solid gray;
+	border-bottom: 2px solid gray;
+}
+
+.formulario select.highlight
+{
+	border-top: 2px solid #b22222;
+	border-bottom: 2px solid #b22222;
+	background-color: white;
+}
+
+.formulario textarea
+{
+	font: 10pt Arial, Helvetica, sans-serif;
+	border-top: 2px solid transparent;
+	border-bottom: 2px solid transparent;
+	border-left: none;
+	border-right: none;
+	background-color: transparent;
+}
+
+.formulario textarea.over
+{
+	border-top: 2px solid gray;
+	border-bottom: 2px solid gray;
+}
+
+.formulario textarea.highlight
+{
+	border-top: 2px solid #b22222;
+	border-bottom: 2px solid #b22222;
+	background-color: white;
+}
+
+.formulario input.boton
+{
+	border-top: 2px solid gray;
+	border-bottom: 2px solid gray;
+	border-left: none;
+	border-right: none;
+	background-color: transparent;
+}
+
+.formulario input.checkbox
+{
+	border: none;
+}
+
+.formulario input.boton_over
+{
+	border-top: 2px solid #b22222;
+	border-bottom: 2px solid #b22222;
+	background-color: white;
+}
+
+.formulario input.cap {}
+.formulario input.readOnly {}
+.formulario input.disabled {}
+.formulario textarea.cap {}
+
+.formulario input.toText {}
+.formulario input.toNumber {}
+.formulario input.toDate {}
+.formulario input.toInterval {}
+.formulario input.toInt {}
+.formulario input.toFloat {}
+.formulario input.toPosInt {}
+.formulario input.toPosFloat {}
+.formulario input.toColorInt {}
+.formulario input.toColorFloat {}
+.formulario input.toUpper {}
+.formulario input.toLower {}
+.formulario input.clean {}
+.formulario input.onlyText {}
+.formulario input.onlyLetters {}
+.formulario input.onlyNumbers {}
+
+.formulario input.numFormat {}
+.formulario input.numFormat1 {}
+.formulario input.numFormat2 {}
+.formulario input.numFormat3 {}
+.formulario input.numFormat4 {}
+.formulario input.numFormat5 {}
+.formulario input.numFormat6 {}
+.formulario input.numFormat7 {}
+.formulario input.numFormat8 {}
+.formulario input.numFormat9 {}
+.formulario input.numFormat10 {}
+
+.formulario input.numPosFormat {}
+.formulario input.numPosFormat1 {}
+.formulario input.numPosFormat2 {}
+.formulario input.numPosFormat3 {}
+.formulario input.numPosFormat4 {}
+.formulario input.numPosFormat5 {}
+.formulario input.numPosFormat6 {}
+.formulario input.numPosFormat7 {}
+.formulario input.numPosFormat8 {}
+.formulario input.numPosFormat9 {}
+.formulario input.numPosFormat10 {}
+
+.formulario input.numColorFormat {}
+.formulario input.numColorFormat1 {}
+.formulario input.numColorFormat2 {}
+.formulario input.numColorFormat3 {}
+.formulario input.numColorFormat4 {}
+.formulario input.numColorFormat5 {}
+.formulario input.numColorFormat6 {}
+.formulario input.numColorFormat7 {}
+.formulario input.numColorFormat8 {}
+.formulario input.numColorFormat9 {}
+.formulario input.numColorFormat10 {}
+
+.formulario input.phoneNumber {}
+
+.formulario input.alignLeft {
+	text-align: left;
+}
+.formulario input.alignRight {
+	text-align: right;
+}
+.formulario input.alignCenter {
+	text-align: center;
+}
+
+.formulario input.bold {
+	font-weight: bold;
+}
+
+.formulario input.fontSize8pt {
+	font-size: 8pt;
+}
+
+.formulario input.fontSize10pt {
+	font-size: 10pt;
+}
+
+.formulario input.fontSize12pt {
+	font-size: 12pt;
+}
+
+.formulario input.fontSize14pt {
+	font-size: 14pt;
+}
+
+.formulario input.Red {
+	color: #C00;
+}
+
+.formulario input.Blue {
+	color: #00C;
+}
+
+.formulario input.Green {
+	color: #060;
+}
+
+.boton_no_form
+{
+	border-top: 2px solid gray;
+	border-bottom: 2px solid gray;
+	border-left: none;
+	border-right: none;
+	background-color: transparent;
+}
+
+.boton_no_form_over
+{
+	border-top: 2px solid #b22222;
+	border-bottom: 2px solid #b22222;
+	background-color: white;
+}

@@ -1,0 +1,38 @@
+========== Description Part Begin ==========
+Description = 
+LastUpdateTime = 37376.476273148
+PreviewPath = 
+ProgID = PageletServer.DynamicMenu
+Title = Blue
+Version = 4.00
+========== Description Part End ==========
+========== Parameter Part Begin ==========
+CrossFrame = 1;0;0;0;mainFrame;1;D:\\Sitios\\Lecaroz\\menus\\
+MenuBody0 = 7;0;0;2;0;0;0;0;0;0;0;0;0;90;1;0;0;16777215;16777215;16777215;16777215;10040064;1;;3
+MenuBody1 = 3;1;0;3;20;0;0;4;0;3;0;0;0;60;1;1;1;12036211;12036211;12036211;12036211;16777215;0;;3
+MenuBody2 = 5;1;0;3;20;0;0;4;0;3;0;0;0;60;1;1;1;12036211;12036211;12036211;12036211;16777215;0;;3
+MenuBody3 = 2;1;0;3;20;0;0;4;0;3;0;0;0;60;1;1;1;12036211;12036211;12036211;12036211;16777215;0;;3
+MenuBody4 = 2;1;0;3;20;0;0;4;0;3;0;0;0;60;1;1;1;12036211;12036211;12036211;12036211;16777215;0;;3
+MenuItem0_0 = 2;2;;;0;Catalogos  ;0;0;1;;;_self;;1;12036211;13880499;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\bullet1.gif;D:\\Sitios\\Lecaroz\\menus\\bullet2.gif;16;16;0;;;0;0;0;;;0;0;0;Arial;Arial;12;12;0;0;16777215;0;1;1;0;0;0;0;0;0;0;0;
+MenuItem0_1 = 0;0;;;0;1;13421772;0;;;-1;-1;0
+MenuItem0_2 = 2;2;;;0;Rentas ;0;0;1;;;_self;;1;12036211;13880499;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\bullet1.gif;D:\\Sitios\\Lecaroz\\menus\\bullet2.gif;16;16;0;;;0;0;0;;;0;0;0;Arial;Arial;12;12;0;0;16777215;0;1;1;0;0;0;0;0;0;0;0;
+MenuItem0_3 = 0;0;;;0;1;13421772;0;;;-1;-1;0
+MenuItem0_4 = 2;2;;;0;Cartas  ;0;0;1;;;;;1;12036211;13880499;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\bullet1.gif;D:\\Sitios\\Lecaroz\\menus\\bullet2.gif;16;16;0;;;0;0;0;;;0;0;0;Arial;Arial;12;12;0;0;16777215;0;1;1;0;0;0;0;0;0;0;0;
+MenuItem0_5 = 0;0;;;0;1;13421772;0;;;-1;-1;0
+MenuItem0_6 = 2;2;;;0;Arrendamientos  ;0;0;1;;;_self;;1;12036211;13880499;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\bullet1.gif;D:\\Sitios\\Lecaroz\\menus\\bullet2.gif;16;16;0;;;0;0;0;;;0;0;0;Arial;Arial;12;12;0;0;16777215;0;1;1;0;0;0;0;0;0;0;0;
+MenuItem1_0 = 0;1;;;0;Arrendadores;0;0;1;;CatalogoArrendadores.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\search.gif;D:\\Sitios\\Lecaroz\\menus\\search.gif;16;16;0;;;-1;-1;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+MenuItem1_1 = 0;1;;;0;Locales;0;0;1;;CatalogoLocales.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\search.gif;D:\\Sitios\\Lecaroz\\menus\\search.gif;-1;-1;0;;;-1;-1;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+MenuItem1_2 = 0;1;;;0;Arrendatarios;0;0;1;;CatalogoArrendatarios.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\search.gif;D:\\Sitios\\Lecaroz\\menus\\search.gif;-1;-1;0;;;-1;-1;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+MenuItem2_0 = 0;1;;;0;Recibos automáticos;0;0;1;;RentasFacturasAutomatico.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\insert2.gif;D:\\Sitios\\Lecaroz\\menus\\insert2.gif;16;16;0;;;0;0;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+MenuItem2_1 = 0;1;;;0;Recibo manual;0;0;1;;RentasFacturasManual.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\insert.gif;D:\\Sitios\\Lecaroz\\menus\\insert.gif;16;16;0;;;0;0;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+MenuItem2_2 = 0;1;;;0;Consulta de recibos;0;0;1;;RentasConsulta.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\search.gif;D:\\Sitios\\Lecaroz\\menus\\search.gif;16;16;0;;;0;0;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+MenuItem2_3 = 0;1;;;0;Rentas pagadas;0;0;1;;RentasPagadas.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\search.gif;D:\\Sitios\\Lecaroz\\menus\\search.gif;16;16;0;;;0;0;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+MenuItem2_4 = 1;1;;;0;Contratos de arrendamiento vencidos;0;0;1;;RentasArrendatariosVencimiento.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;D:\\Sitios\\Lecaroz\\menus\\search.gif;D:\\Sitios\\Lecaroz\\menus\\search.gif;16;16;0;;;0;0;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+MenuItem3_0 = 0;1;;;0;Escribir Carta;0;0;1;;./ban_gen_car.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;;;-1;-1;0;;;-1;-1;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+MenuItem3_1 = 0;1;;;0;Escribir Memo;0;0;1;;./ban_gen_mem.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;;;-1;-1;0;;;-1;-1;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+MenuItem4_0 = 0;1;;;0;Catálogo de arrendamientos;0;0;1;;ArrendamientosCatalogo.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;;;-1;-1;0;;;-1;-1;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+MenuItem4_1 = 0;1;;;0;Arrendamientos vencidos;0;0;1;;ArrendamientosVencidos.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;;;-1;-1;0;;;-1;-1;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+Scrolling0 = 0;16252927;1;14073525;1;;;3;3;0;1;1;16252927;16252927;16252927;16252927;1;0;0;0;0;C:\\Archivos de programa\\SourceTec\\Sothink DHTMLMenu\\Resource\\left_disabled.gif;C:\\Archivos de programa\\SourceTec\\Sothink DHTMLMenu\\Resource\\left_enabled.gif;-1;-1;0;C:\\Archivos de programa\\SourceTec\\Sothink DHTMLMenu\\Resource\\right_disabled.gif;C:\\Archivos de programa\\SourceTec\\Sothink DHTMLMenu\\Resource\\right_enabled.gif;-1;-1;0
+Scrolling1 = 0;16252927;1;14073525;1;;;3;3;0;1;1;16252927;16252927;16252927;16252927;1;0;0;0;0;C:\\Archivos de programa\\SourceTec\\Sothink DHTMLMenu\\Resource\\up_disabled.gif;C:\\Archivos de programa\\SourceTec\\Sothink DHTMLMenu\\Resource\\up_enabled.gif;-1;-1;0;C:\\Archivos de programa\\SourceTec\\Sothink DHTMLMenu\\Resource\\down_disabled.gif;C:\\Archivos de programa\\SourceTec\\Sothink DHTMLMenu\\Resource\\down_enabled.gif;-1;-1;0
+TopMenuBody = 2;430;tubtehr;0;1;1;0;0;0;0;0;0;0;./menus;1;0;0;;1;0;100;0;./menus;67108896
+========== Parameter Part End ==========

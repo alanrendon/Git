@@ -1,0 +1,527 @@
+Install Begin: Tue Jun 28 18:46:47 GMT 2005
+Install End:   Tue Jun 28 18:46:57 GMT 2005
+
+Created with Zero G's InstallAnywhere 5.0.4 Enterprise Build 1615
+
+
+Summary
+-------
+
+Installation: Successful with warnings.
+
+151 SUCCESSES
+1 WARNINGS
+0 NONFATAL ERRORS
+0 FATAL ERRORS
+
+Action Notes:
+
+None.
+
+Install Log Detail:
+
+Check Disk Space:         C:\Archivos de programa\JTwainSDK
+                          Status: SUCCESSFUL
+                          Additional Notes: NOTE - Required Disk Space: 5,515,781; Free Disk Space: 32,626,057,216
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\UninstallerData\
+                          Status: SUCCESSFUL
+
+Install Uninstaller:      JTwain SDK Version 8.2 (Install All Uninstaller Components)
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\UninstallerData\Uninstall JTwain SDK Version 8.2.exe
+                          Status: SUCCESSFUL
+
+
+Install File:             C:\Archivos de programa\JTwainSDK\UninstallerData\Uninstall JTwain SDK Version 8.2.lax
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\UninstallerData\resource\
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\UninstallerData\resource\iawin32.dll
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\UninstallerData\resource\remove.exe
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: DisplayName
+                          Value Data: JTwain SDK
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: UninstallString
+                          Value Data: "C:\Archivos de programa\JTwainSDK\UninstallerData\Uninstall JTwain SDK Version 8.2.exe"
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: Publisher
+                          Value Data: LAB Asprise!
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: URLInfoAbout
+                          Value Data: http://www.asprise.com
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: URLUpdateInfo
+                          Value Data: http://www.asprise.com/product/jtwain
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: Contact
+                          Value Data: info@asprise.com
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: ProductID
+                          Value Data: dccc6a87-1ec9-11b2-b4cc-ca03d04cb157
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: InstallLocation
+                          Value Data: C:\Archivos de programa\JTwainSDK
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: InstallDate
+                          Value Data: Tue Jun 28 18:46:50 GMT 2005
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: HelpLink
+                          Value Data: http://www.asprise.com/product/jtwain/suport.php
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: DisplayVersion
+                          Value Data: 8.2.0.0
+                          Status: SUCCESSFUL
+
+Make Registry Entry:      Key: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\JTwain SDK
+                          Value Name: Comments
+                          Value Data: Acquiring images from any kinds of digital cameras, scanners with Java!
+
+With JTwain, you can access, control any kinds of digital cameras and scanners from Java. Image acquisition has been made extremely easy by this JTwain package. 
+
+                          Status: SUCCESSFUL
+
+Install Uninstaller:      JTwain SDK Version 8.2 (Install All Uninstaller Components)
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\applet.htm
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\AspriseJTwain.dll
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\demo-src.jar
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\demo.jar
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\DevelopersGuide.pdf
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\allclasses-frame.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\allclasses-noframe.html
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\com\
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\com\asprise\
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\InvalidStateException.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\Source.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\package-frame.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\OperationException.html
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\web\
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\web\package-tree.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\web\package-frame.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\web\FileUploader.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\web\package-use.html
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\web\class-use\
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\web\class-use\FileUploader.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\web\package-summary.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\SourceManager.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\package-use.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\package-tree.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\JTwainException.html
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\DataTypeImageInfo.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\ItemTypeFrame.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\DataTypeVersion.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\DataType.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\ValueContainerEnumeration.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\ItemType.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\package-summary.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\DataTypeIdentity.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\ValueContainer.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\OperationResult.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\package-use.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\ItemTypeInteger.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\ValueContainerRange.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\Control.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\ValueContainerArray.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\ItemTypeString.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\ValueContainerOneValue.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\package-tree.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\package-frame.html
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\DataTypeIdentity.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\DataTypeImageInfo.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\ValueContainer.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\ItemTypeFix32.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\ItemTypeString.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\ValueContainerEnumeration.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\ValueContainerRange.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\DataType.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\ItemType.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\ValueContainerArray.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\ItemTypeFrame.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\DataTypeVersion.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\Capability.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\OperationResult.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\Control.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\ValueContainerOneValue.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\ItemTypeInteger.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\class-use\DataTypeImageLayout.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\Capability.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\ItemTypeFix32.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\lowlevel\DataTypeImageLayout.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\JTwainConstants.html
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\class-use\
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\class-use\SourceManager.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\class-use\JTwainException.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\class-use\OperationException.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\class-use\Source.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\class-use\JTwainConstants.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\class-use\InvalidStateException.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\jtwain\package-summary.html
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\JImageDialogSample.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\JImageFileChooser.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\JImageDialog.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\JImageDialogListener.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\package-use.html
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\class-use\
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\class-use\JImageDialogListener.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\class-use\JImageDialogSample.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\class-use\JImageDialog.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\class-use\JImageFileChooser.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\package-summary.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\package-frame.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\com\asprise\util\ui\package-tree.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\constant-values.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\deprecated-list.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\help-doc.html
+                          Status: SUCCESSFUL
+
+Install Directory:        C:\Archivos de programa\JTwainSDK\doc\index-files\
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-4.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-14.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-5.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-15.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-6.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-16.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-10.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-7.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-17.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-1.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-11.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-8.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-18.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-2.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-12.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-9.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-19.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-3.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index-files\index-13.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\index.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\overview-frame.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\overview-summary.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\overview-tree.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\package-list
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\packages.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\serialized-form.html
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\doc\stylesheet.css
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\JTwain.jar
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\LaunchDemo.bat
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\LICENSE-EVALUATION.txt
+                          Status: SUCCESSFUL
+
+Install File:             C:\Archivos de programa\JTwainSDK\Purchase.htm
+                          Status: SUCCESSFUL
+
+Copy File:                Destination: C:\WINDOWS\system32\AspriseJTwain.dll
+                          Status: WARNING
+                          Additional Notes: WARNING - There was a problem copying C:\WINDOWS\system32\AspriseJTwain.dll
+
+Install Directory:        C:\Documents and Settings\Mario\Menú Inicio\Programas\JTwain SDK, LAB Asprise!\
+                          Status: SUCCESSFUL
+
+Create Shortcut:          C:\Documents and Settings\Mario\Menú Inicio\Programas\JTwain SDK, LAB Asprise!\Java Developer's Guide to JTwain.lnk
+                          Status: SUCCESSFUL
+
+Create Shortcut:          C:\Documents and Settings\Mario\Menú Inicio\Programas\JTwain SDK, LAB Asprise!\JTwain SDK Folder.lnk
+                          Status: SUCCESSFUL
+
+Create Shortcut:          C:\Documents and Settings\Mario\Menú Inicio\Programas\JTwain SDK, LAB Asprise!\Launch Demos.lnk
+                          Status: SUCCESSFUL
+
+Create Shortcut:          C:\Documents and Settings\Mario\Menú Inicio\Programas\JTwain SDK, LAB Asprise!\JavaDoc.lnk
+                          Status: SUCCESSFUL
+
+Create Shortcut:          C:\Documents and Settings\Mario\Menú Inicio\Programas\JTwain SDK, LAB Asprise!\Order JTwain.lnk
+                          Status: SUCCESSFUL
+
+Create Shortcut:          C:\Documents and Settings\Mario\Menú Inicio\Programas\JTwain SDK, LAB Asprise!\Demo Applet.lnk
+                          Status: SUCCESSFUL
+
+

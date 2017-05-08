@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+
+@Banco: Banorte
+@Versión: 1.0.0
+@Fecha creación: 13-Noviembre-2012
+@Ultima modificación: 13-Noviembre-2012
+
+-->
+<Documento>
+	<!-- Datos generales del documento -->
+	<Cabecera>
+		<!-- Tamaño de página LETTER -->
+		<PageSize>LETTER</PageSize>
+		<!-- Margen Superior 1 renglon -->
+		<TopMargin>1</TopMargin>
+		<!-- Margen Izquierdo 0 columnas -->
+		<LeftMargin>0</LeftMargin>
+		<!-- Definir macro para logotipos -->
+		<!--<DefineMacro file="pcl/logos/banorte.pcl">1</DefineMacro>-->
+	</Cabecera>
+	<Poliza>
+		<!-- Concatenar constante ARIAL_FONT -->
+		<Constant>ARIAL_FONT</Constant>
+		<!-- Nombre de la compañía -->
+		<Cia>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">6.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<Campo toUpper="TRUE">nombre_cia</Campo>
+		</Cia>
+		<!-- Número de la compañía -->
+		<NumCia>
+			<X unit="mm">160.00</X>
+			<Y unit="mm">6.00</Y>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Campo textIni="[" textEnd="]">num_cia</Campo>
+		</NumCia>
+		<!-- RFC -->
+		<RFC>
+			<X unit="mm">50.00</X>
+			<Y unit="mm">10.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Campo toUpper="TRUE" function="strRFC">rfc</Campo>
+		</RFC>
+		<!-- Fecha de expedición -->
+		<Fecha>
+			<X unit="mm">128.00</X>
+			<Y unit="mm">21.00</Y>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Campo function="strFecha">fecha</Campo>
+		</Fecha>
+		<!-- Leyenda PARA ABONO EN CUENTA BANCARIA DE: -->
+		<ParaAbono>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">17.00</Y>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Leyenda>PARA ABONO EN CUENTA BANCARIA DE:</Leyenda>
+		</ParaAbono>
+		<!-- Beneficiario -->
+		<Beneficiario>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">30.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<Campo toUpper="TRUE">a_nombre</Campo>
+		</Beneficiario>
+		<!-- Importe -->
+		<Importe>
+			<X unit="mm">138.00</X>
+			<Y unit="mm">30.00</Y>
+			<Campo numberFormat="2" textIni="*" textEnd="*">importe</Campo>
+		</Importe>
+		<!-- Importe escrito -->
+		<ImporteEscrito>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">36.00</Y>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<FontWeight>MEDIUM</FontWeight>
+			<Campo function="num2string" toUpper="TRUE" textIni="*" textEnd="*">importe</Campo>
+		</ImporteEscrito>
+		<!-- Nombre Banco -->
+		<NombreBanco>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">42.00</Y>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Leyenda>BANCO MERCANTIL DEL NORTE, S.A.</Leyenda>
+		</NombreBanco>
+		<!-- Cuenta -->
+		<Cuenta>
+			<X unit="mm">73.00</X>
+			<Y unit="mm">55.00</Y>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Campo textIni="CTA " function="cuenta">cuenta</Campo>
+		</Cuenta>
+		<!-- Pseudo-Banda-->
+		<PseudoBanda>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">65.00</Y>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Campo>pseudoBanda</Campo>
+		</PseudoBanda>
+		<!-- Pie de página -->
+		<Concepto>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">75.00</Y>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Campo>concepto</Campo>
+		</Concepto>
+		<Facturas>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">79.00</Y>
+			<Campo explode=" " piecesPerRow="8" rowOffset="4.00">facturas</Campo>
+		</Facturas>
+		<!-- Codigo de Barras -->
+		<BarCode>
+			<X unit="mm">123.00</X>
+			<Y unit="mm">60.00</Y>
+			<FontFace symbolID="9Y">32772</FontFace>
+			<FontPointSize unit="pt">24.00</FontPointSize>
+			<Campo>barcode</Campo>
+		</BarCode>
+	</Poliza>
+	<Cheque>
+		<!-- Nombre de la compañía -->
+		<Cia>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">185.00</Y>
+			<FontFace symbolID="0N">16602</FontFace>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<Campo toUpper="TRUE">nombre_cia</Campo>
+		</Cia>
+		<!-- RFC -->
+		<RFC>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">188.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Campo toUpper="TRUE" function="strRFC">rfc</Campo>
+		</RFC>
+		<!-- Leyenda GRUPO MOLLENDO -->
+		<GM>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">192.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Leyenda>GRUPO MOLLENDO</Leyenda>
+		</GM>
+		<!-- Fecha de expedición -->
+		<Fecha>
+			<Y unit="mm">190.00</Y>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Dia>
+				<X unit="mm">96.00</X>
+				<Campo>dia</Campo>
+			</Dia>
+			<Mes>
+				<X unit="mm">106.00</X>
+				<Campo>mes</Campo>
+			</Mes>
+			<Anio>
+				<X unit="mm">116.00</X>
+				<Campo>anio</Campo>
+			</Anio>
+		</Fecha>
+		<!-- Leyenda PARA ABONO EN CUENTA BANCARIA DE: -->
+		<ParaAbono>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">198.00</Y>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Leyenda>PARA ABONO EN CUENTA BANCARIA DE:</Leyenda>
+		</ParaAbono>
+		<!-- Beneficiario -->
+		<Beneficiario>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">207.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<Campo toUpper="TRUE">a_nombre</Campo>
+		</Beneficiario>
+		<!-- Importe escrito -->
+		<ImporteEscrito>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">220.00</Y>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<FontWeight>MEDIUM</FontWeight>
+			<Campo function="num2string" toUpper="TRUE" textIni="*" textEnd="*">importe</Campo>
+		</ImporteEscrito>
+		<!-- Leyenda SUC. 0679 LINDA VISTA MEXICO -->
+		<Sucursal>
+			<X unit="mm">68.00</X>
+			<Y unit="mm">228.00</Y>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Leyenda>SUC. 0679 LINDA VISTA MEXICO</Leyenda>
+		</Sucursal>
+		<!-- Cuenta -->
+		<Cuenta>
+			<X unit="mm">68.00</X>
+			<Y unit="mm">230.00</Y>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Campo textIni="CTA " function="cuenta">cuenta</Campo>
+		</Cuenta>
+		<!-- Leyenda MEXICO, D.F. -->
+		<MexicoDF>
+			<X unit="mm">68.00</X>
+			<Y unit="mm">232.00</Y>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Leyenda>MEXICO, D.F.</Leyenda>
+		</MexicoDF>
+		<!-- Pie de página -->
+		<Concepto>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">258.00</Y>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Campo>concepto</Campo>
+		</Concepto>
+		<Facturas>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">262.00</Y>
+			<Campo explode=" " piecesPerRow="8" rowOffset="4.00">facturas</Campo>
+		</Facturas>
+		<!-- Importe sin formato de seguridad (ya no es valido el formato seguro) -->
+		<Importe>
+			<X unit="mm">135.00</X>
+			<Y unit="mm">206.00</Y>
+			<FontPointSize unit="pt">16.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Campo numberFormat="2">importe</Campo>
+		</Importe>
+		<!-- Banda MICR -->
+		<MICR>
+			<X unit="mm">28.00</X>
+			<Y unit="mm">244.00</Y>
+			<Campo escapeCodeIni="strBanIniE330" escapeCodeEnd="strFinE330">bandaMICR</Campo>
+		</MICR>
+	</Cheque>
+</Documento>

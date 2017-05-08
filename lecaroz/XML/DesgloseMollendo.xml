@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<DesglosePagos>
+	<Titulos>
+		<FAC>
+			<X unit="mm">0.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>FAC</Leyenda>
+		</FAC>
+		<TOTAL>
+			<X unit="mm">100.00</X>
+			<Y unit="mm">135.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Leyenda>TOTAL</Leyenda>
+		</TOTAL>
+	</Titulos>
+	<Datos incrementoV="3.50">
+		<FAC>
+			<X unit="mm">0.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo>num_fact</Campo>
+		</FAC>
+		<TOTAL>
+			<X unit="mm">100.00</X>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<Campo numberFormat="2">total</Campo>
+		</TOTAL>
+	</Datos>
+</DesglosePagos>

@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>Prueba de paginacion</title>
+</head>
+
+<xml id="xmlPrueba">
+<LISTADO>
+<REGISTRO>
+<NOMBRE>Ismael</NOMBRE>
+<APELLIDOS>Zori Martinez</APELLIDOS>
+</REGISTRO>
+<REGISTRO>
+<NOMBRE>Alicia</NOMBRE>
+<APELLIDOS>Campos Ortega</APELLIDOS>
+</REGISTRO>
+<REGISTRO>
+<NOMBRE>Julio</NOMBRE>
+<APELLIDOS>Camino del Bosque</APELLIDOS>
+</REGISTRO>
+<REGISTRO>
+<NOMBRE>Juan</NOMBRE>
+<APELLIDOS>Diges Sierra</APELLIDOS>
+</REGISTRO>
+<REGISTRO>
+<NOMBRE>Roberto</NOMBRE>
+<APELLIDOS>Cabeza Benito</APELLIDOS>
+</REGISTRO>
+<REGISTRO>
+<NOMBRE>Rosa</NOMBRE>
+<APELLIDOS>Jimenez Sancho</APELLIDOS>
+</REGISTRO>
+<REGISTRO>
+<NOMBRE>Eva</NOMBRE>
+<APELLIDOS>Soria del Pinar</APELLIDOS>
+</REGISTRO>
+<REGISTRO>
+<NOMBRE>Pedro</NOMBRE>
+<APELLIDOS>Zamora Reinoso</APELLIDOS>
+</REGISTRO>
+</LISTADO>
+</xml>
+
+<script language="JavaScript">
+function go(numDonde)
+{
+switch (numDonde)
+{
+case 0:
+tablaPrueba.firstPage();
+break;
+case 1:
+tablaPrueba.previousPage();
+break;
+case 2:
+tablaPrueba.nextPage();
+break;
+case 3:
+tablaPrueba.lastPage();
+break;
+default:
+alert("Opcion de navegacion incorrecta. Fallo de programacion");
+}
+}
+</script>
+
+<body>
+<center>
+<table datasrc="#xmlPrueba" datapagesize="5" id="tablaPrueba" border="1" cellpadding="1" cellspacing="0">
+<thead>
+<tr>
+<td align="center"><b>Nombre</b></td>
+<td align="center"><b>Apellidos</b></td>
+</tr>
+</thead>
+<tr>
+<td><span datafld="NOMBRE"></span></td>
+<td><span datafld="APELLIDOS"></span></td>
+</tr>
+</table>
+<br /><br />
+<input type="button" name="btnPrimero" value="|<" onClick="go(0)" />
+<input type="button" name="btnAnterior" value="<" onClick="go(1)" />
+<input type="button" name="btnSiguiente" value=">" onClick="go(2)" />
+<input type="button" name="btnUltimo" value=">|" onClick="go(3)" />
+</center>
+</body>
+</html>

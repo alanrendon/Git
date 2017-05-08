@@ -1,0 +1,16 @@
+========== Description Part Begin ==========
+Description = 
+LastUpdateTime = 37376.476273148
+PreviewPath = 
+ProgID = PageletServer.DynamicMenu
+Title = Blue
+Version = 4.00
+========== Description Part End ==========
+========== Parameter Part Begin ==========
+MenuBody0 = 2;0;0;2;0;0;0;0;0;0;0;0;0;90;1;0;0;16777215;16777215;16777215;16777215;10040064;1;;3
+MenuBody1 = 1;1;0;3;20;0;0;4;0;3;0;15;14;60;1;1;1;12036211;12036211;12036211;12036211;16777215;0;;3
+MenuItem0_0 = 2;2;;;0;Panaderias;0;0;1;;;_self;;1;12036211;13880499;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;C:\\Documents and Settings\\John Talbain\\Escritorio\\Lecaroz\\menus\\bullet1.gif;C:\\Documents and Settings\\John Talbain\\Escritorio\\Lecaroz\\menus\\bullet2.gif;16;16;0;;;0;0;0;;;0;0;0;Arial;Arial;12;12;0;0;16777215;0;1;1;0;0;0;0;0;0;0;0;
+MenuItem0_1 = 0;0;;;0;1;13421772;0;;;0;0;0
+MenuItem1_0 = 0;1;;;0;Solicitudes de modificación\r\nde pasteles;0;0;1;;./pan_rev_sol.php;mainFrame;;1;16775403;14537388;0;0;;;3;3;0;3;0;0;16777215;16777215;16777215;16777215;16777215;16777215;16777215;16777215;C:\\Documents and Settings\\John Talbain\\Escritorio\\Lecaroz\\menus\\insert.gif;C:\\Documents and Settings\\John Talbain\\Escritorio\\Lecaroz\\menus\\insert.gif;16;16;0;;;0;0;0;;;0;0;0;Arial;Arial;12;12;0;0;3355443;3355443;0;0;0;0;0;0;0;0;0;0;
+TopMenuBody = 2;400;tubtehr;0;1;1;0;0;0;0;0;0;0;./menus;1;1;1
+========== Parameter Part End ==========

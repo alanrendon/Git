@@ -1,0 +1,23 @@
+<html>
+<body>
+<center>
+<p align="center">
+	<font color="#CC0000" face="Arial, Helvetica, sans-serif" size="5"><br>
+Image Acquisition and Uploading with JTwain</font>
+<p><br>
+	<applet code="com.asprise.util.jtwain.web.UploadApplet.class" 
+		codebase="./TWAIN"
+		archive="JTwain.jar"
+		width="600" height="470">
+		<param name="DOWNLOAD_URL" value="./TWAIN/dll/AspriseJTwain.dll">
+		<param name="DLL_NAME" value="AspriseJTwain.dll">
+		<param name="UPLOAD_URL" value="./cacha_archivo.php">
+		<param name="UPLOAD_PARAM_NAME" value="file[]">
+		<param name="UPLOAD_EXTRA_PARAMS" value="A=B">
+		<param name="UPLOAD_OPEN_URL" value="./cacha_archivo.php">
+		<param name="UPLOAD_OPEN_TARGET" value="_blank">
+		Oops, Your browser does not support Java applet!
+  </applet>
+<p align="center">
+</body>
+</html>

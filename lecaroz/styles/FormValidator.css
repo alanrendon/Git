@@ -1,0 +1,33 @@
+/* CSS Document */
+
+form.FormValidator {}
+
+form.FormValidator .valid {}
+
+form.FormValidator .Focus {}
+form.FormValidator .toText {}
+form.FormValidator .onlyText {}
+form.FormValidator .onlyLetters {}
+form.FormValidator .onlyNumbers {}
+form.FormValidator .onlyNumbersAndLetters {}
+form.FormValidator .toDate {}
+form.FormValidator .toNumber {}
+form.FormValidator .toInterval {}
+form.FormValidator .toIntervalChars {}
+form.FormValidator .toInt {}
+form.FormValidator .toPosInt {}
+form.FormValidator .toColorInt {}
+form.FormValidator .toFloat {}
+form.FormValidator .toPosFloat {}
+form.FormValidator .toColorFloat {}
+form.FormValidator .numberFormat {}
+form.FormValidator .numberPosFormat {}
+form.FormValidator .numberColorFormat {}
+form.FormValidator .toPhoneNumber {}
+form.FormValidator .toEmail {}
+form.FormValidator .toRFC {}
+form.FormValidator .toRFCopcional {}
+form.FormValidator .toCURP {}
+form.FormValidator .toUpper {}
+form.FormValidator .toLower {}
+form.FormValidator .cleanText {}
