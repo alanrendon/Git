@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+
+@Banco: Banorte
+@Versión: 1.0.0
+@Fecha creación: 26-Enero-2010
+@Ultima modificación: 26-Enero-2010
+
+-->
+<Documento>
+	<!-- Datos generales del documento -->
+	<Cabecera>
+		<!-- Tamaño de página LETTER -->
+		<PageSize>LETTER</PageSize>
+		<!-- Margen Superior 1 renglon -->
+		<TopMargin>1</TopMargin>
+		<!-- Margen Izquierdo 0 columnas -->
+		<LeftMargin>0</LeftMargin>
+		<!-- Código de inicio modo MICR -->
+		<modoMICR>1</modoMICR>
+	</Cabecera>
+	<PseudoPoliza>
+		<!-- Concatenar constante ARIAL_FONT -->
+		<Constant>ARIAL_FONT</Constant>
+		<!-- Nombre de la compañía -->
+		<Cia>
+			<X unit="mm">0.00</X>
+			<Y unit="mm">4.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<Campo toUpper="TRUE">nombre_cia</Campo>
+		</Cia>
+		<!-- Número de la compañía -->
+		<NumCia>
+			<X unit="mm">132.00</X>
+			<Y unit="mm">4.00</Y>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Campo textIni="[" textEnd="]">num_cia</Campo>
+		</NumCia>
+		<!-- RFC -->
+		<RFC>
+			<X unit="mm">22.00</X>
+			<Y unit="mm">7.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Campo toUpper="TRUE" function="strRFC">rfc</Campo>
+		</RFC>
+		<!-- Fecha de expedición -->
+		<Fecha>
+			<X unit="mm">100.00</X>
+			<Y unit="mm">15.00</Y>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Campo function="strFecha">fecha</Campo>
+		</Fecha>
+		<!-- Leyenda PARA ABONO EN CUENTA BANCARIA DE: -->
+		<ParaAbono>
+			<X unit="mm">0.00</X>
+			<Y unit="mm">11.00</Y>
+			<FontWeight>MEDIUM</FontWeight>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<Leyenda>PARA ABONO EN CUENTA BANCARIA DE:</Leyenda>
+		</ParaAbono>
+		<!-- Beneficiario -->
+		<Beneficiario>
+			<X unit="mm">0.00</X>
+			<Y unit="mm">24.00</Y>
+			<FontWeight>BOLD</FontWeight>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<Campo toUpper="TRUE" charsPerLine="47">a_nombre</Campo>
+		</Beneficiario>
+		<!-- Importe -->
+		<Importe>
+			<X unit="mm">110.00</X>
+			<Y unit="mm">24.00</Y>
+			<Campo numberFormat="2" textIni="*" textEnd="*">importe</Campo>
+		</Importe>
+		<!-- Importe escrito -->
+		<ImporteEscrito>
+			<X unit="mm">0.00</X>
+			<Y unit="mm">30.00</Y>
+			<FontPointSize unit="pt">8.00</FontPointSize>
+			<FontWeight>MEDIUM</FontWeight>
+			<Campo function="num2string" toUpper="TRUE" textIni="*" textEnd="*">importe</Campo>
+		</ImporteEscrito>
+		<!-- Nombre Banco -->
+		<NombreBanco>
+			<X unit="mm">0.00</X>
+			<Y unit="mm">36.00</Y>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Leyenda>BANCO MERCANTIL DEL NORTE, S.A.</Leyenda>
+		</NombreBanco>
+		<!-- Cuenta -->
+		<Cuenta>
+			<X unit="mm">45.00</X>
+			<Y unit="mm">49.00</Y>
+			<FontPointSize unit="pt">6.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Campo textIni="CTA " function="cuenta">cuenta</Campo>
+		</Cuenta>
+		<!-- Pseudo-Banda-->
+		<PseudoBanda>
+			<X unit="mm">0.00</X>
+			<Y unit="mm">59.00</Y>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Campo>pseudoBanda</Campo>
+		</PseudoBanda>
+		<!-- Pie de página -->
+		<Concepto>
+			<X unit="mm">0.00</X>
+			<Y unit="mm">75.00</Y>
+			<FontPointSize unit="pt">10.00</FontPointSize>
+			<FontWeight>BOLD</FontWeight>
+			<Campo>concepto</Campo>
+		</Concepto>
+		<Facturas>
+			<X unit="mm">0.00</X>
+			<Y unit="mm">79.00</Y>
+			<Campo explode=" " piecesPerRow="8" rowOffset="4.00">facturas</Campo>
+		</Facturas>
+		<!-- Desglose de pagos -->
+		<Desglose empresa="Elite" file="XML/DesgloseElite.xml">TRUE</Desglose>
+		<!-- Codigo de Barras -->
+		<BarCode>
+			<X unit="mm">95.00</X>
+			<Y unit="mm">55.00</Y>
+			<FontFace symbolID="9Y">32772</FontFace>
+			<FontPointSize unit="pt">24.00</FontPointSize>
+			<Campo>barcode</Campo>
+		</BarCode>
+	</PseudoPoliza>
+</Documento>

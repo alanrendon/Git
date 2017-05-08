@@ -11,6 +11,10 @@ include './includes/class.session2.inc.php';
 include './includes/class.TemplatePower.inc.php';
 include './includes/dbstatus.php';
 
+
+
+
+
 // --------------------------------- Validar usuario ---------------------------------------------------------
 $session = new sessionclass($dsn);
 
@@ -50,12 +54,20 @@ if (isset($_POST['iduser'])) {
 	// Generar permisos para menus
 	$sql = "DELETE FROM menus_permisos WHERE iduser = $_POST[iduser]";
 	ejecutar_script($sql,$dsn);
-	for ($i=1; $i<=8; $i++)
+	for ($i=1; $i<=11; $i++)
 		if (isset($_POST['menu'.$i])) {
-			$sql = "INSERT INTO menus_permisos (iduser,authlevel,idmenu,permiso) VALUES ($_POST[iduser],1,$i,'TRUE')";
+			if ($i==9) {
+				$prm=36;
+			}elseif ($i==10) {
+				$prm=37;
+			}elseif ($i==11) {
+				$prm=38;
+			}else{
+				$prm=$i;
+			}
+			$sql = "INSERT INTO menus_permisos (iduser,authlevel,idmenu,permiso) VALUES ($_POST[iduser],1,$prm,'TRUE')";
 			ejecutar_script($sql,$dsn);
 		}
-	
 	$tpl->newBlock("cerrar");
 	$tpl->printToScreen();
 	die;
@@ -76,8 +88,20 @@ $tpl->assign("apellido",$result[0]['apellido']);
 // Obtener permisos de menus
 $sql = "SELECT idmenu FROM menus_permisos WHERE iduser = $_GET[iduser]";
 $menu = ejecutar_script($sql,$dsn);
-for ($i=0; $i<count($menu); $i++)
+
+
+for ($i=0; $i<count($menu); $i++){
+	if ($menu[$i]['idmenu']==36) {
+		$menu[$i]['idmenu']=9;
+	}
+	if ($menu[$i]['idmenu']==37) {
+		$menu[$i]['idmenu']=10;
+	}
+	if ($menu[$i]['idmenu']==38) {
+		$menu[$i]['idmenu']=11;
+	}
 	$tpl->assign($menu[$i]['idmenu'],"checked");
+}
 
 if ($id = ejecutar_script("SELECT idoperadora FROM catalogo_operadoras WHERE iduser = $_GET[iduser]",$dsn))
 	$tpl->assign("checked","checked");

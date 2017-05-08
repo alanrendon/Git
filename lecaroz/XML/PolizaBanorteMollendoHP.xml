@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+
+@Banco: Banorte
+@Versión: 1.0.0
+@Fecha creación: 29-Enero-2010
+@Ultima modificación: 29-Enero-2010
+
+-->
+<Documento>
+	<FileType>PDF</FileType>
+	<!-- Datos generales del documento -->
+	<Cabecera>
+		<Orientation>Portrait</Orientation>
+		<Units>mm</Units>
+		<Format width="174" height="269">UNIVERSAL</Format>
+		<LeftMargin>5</LeftMargin>
+		<ImageHeader x="110" y="10" width="54">imagenes/Banorte.gif</ImageHeader>
+	</Cabecera>
+	<PseudoPoliza>
+		<!-- Nombre de la compañía -->
+		<Cia>
+			<Y>12</Y>
+			<X>5</X>
+			<Font style="B" size="10">Arial</Font>
+			<Campo width="110" toUpper="TRUE">nombre_cia</Campo>
+		</Cia>
+		<!-- Número de la compañía -->
+		<NumCia>
+			<Y>5</Y>
+			<X>156</X>
+			<Font style="" size="8">Arial</Font>
+			<Campo width="10" textIni="[" textEnd="]">num_cia</Campo>
+		</NumCia>
+		<!-- RFC -->
+		<RFC>
+			<Y>15</Y>
+			<X>22</X>
+			<Font style="B" size="8">Arial</Font>
+			<Campo width="25" toUpper="TRUE" function="strRFC">rfc</Campo>
+		</RFC>
+		<!-- Fecha de expedición -->
+		<Fecha>
+			<Y>22</Y>
+			<X>112</X>
+			<Font style="" size="10">Arial</Font>
+			<Campo width="45" function="strFecha">fecha</Campo>
+		</Fecha>
+		<!-- Beneficiario -->
+		<Beneficiario>
+			<Y>29</Y>
+			<X>5</X>
+			<Font style="B" size="10">Arial</Font>
+			<Campo width="115" toUpper="TRUE">a_nombre</Campo>
+		</Beneficiario>
+		<!-- Importe -->
+		<Importe>
+			<Y>29</Y>
+			<X>120</X>
+			<Font style="B" size="12">Arial</Font>
+			<Campo width="45" numberFormat="2" textIni="*" textEnd="*">importe</Campo>
+		</Importe>
+		<!-- Importe escrito -->
+		<ImporteEscrito>
+			<Y>33</Y>
+			<X>5</X>
+			<Font style="" size="8">Arial</Font>
+			<Campo width="160" function="num2string" toUpper="TRUE" textIni="*" textEnd="*">importe</Campo>
+		</ImporteEscrito>
+		<!-- Nombre Banco -->
+		<NombreBanco>
+			<Y>38</Y>
+			<X>5</X>
+			<Font style="B" size="10">Arial</Font>
+			<Leyenda width="60">BANCO MERCANTIL DEL NORTE, S.A.</Leyenda>
+		</NombreBanco>
+		<!-- Pseudo-Banda-->
+		<PseudoBanda>
+			<Y>46</Y>
+			<X>5</X>
+			<Font style="B" size="10">Arial</Font>
+			<Campo width="50">pseudoBanda</Campo>
+		</PseudoBanda>
+		<!-- Pie de página -->
+		<Concepto>
+			<Y>60</Y>
+			<X>5</X>
+			<Font style="B" size="10">Arial</Font>
+			<Campo width="160">concepto</Campo>
+		</Concepto>
+		<Facturas>
+			<Y>62</Y>
+			<X>5</X>
+			<Font style="" size="10">Arial</Font>
+			<Campo width="160" height="4" explode=" " piecesPerRow="10" multicell="TRUE">facturas</Campo>
+		</Facturas>
+	</PseudoPoliza>
+</Documento>
