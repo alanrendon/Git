@@ -1,0 +1,60 @@
+<tip type='print button - cross platform'>
+<html>
+<head>
+<title>Print Page Test</title>
+<SCRIPT>
+ function print_moz() 
+   {window.print() ;
+    print() ;} 
+ function print_ms() {        
+        var OLECMDID_PRINT = 6;
+        var OLECMDEXECOPT_DONTPROMPTUSER = 2;
+        var OLECMDEXECOPT_PROMPTUSER = 1;
+        var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH=0 HEIGHT=0 CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+        document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
+        oldHandler = window.onerror;        
+        window.onerror = deal;
+        WebBrowser1.ExecWB(OLECMDID_PRINT, OLECMDEXECOPT_PROMPTUSER);
+        WebBrowser1.outerHTML = "";        
+        window.onerror = oldHandler;}
+        
+  function deal() {                
+        WebBrowser1.outerHTML = "";
+        window.onerror = oldHandler;                
+        return true;
+        }
+</SCRIPT>
+</head>
+<body bgcolor="#ffffff">
+<h1>This is the test page</h1>
+Lets see if it works!
+<FORM>
+<SCRIPT LANGUAGE="javascript">
+  <!--
+  var version="";
+  if (navigator.userAgent.indexOf("Mozilla/4") != -1) version =
+"moz_valid";
+  else if (navigator.userAgent.indexOf("Mozilla/5") != -1) version =
+"moz_valid";
+  else if (navigator.userAgent.indexOf("Mozilla/6") != -1) version =
+"moz_valid";
+  else if (navigator.userAgent.indexOf("Mozilla/7") != -1) version =
+"moz_valid";
+  if (navigator.userAgent.indexOf("MSIE 5") != -1) version = "ms_valid";
+  else if (navigator.userAgent.indexOf("MSIE 6") != -1) version =
+"ms_valid";
+  else if (navigator.userAgent.indexOf("MSIE 7") != -1) version =
+"ms_valid";
+  else if (navigator.userAgent.indexOf("MSIE 4") != -1) version =
+"ms_valid";
+  if (version == "moz_valid") {
+    document.write('<input type=button value="PRINT" name="Print" onClick=print_moz()>') ;  }
+  else if (version == "ms_valid") {
+    document.write('<input type=button value="PRINT" name="Print" onClick=print_ms()>') ;  }
+	version = "" ;
+  // -->
+</SCRIPT>
+</FORM>
+</html>
+
+</tip>

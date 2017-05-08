@@ -1,0 +1,52 @@
+<script type="text/javascript" language="JavaScript">
+	
+function valida_registro() {
+
+
+if (confirm("¿Son correctos los datos de la pantalla?"))
+	document.form.submit();
+}
+	
+function borrar() {
+	if (confirm("¿Desea borrar la pantalla?")) {
+		document.form.reset();
+		document.form.num_cia.select();
+	}
+	else
+		document.form.num_cia.select();
+}
+	</script>
+<table width="100%"  height="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+<tr align="center" valign="middle">
+<td>
+<p class="title">CAPTURA DIRECTA DE EFECTIVOS</P>
+<!-- tabla importe_efectivos menu efectivos -->
+<form name="form" method="post" action="insert_pan_efe_cap.php?tabla={tabla}">
+<input name="temp" type="hidden">
+  <table class="tabla">
+    <tr>
+      <th class="tabla">Num. Compa&ntilde;&iacute;a </th>
+      <th class="tabla">Importe</th>
+      
+    </tr>
+	<!-- START BLOCK : rows -->
+    <tr>
+      <td class="tabla" align="center">
+        <input name="num_cia{i}" type="text" class="insert" id="num_cia{i}" size="5" onKeyDown="if (event.keyCode == 13) document.form.fecha{i}.select();" onFocus="form.temp.value=this.value" onChange="valor=isInt(this,form.temp)">
+</td>
+      <td class="tabla" align="center">
+        <input name="importe{i}" type="text" class="insert" id="importe{i}" size="15" onKeyDown="if (event.keyCode == 13) document.form.num_cia{next}.select();" onFocus="form.temp.value=this.value" onChange="valor=isFloat(this,2,form.temp)">
+   </td>
+      
+    </tr>
+	<!-- END BLOCK : rows -->
+  </table>
+  <p>
+    <img src="./menus/insert.gif" align="middle">&nbsp;&nbsp;<input type="button" name="enviar" class="boton" value="Capturar Efectivos" onclick='valida_registro()'><br><br>
+    <img src="./menus/delete.gif" align="middle">&nbsp;&nbsp;<input type="button" class="boton" value="Borrar formulario" onclick='borrar()'>
+</p>
+</form>
+</td>
+</tr>
+</table>
+<script language="javascript" type="text/javascript">window.onload = document.form.num_cia0.select();</script>

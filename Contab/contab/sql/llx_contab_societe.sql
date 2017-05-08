@@ -1,0 +1,27 @@
+
+CREATE TABLE IF NOT EXISTS `llx_contab_societe` (
+  `rowid` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(128) DEFAULT NULL,
+  `entity` int(11) NOT NULL DEFAULT '1',
+  `statut` tinyint(4) DEFAULT '0',
+  `tms` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `datec` datetime DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `zip` varchar(25) DEFAULT NULL,
+  `town` varchar(50) DEFAULT NULL,
+  `fk_departement` int(11) DEFAULT '0',
+  `fk_pays` int(11) DEFAULT '0',
+  `phone` varchar(20) DEFAULT NULL,
+  `fax` varchar(20) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `email` varchar(128) DEFAULT NULL,
+  `note_private` text,
+  `note_public` text,
+  `fk_user_creat` int(11) DEFAULT NULL,
+  `fk_user_modif` int(11) DEFAULT NULL,
+  `tip_prov` int(11) DEFAULT NULL,
+  `rfc` varchar(255) DEFAULT NULL,
+  `id_fiscal` varchar(255) DEFAULT NULL,
+  `tip_op` int(11) DEFAULT NULL,
+  PRIMARY KEY (`rowid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
