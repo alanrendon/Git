@@ -35,6 +35,12 @@
     <th class="vtabla">Nombre del Producto</th>
     <td class="vtabla"  onMouseOver="overTD(this,'#ACD2DD');" onMouseOut="outTD(this,'');"><input name="campo1" type="text" class="insert" id="campo1" size="30" maxlength="60"></td>
   </tr>
+  <tr>
+    <th class="vtabla">Precio</th>
+    <td class="vtabla"  onMouseOver="overTD(this,'#ACD2DD');" onMouseOut="outTD(this,'');">
+    	<input name="campo5" type="number" class="insert" id="campo5" size="30" maxlength="60">
+    </td>
+  </tr>
 </table>
   <p>
     <img src="./menus/insert.gif" align="middle">&nbsp;&nbsp;<input type="button" name="enviar" class="boton" value="Alta de Producto" onclick='valida_registro()'><br><br>

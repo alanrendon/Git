@@ -20,6 +20,65 @@
 <script type="text/javascript" src="jscripts/mootools/Popups.js"></script>
 <script type="text/javascript" src="jscripts/fac/FacturaElectronicaManualV2.js"></script>
 <script language="JavaScript" type="text/javascript" src="menus/stm31.js"></script>
+<script type="text/javascript">
+	window.addEvent('domready', function() {
+		$('producto').addEvents({
+			'change': validarProd,
+			'keydown': function(e) {
+				if (e.key == 'down') {
+					$('descripcion').select();
+					e.stop();
+				}
+			}
+		});
+	});
+
+	var validarProd = function() {
+
+		if ($('producto').get('value') > 0) {
+			new Request({
+				'url': 'FacturaElectronicaManualV2.php',
+				'data': 'accion=validarProd&producto=' + $('producto').get('value'),
+				'onRequest': function() {
+				},
+				'onSuccess': function(result) {
+
+					if (result != '') {
+						
+						var data = JSON.decode(result);
+
+						$('precio').set('value', data.precio);
+						$('importe').set('value', data.precio);
+						$('subtotal').set('value', data.precio);
+						$('total').set('value', data.precio);
+						$('cantidad').set('value', 1);
+						$('descripcion').set('value', data.nombre);
+
+
+					}else{
+
+						$('precio').set('value', "");
+						$('importe').set('value', "");
+						$('subtotal').set('value', "");
+						$('total').set('value', "");
+						$('cantidad').set('value', "");
+						$('descripcion').set('value', "");
+						
+					}
+				}
+			}).send();
+		}else{
+
+			$('precio').set('value', "");
+			$('importe').set('value', "");
+			$('subtotal').set('value', "");
+			$('total').set('value', "");
+			$('cantidad').set('value', "");
+			$('descripcion').set('value', "");
+		}
+	}
+
+</script>
 </head>
 
 <body>
@@ -48,16 +107,9 @@
 					<th align="left" scope="row">Tipo de pago</th>
 					<td><select name="tipo_pago" id="tipo_pago">
 						<!-- <option value="4" selected="selected"></option> -->
-						<option value="B" selected="selected">EFECTIVO</option>
-						<option value="1">TRANSFERENCIA BANCARIA</option>
-						<option value="2">CHEQUE</option>
-						<option value="K">TARJETA DE CREDITO</option>
-						<option value="V">MONEDERO ELECTRONICO</option>
-						<option value="W">DINERO ELECTRONICO</option>
-						<option value="X">VALES DE DESPENSA</option>
-						<option value="Y">TARJETA DE DEBITO</option>
-						<option value="Z">TARJETA DE SERVICIOS</option>
-						<option value="NA">N/A</option>
+						{pay_met}
+						
+						
 						<!-- <option value="5">NO IDENTIFICADO</option> -->
 					</select></td>
 				</tr>
@@ -143,6 +195,12 @@
 					<th colspan="7" align="left" scope="col"><img src="/lecaroz/imagenes/plus16x16.png" name="expand" width="16" height="16" align="top" id="expand" /> <span id="expand_desc">Expandir descripciones
 
 					</span><input name="tipo_reporte" type="hidden" id="tipo_reporte" value="1" /></th>
+				</tr>
+				<tr>
+					<th colspan="7" align="left" scope="col"> 
+						<span id="expand_desc">Clave del Producto</span>
+						<input name="tipo_reporte" id="producto" class="valid toText toUpper cleanText" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >
+					</th>
 				</tr>
 				<tr>
 					<th scope="col">Descripci&oacute;n</th>

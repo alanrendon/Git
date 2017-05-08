@@ -50,11 +50,14 @@
     <tr>
       <th class="print" scope="col">C&oacute;digo</th>
       <th class="print" scope="col">Nombre</th>
+      <th class="print" scope="col">Precio</th>
     </tr>
     <!-- START BLOCK : fila -->
 	<tr onMouseOver="overTR(this,'#ACD2DD');" onMouseOut="outTR(this,'');">
       <td class="print">{cod_producto}</td>
       <td class="vprint">{nombre}</td>
+      <td class="vprint">{precio}</td>
+      
     </tr>
 	<!-- END BLOCK : fila -->
   </table>

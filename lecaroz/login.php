@@ -1,5 +1,7 @@
 <?php
+
 require_once 'DB.php';
+//die();
 require_once './includes/dbstatus.php';
 
 $db = DB::connect($dsn);//variable con conexión a base de datos

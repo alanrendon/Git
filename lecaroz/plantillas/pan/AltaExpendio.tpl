@@ -28,12 +28,16 @@
       <table class="tabla_captura">
       <tr>
         <th align="left">Compa&ntilde;&iacute;a</th>
-        <td class="linea_off"><input name="num_cia" type="text" class="cap toPosInt alignCenter" id="num_cia" size="3" />
-          <input name="nombre_cia" type="text" class="disabled" id="nombre_cia" size="30" /></td>
+        <td class="linea_off">
+          <input name="num_cia" type="text" class="cap toPosInt alignCenter" id="num_cia" size="3" />
+          <input name="nombre_cia" type="text" class="disabled" id="nombre_cia" size="30" />
+        </td>
       </tr>
       <tr>
         <th align="left">No. expendio</th>
-        <td class="linea_on"><input name="num_expendio" type="text" class="cap toPosInt alignCenter" id="num_expendio" size="3" /></td>
+        <td class="linea_on">
+          <input name="num_expendio" type="text" class="cap toPosInt alignCenter" id="num_expendio" size="3" />
+        </td>
       </tr>
       <tr>
         <th align="left">No. expendio (panader&iacute;a) </th>

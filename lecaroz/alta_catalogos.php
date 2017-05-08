@@ -125,7 +125,7 @@ switch ($tabla) {
 			header("location: ./ban_aud_altas.php?codigo_error=1");
 		}
 	break;
-		case "catalogo_aseguradoras":
+	case "catalogo_aseguradoras":
 		// Conectandose a la base de datos
 		$db = DB::connect($dsn);
 		if (DB::isError($db)) {
@@ -717,12 +717,17 @@ switch ($tabla) {
 		// Si no existe producto, crearlo
 		if ($result->numRows() == 0) {
 			$ins = new DBclass($dsn,$tabla,$_POST);
+
 			$ins->determinar_campos($ins->tabla_info());
+
 			$ins->determinar_cols();
+
 			$ins->determinar_rows();
+
 			$ins->generar_script_insert(0);
+
 			$ins->insertar();
-			
+	
 			// Insertar registro de operacion de usuario en la tabla 'registro'
 			$session->guardar_registro_acceso("Alta de Producto. ID: $_POST[campo0]", $dsn);
 			

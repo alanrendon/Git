@@ -67,8 +67,10 @@ $tpl->newBlock("listado");
 
 for ($i=0; $i<count($result); $i++) {
 	$tpl->newBlock("fila");
+	
 	$tpl->assign("cod_producto",$result[$i]['cod_producto']);
 	$tpl->assign("nombre",$result[$i]['nombre']);
+	$tpl->assign("precio",$result[$i]['precio']);
 }
 
 $tpl->printToScreen();

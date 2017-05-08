@@ -346,6 +346,25 @@ if (isset($_REQUEST['accion'])) {
 			echo $tpl->getOutputContent();
 
 		break;
+		case 'validarProd':
+			$sql="SELECT cat.cod_producto,cat.nombre,cat.precio FROM catalogo_productos as cat WHERE cat.cod_producto =".$_REQUEST['producto'];
+			$result = $db->query($sql);
+
+			if ($result) {
+				$data = array();
+
+				$num_pro = NULL;
+				foreach ($result as $rec) {
+					$data = array(
+						'nombre' => utf8_encode($rec['nombre']),
+						'precio' => utf8_encode($rec['precio'])
+					);
+					
+				}
+
+				echo json_encode($data);
+			}
+		break;
 	}
 
 	die;
@@ -353,6 +372,21 @@ if (isset($_REQUEST['accion'])) {
 
 $tpl = new TemplatePower('plantillas/fac/FacturaElectronicaManualV2.tpl');
 $tpl->prepare();
+
+$sql = '
+	SELECT catp.clave_sat,catp.label FROM catp ORDER BY catp.label asc
+';
+
+$result = $db->query($sql);
+$cad="";
+if ($result) {
+
+	foreach ($result as $key ) {
+		$cad.='<option value="'.$key["clave_sat"].'" >'.$key["label"].'</option>';
+	}
+}
+
+$tpl->assign('pay_met', $cad);
 
 $tpl->assign('menucnt', $_SESSION['menu'] . '_cnt.js');
 

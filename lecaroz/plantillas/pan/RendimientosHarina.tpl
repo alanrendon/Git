@@ -55,7 +55,8 @@
         	</tr>
         <tr class="linea_on">
           <th align="left" scope="row">Fecha de corte </th>
-          <td><input name="fecha" type="text" class="valid Focus toDate center" id="fecha" value="{fecha}" size="10" maxlength="10" /></td>
+          <td><input name="fecha" type="text" class="valid Focus toDate center" id="fecha" value="{fecha}" size="10" maxlength="10" />
+          </td>
         </tr>
         <tr class="linea_off">
         	<th align="left" scope="row">Turnos</th>

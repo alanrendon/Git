@@ -696,7 +696,10 @@ class TemplatePower extends TemplatePowerParser
         $lastitem > 1 ? $lastitem-- : $lastitem = 0;
 
 		    $ind_blockname = $blockname .'_'. $this->index[ $blockname ];
-		
+		    
+
+
+
         if ( !isset( $parent[ $lastitem ]["_B:$blockname"] ))
         {
            //ok, there is no block found in the parentblock with the name of {$blockname}
@@ -719,6 +722,7 @@ class TemplatePower extends TemplatePowerParser
         $blocksize = sizeof( $this->content[ $ind_blockname ] );
 
         $this->content[ $ind_blockname ][ $blocksize ] = Array( $blockname );
+
 
        //link the current block to the block we just created
         $this->currentBlock = &$this->content[ $ind_blockname ][ $blocksize ];

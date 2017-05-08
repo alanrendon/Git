@@ -24,6 +24,5 @@ if ($result)
 		$tpl->assign('menupath', $reg['path']);
 		$tpl->assign('menu', $reg['descripcion']);
 	}
-
 $tpl->printToScreen();
 ?>
