@@ -1,9 +1,0 @@
-p.status { color: White; font-weight: bold;  font-family: Arial, Helvetica, sans-serif;  font-size: 12pt;  }
-
-input.status {   font-family: Arial, Helvetica, sans-serif;  border: 1px ridge #EBF8FF;  background: #B3CCD3 url(../imagenes/boton_back.jpg);  font-weight: bold;  text-align: center;                  }
-
-input.clock { color: White; font-weight: bold;  font-family: Arial, Helvetica, sans-serif;  font-size: 12pt;  border: none;  text-align: center;  text-transform: capitalize;  background-color: transparent;        }
-
-a.link {color: White; font-weight: bold;  font-family: Arial, Helvetica, sans-serif;  font-size: 12pt; }
-
-input.boton {   font-family: Arial, Helvetica, sans-serif;  border: 1px ridge #EBF8FF;  background: #B3CCD3 url(../imagenes/boton_back.jpg);  font-weight: bold;  text-align: center;            vertical-align: middle;                }

@@ -1,7 +1,0 @@
-1120.001.000,60,0,,Instrucciones:
-1120.005.000,,60,,"Columna A:  Debe ir el código agrupador, este deberá estar registrado previamente en su catálogo de cuentas."
-,,,,Columna B: El total de debe de la cuenta
-,,,,Columna C: El total de haber de la cuenta
-,,,,"1.- Solamente puede ingresar un debe o haber por cuenta, no los dos."
-,,,,2.- El archivo debe ser CSV.
-,,,,3. El CSV debe tener solamente una página.
