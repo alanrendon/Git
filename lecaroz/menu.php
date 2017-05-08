@@ -17,8 +17,7 @@ if (isset($_GET['menu']))
 $tpl = new TemplatePower( "./plantillas/menu.tpl" );
 
 $tpl->prepare();
-//echo $_SESSION['menu'];
-//echo "$_SESSION[menu]_nav.js?v=" . mt_rand();
+
 // Generar menu segun nivel de usuario
 if (isset($_SESSION['menu'])) {
 	$tpl->newBlock("menu");
