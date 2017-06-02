@@ -254,6 +254,61 @@ class modContab extends DolibarrModules {
         $this->rights[$r][3] = 0;
         $this->rights[$r][4] = 'expimppol';
         $r++;
+
+        $this->rights[$r][0] = 4031204;
+        $this->rights[$r][1] = 'Lista de depresiación';
+        $this->rights[$r][3] = 0;
+        $this->rights[$r][4] = 'ldepres';
+        $r++;
+
+        $this->rights[$r][0] = 4031205;
+        $this->rights[$r][1] = 'Nueva Depresiación';
+        $this->rights[$r][3] = 0;
+        $this->rights[$r][4] = 'ndepres';
+        $r++;
+
+        $this->rights[$r][0] = 4031206;
+        $this->rights[$r][1] = 'Nuevo valor INPC';
+        $this->rights[$r][3] = 0;
+        $this->rights[$r][4] = 'ninpc';
+        $r++;
+
+        $this->rights[$r][0] = 4031207;
+        $this->rights[$r][1] = 'Listado de valores INPC';
+        $this->rights[$r][3] = 0;
+        $this->rights[$r][4] = 'linpc';
+        $r++;
+
+        $this->rights[$r][0] = 4031208;
+        $this->rights[$r][1] = 'Crear Proveedor';
+        $this->rights[$r][3] = 0;
+        $this->rights[$r][4] = 'cprove';
+        $r++;
+
+        $this->rights[$r][0] = 4031209;
+        $this->rights[$r][1] = 'Listar Proveedores';
+        $this->rights[$r][3] = 0;
+        $this->rights[$r][4] = 'lprove';
+        $r++;
+
+        $this->rights[$r][0] = 4031210;
+        $this->rights[$r][1] = 'DIOT';
+        $this->rights[$r][3] = 0;
+        $this->rights[$r][4] = 'diot';
+        $r++;
+
+        $this->rights[$r][0] = 4031211;
+        $this->rights[$r][1] = 'Asignar Valores IVA';
+        $this->rights[$r][3] = 0;
+        $this->rights[$r][4] = 'viva';
+        $r++;
+
+        $this->rights[$r][0] = 4031212;
+        $this->rights[$r][1] = 'Listar Valores Asignados IVA';
+        $this->rights[$r][3] = 0;
+        $this->rights[$r][4] = 'liva';
+        $r++;
+
         
         // Main menu entries
         $this->menu = array();   // List of menus to add
@@ -398,7 +453,7 @@ class modContab extends DolibarrModules {
                 'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
                 'position' => 103,
                 'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
-                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'perms' => '$user->rights->contab->ldepres', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
                 'target' => '',
                 'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
         $r++;
@@ -413,7 +468,7 @@ class modContab extends DolibarrModules {
                 'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
                 'position' => 103,
                 'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
-                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'perms' => '$user->rights->contab->ndepres', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
                 'target' => '',
                 'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
         $r++;
@@ -427,7 +482,7 @@ class modContab extends DolibarrModules {
                 'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
                 'position' => 103,
                 'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
-                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'perms' => '$user->rights->contab->ninpc', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
                 'target' => '',
                 'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
         $r++;
@@ -441,7 +496,7 @@ class modContab extends DolibarrModules {
                 'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
                 'position' => 103,
                 'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
-                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'perms' => '$user->rights->contab->linpc', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
                 'target' => '',
                 'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
         $r++;
@@ -455,7 +510,7 @@ class modContab extends DolibarrModules {
                 'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
                 'position' => 103,
                 'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
-                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'perms' => '$user->rights->contab->cprove', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
                 'target' => '',
                 'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
         $r++;
@@ -468,7 +523,7 @@ class modContab extends DolibarrModules {
                 'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
                 'position' => 103,
                 'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
-                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'perms' => '$user->rights->contab->lprove', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
                 'target' => '',
                 'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
         $r++;
@@ -481,7 +536,7 @@ class modContab extends DolibarrModules {
                 'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
                 'position' => 103,
                 'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
-                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'perms' => '$user->rights->contab->diot', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
                 'target' => '',
                 'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
         $r++;
@@ -496,7 +551,7 @@ class modContab extends DolibarrModules {
                 'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
                 'position' => 103,
                 'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
-                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'perms' => '$user->rights->contab->viva', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
                 'target' => '',
                 'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
         $r++;
@@ -510,7 +565,7 @@ class modContab extends DolibarrModules {
                 'langs' => 'contab@contab', // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
                 'position' => 103,
                 'enabled' => '$user->rights->contab->cont', // Define condition to show or hide menu entry. Use '$conf->doliwaste->enab
-                'perms' => '$user->rights->contab->cont', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
+                'perms' => '$user->rights->contab->liva', // Use 'perms'=>'$user->rights->doliwaste->level1->level2' if you w
                 'target' => '',
                 'user' => 0);                    // 0=Menu for internal users, 1=external users, 2=both
         $r++;

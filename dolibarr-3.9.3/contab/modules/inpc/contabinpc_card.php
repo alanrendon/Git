@@ -79,9 +79,9 @@ $search_diciembre=GETPOST('search_diciembre','alpha');
 
 
 // Protection if external user
-if ($user->societe_id > 0)
+if ($user->rights->contab->ninpc!=1)
 {
-	//accessforbidden();
+	accessforbidden();
 }
 
 if (empty($action) && empty($id) && empty($ref)) $action='list';

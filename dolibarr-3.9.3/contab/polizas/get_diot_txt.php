@@ -243,6 +243,8 @@
 	$polizas_diot= getPolizas_diot($anio, $mes,$fk_proveedor,$format,$diot);
 
 
+	
+
 	if ($format==1) {
 		header('Content-type: text/plain');
 	    header('Content-Disposition: attachment; filename=DIOT_POLIZAS_'.$anio.'-'.$mes.'.txt');
@@ -440,9 +442,13 @@
 						$xml_array[$i]['key_ts']            =$code_tip_op;
 						$xml_array[$i]['id_fiscal']         =$id_fiscal;
 						$xml_array[$i]['nombre_extranjero2'] =$nombre_extranjero;
-						$xml_array[$i]['compIppSubTot']     =round(floatval($compIppSubTot),0);
+						$xml_array[$i]['compIppSubTot']     =round(floatval($compIppSubTot-$descuento),0);
 						$xml_array[$i]['compIppTot']        = 0;
-						$xml_array[$i]['iva']     			=round(floatval($arrTras[$xml_key]["importe"]),0);
+						$sum_iva=0;
+						foreach ($arrTras as $key => $value) {
+							$sum_iva+=$value["importe"];
+						}
+						$xml_array[$i]['iva']     			=round(floatval($sum_iva ),0);
 						$xml_array[$i]['prov']     			=$poli_value->fk_proveedor;
 
 						$i++;
@@ -641,9 +647,9 @@
 
 			
 		}
-
-		
 	}
+
+
 
 
 	

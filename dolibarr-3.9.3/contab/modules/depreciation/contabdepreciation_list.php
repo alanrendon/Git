@@ -108,6 +108,11 @@ if ($user->societe_id > 0)
 	//accessforbidden();
 }
 
+if ($user->rights->contab->ldepres !=1)
+{
+	accessforbidden();
+}
+
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array
 $hookmanager->initHooks(array('contabdepreciationlist'));
 $extrafields = new ExtraFields($db);
@@ -357,7 +362,7 @@ if ($search_depreciation_accumulated != '') $params.= '&amp;search_depreciation_
     } 
     
     print_barre_liste($title, $page, $_SERVER["PHP_SELF"],$params,$sortfield,$sortorder,'',$num,$nbtotalofrecords,'title_companies');
-    
+  
 
     print "
     	<form method='GET' id='search' action='contabdepreciation_report.php' target='_blank'>
@@ -401,7 +406,7 @@ if ($search_depreciation_accumulated != '') $params.= '&amp;search_depreciation_
 
     $varpage=empty($contextpage)?$_SERVER["PHP_SELF"]:$contextpage;
     $selectedfields=$form->multiSelectArrayWithCheckbox('selectedfields', $arrayfields, $varpage);	// This also change content of $arrayfields
-	
+
 	print '<table class="liste '.($moreforfilter?"listwithfilterbefore":"").'">';
 
     // Fields title

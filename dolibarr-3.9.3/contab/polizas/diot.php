@@ -64,7 +64,10 @@ $page = GETPOST('page','int');
 if ($page == -1) { $page = 0; }
 $offset = $limit * $page;
 
-
+if ($user->rights->contab->diot!=1)
+{
+	accessforbidden();
+}
 
 $proveedor=GETPOST("proveedor");
 $format=GETPOST("format");

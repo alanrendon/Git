@@ -80,9 +80,9 @@ $search_depreciation_accumulated=GETPOST('search_depreciation_accumulated','alph
 
 
 // Protection if external user
-if ($user->societe_id > 0)
+if ($user->rights->contab->ndepres!=1)
 {
-	//accessforbidden();
+	accessforbidden();
 }
 
 if (empty($action) && empty($id) && empty($ref)) $action='list';

@@ -93,6 +93,10 @@ if ($user->societe_id > 0)
     $socid = $user->societe_id;
 	//accessforbidden();
 }
+if ($user->rights->contab->lprove!=1)
+{
+	accessforbidden();
+}
 
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array
 $hookmanager->initHooks(array('contabsocietelist'));

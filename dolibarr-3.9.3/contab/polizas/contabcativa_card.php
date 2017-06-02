@@ -65,9 +65,9 @@ $search_id_user_update=GETPOST('search_id_user_update','int');
 
 
 // Protection if external user
-if ($user->societe_id > 0)
+if ($user->rights->contab->viva!=1)
 {
-	//accessforbidden();
+	accessforbidden();
 }
 
 if (empty($action) && empty($id) && empty($ref)) $action='list';
@@ -104,7 +104,7 @@ if (empty($reshook))
 	{
 		if (GETPOST('cancel'))
 		{
-			$urltogo=$backtopage?$backtopage:dol_buildpath('/contab/list.php',1);
+			$urltogo=$backtopage?$backtopage:dol_buildpath('/contab/polizas/contabcativa_list.php',1);
 			header("Location: ".$urltogo);
 			exit;
 		}

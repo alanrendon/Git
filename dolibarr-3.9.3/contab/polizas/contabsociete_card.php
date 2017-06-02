@@ -78,10 +78,11 @@ $search_fk_user_modif=GETPOST('search_fk_user_modif','int');
 
 
 // Protection if external user
-if ($user->societe_id > 0)
+if ($user->rights->contab->cprove!=1)
 {
-	//accessforbidden();
+	accessforbidden();
 }
+
 
 if (empty($action) && empty($id) && empty($ref)) $action='list';
 

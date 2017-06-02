@@ -88,6 +88,11 @@ if ($user->societe_id > 0)
 	//accessforbidden();
 }
 
+if ($user->rights->contab->liva!=1)
+{
+	accessforbidden();
+}
+
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array
 $hookmanager->initHooks(array('contabcativalist'));
 $extrafields = new ExtraFields($db);

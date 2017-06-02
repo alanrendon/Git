@@ -99,6 +99,11 @@ if ($user->societe_id > 0)
 	//accessforbidden();
 }
 
+if ($user->rights->contab->linpc!=1)
+{
+	accessforbidden();
+}
+
 // Initialize technical object to manage hooks. Note that conf->hooks_modules contains array
 $hookmanager->initHooks(array('contabinpclist'));
 $extrafields = new ExtraFields($db);

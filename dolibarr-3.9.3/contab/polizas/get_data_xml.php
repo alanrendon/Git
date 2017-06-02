@@ -62,14 +62,15 @@ function get_data_xml($file){
 	$xml->registerXPathNamespace('t', $ns['tfd']);
 
 	foreach ($xml->xpath('//cfdi:Comprobante') as $cfdiComprobante){
-		global $compVersion , $compFecha , $compSello , $compImpTot , $compIppSubTot , $compCertifi , $compFormPag , $compMetPag , $compNoCertificado , $compTipoCompr , $compSerie , $compFolio , $compMoneda;
+		global $compVersion , $compFecha , $compSello , $compImpTot , $compIppSubTot , $compCertifi , $compFormPag , $compMetPag , $compNoCertificado , $compTipoCompr , $compSerie , $compFolio , $compMoneda,$descuento;
 	    
 	    $compVersion = $cfdiComprobante['version'];
 	    $compFecha = $cfdiComprobante['fecha'];
 	    $compSello = $cfdiComprobante['sello'];
 	    $compImpTot = $cfdiComprobante['total'];
 	    $compIppSubTot = $cfdiComprobante['subTotal'];
-	    $compCertifi = $cfdiComprobante['certificado'];
+	    $compIppSubTot = $cfdiComprobante['subTotal'];
+	    $descuento = $cfdiComprobante['descuento'];
 	    $compFormPag = $cfdiComprobante['formaDePago'];
 	    $compMetPag = $cfdiComprobante['metodoDePago'];
 	    $compNoCertificado = $cfdiComprobante['noCertificado'];
@@ -138,11 +139,16 @@ function get_data_xml($file){
 	$i=0;
 	foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Impuestos//cfdi:Traslados//cfdi:Traslado') as $Traslado){
 		global $arrTras;
-	  $arrTras[$i]['tasa']     = $Traslado['tasa'];
-	  $arrTras[$i]['importe']  = $Traslado['importe'];
-	  $arrTras[$i]['impuesto'] = $Traslado['impuesto'];
+	  $arrTras[$i]['tasa']     = (float)$Traslado['tasa'];
+	  $arrTras[$i]['importe']  = (float)$Traslado['importe'];
+	  $arrTras[$i]['impuesto'] = (String)$Traslado['impuesto'];
+
+	  
+
+
 	    $i++;
 	}
+	
 	foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd) {
        global $timbreFDSelloCfd ,$timbreFDFechTimbra ,$timbreFDUuid ,$timbreFDNoCertif ,$timbreFDVersion ,$timbreFDSelloSat;
 		$timbreFDSelloCfd   = $tfd['selloCFD'];
