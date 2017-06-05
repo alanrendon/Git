@@ -69,6 +69,7 @@ if ($id || $ref)
 	$productid=$object->id;
 	$id=$object->id;
 	$factory->id =$id;
+	$factory->change_defaultPrice($id);
 }
 
 

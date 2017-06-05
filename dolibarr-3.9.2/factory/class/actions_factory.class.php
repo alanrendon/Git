@@ -72,8 +72,22 @@ class ActionsFactory // extends CommonObject
 		}
 		
 	}
+
+
 	function formAddObjectLine($parameters, $object, $action) 
 	{
+		if (isset($object->array_options["options_desc_tot"])) {
+			if ($object->array_options["options_desc_tot"]>0) {
+				print "\n".'<script type="text/javascript" language="javascript">'."\n";
+	            print 'jQuery(document).ready(function () {
+	            			var value=parseInt($("#remise_percent").val())+'.$object->array_options["options_desc_tot"].';
+	                        $("#remise_percent").val(value);
+	                    })';
+	            print '</script>';
+			}
+		}
+		
+
 		global $db,$langs,$conf;
 
 
@@ -84,22 +98,9 @@ class ActionsFactory // extends CommonObject
 			print '<tr style="border:1px solid #E0E0E0;">';
 			print '<td colspan=7 valign="top" style="width:265px; border-top:1px solid #E0E0E0;">Inserte la clave especifica del proyecto</td>';
 			print '<td  valign="top" style="border-top:1px solid #E0E0E0;">';
-			$sql='SELECT
-				SUBSTR(a.ref, 1, 8) as clave
-			FROM
-				llx_product AS a
-			WHERE SUBSTR(a.ref, 1, 5) REGEXP "^[0-9]+$"
-			AND (SUBSTR(a.ref, 6, 1) = "_" OR SUBSTR(a.ref, 6, 1) = "-")
-			AND SUBSTR(a.ref, 7, 2) REGEXP "^[A-Z]"
-			GROUP BY SUBSTR(a.ref, 1, 8)';
-			$query=$db->query($sql);
-			print '
-			<select class="flat" id="select_clave" name="select_clave">';
-				while ($obj = $db->fetch_object($query)) {
-					print '<option value="'.$obj->clave.'">'.$obj->clave.'</option>';
-				}
-			print '
-			</select>';
+			
+
+			print $this->select_dol_products2($_REQUEST["select_clave"],"select_clave");
 			print '</td>
 			<td style="border-top:1px solid #E0E0E0;">
 				<input type="submit" class="button" value="Cargar" name="cargar_clave" id="cargar_clave">
@@ -211,8 +212,13 @@ class ActionsFactory // extends CommonObject
 					print '</td>';
 					$factory = new Factory($db);
 	            	$factory->id =$obj->rowid;
+	            	
+	            	$factory->change_defaultPrice($obj->rowid);
+
 	            	$factory->get_sousproduits_arbo();
-	            	//$pr = $factory->get_arbo_each_prod();
+	            	$pr=NULL;
+	            	$ar= array();
+	            	$pr = $factory->get_arbo_each_prod();
 
 	            	foreach ($pr as $key => $value) {
 	            		if ($value["type"]==0) {
@@ -280,21 +286,24 @@ class ActionsFactory // extends CommonObject
 
             	$prodsfather = $factory->getFather(); //Parent Products
                 // pour connaitre les produits composant le produits
+                $factory->dataIntegrationProduct($_REQUEST["id_obj"]);//father
+
                 $factory->get_sousproduits_arbo();
                 // Number of subproducts
                 $prods_arbo = $factory->get_arbo_each_prod();
 
-
-
-                //
-                $html= '<br>
+                $html= '
                 <form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
+
+                	
+
                		$html.= '<input type="hidden" name="id" value="'.$object->id.'">';
 		            $html.= '<input type="hidden" name="act" value="update">';
 		            
 		            $html.= '<input type="hidden" name="select_clave" value="'.$_REQUEST["select_clave"].'">';
 		            $html.= '<input type="hidden" name="cargar_clave" value="'.$_REQUEST["cargar_clave"].'">';
 		            $html.= '<input type="hidden" name="id_obj" value="'.$prod->id.'">';
+		            $html.= '<input type="hidden" name="selected" value="ref2">';
 		            
 		            $label2=$prod->ref.' - '.$prod->label;
 
@@ -303,7 +312,7 @@ class ActionsFactory // extends CommonObject
 		            	$html.= '<td colspan=2><b>'.$prod->ref.' - '.$prod->label.'</b></td>';
 		            $html.= '</tr >';*/
 		            if (! empty($modCodeProduct->code_auto)) $tmpcode=$modCodeProduct->getNextValue($prod,$type);
-		            $html.= '<td class="fieldrequired" width="20%">'.$langs->trans("Ref").'</td><td colspan="3"><input name="ref2" size="32" maxlength="128" value="'.$prod->ref.'">';
+		            $html.= '<td class="fieldrequired" width="20%">'.$langs->trans("Ref").'</td><td colspan="3"><input name="ref2" id="ref2" size="32" maxlength="128" value="'.$prod->ref.'">';
 		            if ($refalreadyexists)
 		            {
 		                $html.= $langs->trans("RefAlreadyExists");
@@ -312,7 +321,7 @@ class ActionsFactory // extends CommonObject
 
 		            // Label
 		            $html.= '<tr><td class="fieldrequired">'.$langs->trans("Label").'</td><td colspan="3">
-		                    <input name="label" size="40" maxlength="255" value="'.$prod->label.'">
+		                    <input name="label" id="label" size="40" maxlength="255" value="'.$prod->label.'">
 		                </td></tr>';
 
 
@@ -332,21 +341,21 @@ class ActionsFactory // extends CommonObject
 		                    <tr>
 		                        <td>'.$extrafields->attribute_label["anc"].'</td>
 		                        <td colspan="3">
-		                            <input type="text" class="flat" name="options_anc" size="6" value="'.number_format($prod->array_options["options_anc"],2).'"> 
+		                            <input type="text" class="flat" id="options_anc" name="options_anc" size="6" value="'.number_format($prod->array_options["options_anc"],2).'"> 
 		                        </td>
 		                    </tr>
 		       
 		                    <tr>
 		                        <td>'.$extrafields->attribute_label["lar"].'</td>
 		                        <td colspan="3">
-		                            <input type="text" class="flat" name="options_lar" size="6" value="'.number_format($prod->array_options["options_lar"],2).'"> 
+		                            <input type="text" class="flat" id="options_lar" name="options_lar" size="6" value="'.number_format($prod->array_options["options_lar"],2).'"> 
 		                        </td>
 		                    </tr>
 		        
 		                    <tr>
 		                        <td>'.$extrafields->attribute_label["total_prod"].'</td>
 		                        <td colspan="3">
-		                            <input type="text" class="flat" name="options_total_prod" size="10" maxlength="10" value="'.$prod->array_options["options_total_prod"].'">
+		                            <input type="text" class="flat" id="options_total_prod" name="options_total_prod" size="10" maxlength="10" value="'.$prod->array_options["options_total_prod"].'">
 		                        </td>
 		                    </tr>
 
@@ -384,7 +393,7 @@ class ActionsFactory // extends CommonObject
 			           <tr>
 			                <td>Solo Tratamiento</td>
 			                <td colspan="3">
-			                    <input type="checkbox" name="tratamiento" '.$cad.'>
+			                    <input type="checkbox" id="tratamiento" name="tratamiento" '.$cad.'>
 			                </td>
 			            </tr>
 			        ';
@@ -418,15 +427,15 @@ class ActionsFactory // extends CommonObject
 	                    $html.=load_fiche_titre("Face 2 - Materia Prima",'','');
 	                    $html.=dol_get_fiche_head();
 
-	                        $html.= '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
+	                        $html.= '<form action="'.$_SERVER['PHP_SELF'].'" method="GET" id="mat">';
 	                            $html.= '<input type="hidden" name="act" value="add_line">';
 		            			$html.= '<input type="hidden" name="id" value="'.$object->id.'">';
 	         					$html.= '<input type="hidden" name="select_clave" value="'.$_REQUEST["select_clave"].'">';
 								$html.= '<input type="hidden" name="cargar_clave" value="'.$_REQUEST["cargar_clave"].'">';
 								$html.= '<input type="hidden" name="id_obj" value="'.$prod->id.'">';
-	                            $html.= '<b>Producto:</b>'.$this->select_dol_products(GETPOST("id_line"), 'id_line',1," WHERE fk_product_type<>1 and rowid<>".$object->id." ");
+	                            $html.= '<b>Producto:</b>'.$this->select_dol_products(GETPOST("id_line"), 'id_line',1," WHERE fk_product_type<>1 and u.rowid<>".$prod->id." AND a.fk_entrepot = ".$conf->global->FACT_ALM_MP);
 	                            //print '<br><b>Cantidad: </b><input name="cantidad" size="10"  value="'.GETPOST("cantidad").'">';
-	                            $html.= '<br><br><input type="submit" class="button" value="Cargar">';
+	                            //$html.= '<br><br><input type="submit" class="button" value="Cargar">';
 	                        $html.= '</form>';    
 	                    $html.=dol_get_fiche_end(); 
 	                }
@@ -436,16 +445,16 @@ class ActionsFactory // extends CommonObject
 	                    
 	                    $html.=load_fiche_titre("Face 3 - Tratamiento",'','');
 	                 	$html.=dol_get_fiche_head();
-                        $html.= '<form action="'.$_SERVER['PHP_SELF'].'" method="GET">';
+                        $html.= '<form action="'.$_SERVER['PHP_SELF'].'" method="GET" id="tra">';
 							$html.= '<input type="hidden" name="act" value="add_line">';
 							$html.= '<input type="hidden" name="id" value="'.$object->id.'">';
 							$html.= '<input type="hidden" name="select_clave" value="'.$_REQUEST["select_clave"].'">';
 							$html.= '<input type="hidden" name="cargar_clave" value="'.$_REQUEST["cargar_clave"].'">';
 							$html.= '<input type="hidden" name="id_obj" value="'.$prod->id.'">';
 
-                            $html.= '<b>Producto:</b>'.$this->select_dol_products(GETPOST("id_line2"), 'id_line2',1," WHERE fk_product_type=1 and rowid<>".$prod->id." ");
+                            $html.= '<b>Producto:</b>'.$this->select_dol_products(GETPOST("id_line2"), 'id_line2',1," WHERE fk_product_type=1 and u.rowid<>".$prod->id." ");
                             //print '<br><b>Cantidad: </b><input name="cantidad" size="10"  value="'.GETPOST("cantidad").'">';
-                            $html.= '<br><br><input type="submit" class="button" value="Cargar">';
+                            //$html.= '<br><br><input type="submit" class="button" value="Cargar">';
                         $html.= '</form>';   
                         $html.=dol_get_fiche_end(); 
 	                 
@@ -528,7 +537,7 @@ class ActionsFactory // extends CommonObject
 
 		                                    $productstatic->load_stock();
 
-		                                     $html.= '<td align=center></td>';
+		                                    $html.= '<td align=center>'.$factory->getUrlStock($value['id'], 1, $productstatic->stock_reel).'</td>';
 
 		                                }
 		                                else{
@@ -545,13 +554,14 @@ class ActionsFactory // extends CommonObject
 		                            $factory->dataIntegrationProduct($id);//father
 		                            $soon= new factory($db);//soon
 		                            $soon->dataIntegrationProduct($value['id']);
-		                            
-		                            $resp=substr($factory->refFather, 0, 3);                
-		                            if((strcmp($resp, 'TRA')==0 || strcmp($resp, 'tra')==0) || strcmp($ref, 'cxhcnc')==0 || strcmp($ref, 'cxhdm')==0 || strcmp($ref, 'cxhr') ==0 || $factory->type==1){
+		  
+		                            $resp=substr($factory->refFather, 0, 3); 
+
+		                            if((strcmp($resp, 'TRA')==0 || strcmp($resp, 'tra')==0) || strcmp($ref, 'cxhcnc')==0 || strcmp($ref, 'cxhdm')==0 || strcmp($ref, 'cxhr') ==0 || $factory->type==1 ){
 		                                $pesoTeori=0;
 		                                $precioUnit=$value['price'];                
 		                            }else{
-		                                                
+		                                             
 		                                $pesoTeori=($soon->esp*$factory->anc*$factory->lar*$soon->fac/ 1000000);//peso teorico= espesor * ancho * largo * factor / 1000000
 		                            }       
 
@@ -607,7 +617,7 @@ class ActionsFactory // extends CommonObject
 		                             $html.= '<td align="right">'.number_format($pesoTeori,2).'</td>'; //peso teorico= espesor * ancho * largo * factor / 1000000
 		                             $html.= '<td align="right">'.number_format($precioUnit,2).'</td>'; //precio unitario
 		                             $html.= '<td align="right">'.number_format(($precioUnit*$value['nb']),2).'</td>'; //precio total
-		                             $html.= '<td align="center"><input type="checkbox" name="prod_id_chk'.$i.'" value="'.$value['id'].'"></td>';
+		                             $html.= '<td align="center"><input type="checkbox" name="prod_id_chk[]" value="'.$value['id'].'"></td>';
 		                            
 		                            $mntTot=$mntTot+$price*$value['nb'];
 		                            $pmpTot=$pmpTot+$pmp*$value['nb']; // sub total calculation
@@ -642,17 +652,109 @@ class ActionsFactory // extends CommonObject
 		             $html.= '</form>';   
 	            }
 	            echo $this->formconfirm2("",$label2,$html,"");
-	           
-	            
+
+	            print "\n".'<script type="text/javascript" language="javascript">'."\n";
+	            print 'jQuery(document).ready(function () {
+	                        
+	                        
+	                    })';
+	            print '</script>';
             }
 		}
 
 
 
 	}
+	function select_dol_products2($selected='', $htmlname='prod', $show_empty=0, $exclude='', $disabled=0, $include='', $enableonly='', $force_entity=0, $maxlength=0, $showstatus=0, $morefilter='', $show_every=0, $enableonlytext='', $morecss='', $noactive=0)
+	{
+	
+	    global $conf,$user,$langs,$db;
 
 
-	 function formconfirm2($page, $title, $question, $action, $formquestion='', $selectedchoice="", $useajax=1, $height=670, $width=1000)
+	    $out='';
+
+	    $sql='SELECT
+				SUBSTR(a.ref, 1, 8) as clave
+			FROM
+				llx_product AS a
+			WHERE SUBSTR(a.ref, 1, 5) REGEXP "^[0-9]+$"
+			AND (SUBSTR(a.ref, 6, 1) = "_" OR SUBSTR(a.ref, 6, 1) = "-")
+			AND SUBSTR(a.ref, 7, 2) REGEXP "^[A-Z]"
+			GROUP BY SUBSTR(a.ref, 1, 8)';
+
+	    $resql=$db->query($sql);
+
+	    if ($resql)
+	    {
+
+	        $num = $db->num_rows($resql);
+	        $i = 0;
+	        if ($num)
+	        {
+
+	            // Enhance with select2
+	            $nodatarole='';
+	            if ($conf->use_javascript_ajax)
+	            {
+	                include_once DOL_DOCUMENT_ROOT . '/core/lib/ajax.lib.php';
+	                $comboenhancement = ajax_combobox($htmlname);
+	                $out.=$comboenhancement;
+	                $nodatarole=($comboenhancement?' data-role="none"':'');
+	            }
+
+	            $out.= '<select class="flat minwidth200'.($morecss?' '.$morecss:'').'" id="'.$htmlname.'" name="'.$htmlname.'"'.($disabled?' disabled':'').$nodatarole.'>';
+	            if ($show_empty) $out.= '<option value="-1"'.((empty($selected) || $selected==-1)?' selected':'').'>&nbsp;</option>'."\n";
+	            if ($show_every) $out.= '<option value="-2"'.(($selected==-2)?' selected':'').'>-- '.$langs->trans("Everybody").' --</option>'."\n";
+
+	            $userstatic=new User($db);
+
+	            while ($i < $num)
+	            {
+	                $obj = $db->fetch_object($resql);
+
+	                $disableline='';
+
+
+	                if ($obj->clave==$selected)
+	                {
+	                    $out.= '<option value="'.$obj->clave.'"';
+	                    if ($disableline) $out.= ' disabled';
+	                    $out.= ' selected>';
+	                }
+	                else
+	                {
+	                    $out.= '<option value="'.$obj->clave.'"';
+	                    if ($disableline) $out.= ' disabled';
+	                    $out.= '>';
+	                }
+
+	                $out.= $obj->clave;
+
+
+	                
+
+
+	                $out.= '</option>';
+
+	                $i++;
+	            }
+	        }
+	        else
+	        {
+	            $out.= '<select class="flat" id="'.$htmlname.'" name="'.$htmlname.'" disabled>';
+	            $out.= '<option value="">'.$langs->trans("None").'</option>';
+	        }
+	        $out.= '</select>';
+	    }
+	    else
+	    {
+	        dol_print_error($db);
+	    }
+	    return $out;
+	}
+
+
+	function formconfirm2($page, $title, $question, $action, $formquestion='', $selectedchoice="", $useajax=1, $height=670, $width=1000)
     {
         global $langs,$conf;
         global $useglobalvars;
@@ -707,50 +809,221 @@ class ActionsFactory // extends CommonObject
             
 
             $formconfirm.= "\n<!-- begin ajax form_confirm page=".$page." -->\n";
-            $formconfirm.= '<script type="text/javascript">'."\n";
+            $formconfirm.= '
+            <script type="text/javascript">'."\n";
             $formconfirm.= 'jQuery(document).ready(function() {
-            $(function() {
-            	$( "#'.$dialogconfirm.'" ).dialog(
-            	{
-                    autoOpen: '.($autoOpen ? "true" : "false").',';
- 
-        			$formconfirm.='
-                    resizable: false,
-                    height: "'.$height.'",
-                    width: "'.$width.'",
-                    modal: true,
-                    closeOnEscape: false,
-                    buttons: {
-                        
-                        "Cerrar": function() {
-                        	var options = "";
-                         	var inputko = '.json_encode($inputko).';
-                         	var pageno="'.dol_escape_js(! empty($pageno)?$pageno:'').'";
-                         	if (inputko.length>0) {
-                         		$.each(inputko, function(i, inputname) {
-                         			var more = "";
-                         			if ($("#" + inputname).attr("type") == "checkbox") { more = ":checked"; }
-                         			var inputvalue = $("#" + inputname + more).val();
-                         			if (typeof inputvalue == "undefined") { inputvalue=""; }
-                         			options += "&" + inputname + "=" + inputvalue;
-                         		});
-                         	}
-                         	var urljump=pageno + (pageno.indexOf("?") < 0 ? "?" : "") + options;
-                         	//alert(urljump);
-            				if (pageno.length > 0) { location.href = urljump; }
-                            $(this).dialog("close");
+	            $(function() {
+	            	$( "#'.$dialogconfirm.'" ).dialog(
+	            	{
+	                    autoOpen: '.($autoOpen ? "true" : "false").',';
+	 
+	        			$formconfirm.='
+	                    resizable: false,
+	                    height: "'.$height.'",
+	                    width: "'.$width.'",
+	                    modal: true,
+	                    closeOnEscape: false,
+	                    buttons: {
+	                        
+	                        "Cerrar": function() {
+	                        	var options = "";
+	                         	var inputko = '.json_encode($inputko).';
+	                         	var pageno="'.dol_escape_js(! empty($pageno)?$pageno:'').'";
+	                         	if (inputko.length>0) {
+	                         		$.each(inputko, function(i, inputname) {
+	                         			var more = "";
+	                         			if ($("#" + inputname).attr("type") == "checkbox") { more = ":checked"; }
+	                         			var inputvalue = $("#" + inputname + more).val();
+	                         			if (typeof inputvalue == "undefined") { inputvalue=""; }
+	                         			options += "&" + inputname + "=" + inputvalue;
+	                         		});
+	                         	}
+	                         	var urljump=pageno + (pageno.indexOf("?") < 0 ? "?" : "") + options;
+	                         	//alert(urljump);
+	            				if (pageno.length > 0) { location.href = urljump; }
+	                            $(this).dialog("close");
+	                        }
+	                    }
+	                });
+
+	            	var button = "'.$button.'";';
+	        
+	            	if (!empty($conf->global->SELECTED_ROW)) {
+	            		switch ($conf->global->SELECTED_ROW) {
+	            			case 'ref2':
+	            				$const="label";
+	            				break;
+	            			case 'label':
+	            				$const="options_anc";
+	            				break;
+	            			case 'options_anc':
+	            				$const="options_lar";
+	            				break;
+	            			case 'options_lar':
+	            				$const="options_total_prod";
+	            				break;
+	            			case 'options_total_prod':
+	            				$const="options_hmcnc";
+	            				break;
+	            			case 'options_hmcnc':
+	            				$const="options_hecnc";
+	            				break;
+	            			case 'options_hecnc':
+	            				$const="options_hr";
+	            				break;
+	            			case 'options_hr':
+	            				$const="tratamiento";
+	            				break;
+	            			case 'tratamiento':
+	            				$const="s2id_autogen1";
+	            				break;
+	            			case 's2id_autogen1':
+	            				$const="s2id_autogen2";
+	            				break;
+	            		}
+	            		$formconfirm.='
+		            		if ($("#'.$const.'").length) {
+		            			$("#'.$const.'").select();
+		            		}else{
+		            			$("#s2id_autogen2").select();
+		            		}
+	            		';
+	            	}else{
+	            		$formconfirm.='$("#ref2").select();';
+	            		
+	            	}
+
+
+	        		$formconfirm.='
+	            	
+	            	if (button.length > 0) {
+	                	$( "#" + button ).click(function() {
+	                		$("#'.$dialogconfirm.'").dialog("open");
+
+	        			});
+	                }
+	            });  
+            	$("#ref2").keydown (function(e) {
+	                if (e.which==40) {
+
+	                    $("#label").select();
+	                }
+	            }); 
+	            $("#label").keydown (function(e) {
+	                if (e.which==38) {
+	                    $("#ref2").select();
+	                }
+	                if (e.which==40) {
+	                    $("#options_anc").select();
+	                }
+	            }); 
+	            $("#options_anc").keydown (function(e) {
+	                if (e.which==38) {
+	                    $("#label").select();
+	                }
+	                if (e.which==40) {
+	                    $("#options_lar").select();
+	                }
+	            });
+	            $("#options_lar").keydown (function(e) {
+	                if (e.which==38) {
+	                    $("#options_anc").select();
+	                }
+	                if (e.which==40) {
+	                    $("#options_total_prod").select();
+	                }
+	            });
+	            $("#options_total_prod").keydown (function(e) {
+	                if (e.which==38) {
+	                    $("#options_lar").select();
+	                }
+	                if (e.which==40) {
+	                    $("#options_hmcnc").select();
+	                }
+	            }); 
+
+	            $("#options_hmcnc").keydown (function(e) {
+	                if (e.which==38) {
+	                    $("#options_total_prod").select();
+	                }
+	                if (e.which==40) {
+	                    $("#options_hecnc").select();
+	                }
+	            }); 
+	            $("#options_hecnc").keydown (function(e) {
+	                if (e.which==38) {
+	                    $("#options_hmcnc").select();
+	                }
+	                if (e.which==40) {
+	                    $("#options_hr").select();
+	                }
+	                
+	            }); 
+	            $("#options_hr").keydown (function(e) {
+	                if (e.which==38) {
+	                    $("#options_hecnc").select();
+	                }
+	                if (e.which==40) {
+	                    $("#tratamiento").select();
+	                }
+	            }); 
+	            $("#tratamiento").keydown (function(e) {
+                    if (e.which==38) {
+                        $("#options_hr").select();
+                    }
+                    if (e.which==40) {
+                        if ( $("#s2id_autogen1").length > 0 ) {
+                            $("#s2id_autogen1").select();
+                        }else{
+                            if ($("#s2id_autogen2").length > 0) {
+                                $("#s2id_autogen2").select();
+                            }
                         }
                     }
-                }
-                );
+                    if (e.which==13) {
+                        if($("#tratamiento").is(":checked")) {
+                            $(this).prop("checked", false);
+                        } else {
+                            $("#tratamiento").prop("checked", true);
+                        }
+                    }
+                });
+                if ($("#s2id_autogen1").length > 0) {
+	                $("#s2id_autogen1").keydown (function(e) {
+		                if (e.which==37) {
+		                    $("#tratamiento").select();
+		                }
+		                if (e.which==39) {
+		                	if ($("#s2id_autogen2").length > 0) {
+		                    	$("#s2id_autogen2").select();
+		                    }
+		                }
+		                if (e.which==13) {
+	        				$("#mat").submit();
+	        			}
+		            });
+		        }
 
-            	var button = "'.$button.'";
-            	if (button.length > 0) {
-                	$( "#" + button ).click(function() {
-                		$("#'.$dialogconfirm.'").dialog("open");
-        			});
-                }
-            });
+			    $("input").keydown (function(e) {
+	                if (e.which==13) {
+	                	$("input[name$=selected]").val($(this).attr("name"));
+	                }
+	            });
+		        if ($("#s2id_autogen2").length > 0) {
+	                $("#s2id_autogen2").keydown (function(e) {
+		                if (e.which==37) {
+		                	if ($("#s2id_autogen1").length) {
+		                    	$("#s2id_autogen1").select();
+		                    }else{
+		                    	$("#tratamiento").select();
+		                    }
+		                }
+
+		                if (e.which==13) {
+	        				$("#tra").submit();
+	        			}
+		            });
+		        }
             });
             </script>';
             $formconfirm.= "<!-- end ajax form_confirm -->\n";
@@ -778,7 +1051,7 @@ class ActionsFactory // extends CommonObject
 	    {
 	        $sql.= ", e.label";
 	    }*/
-	    $sql.= " FROM ".MAIN_DB_PREFIX ."product as u  ";
+	    $sql.= " FROM ".MAIN_DB_PREFIX ."product as u LEFT JOIN llx_product_stock AS a on u.rowid = a.fk_product ";
 
 	    if (!empty($exclude)) {
 	        $sql.=$exclude;
@@ -801,7 +1074,8 @@ class ActionsFactory // extends CommonObject
 	            if ($conf->use_javascript_ajax)
 	            {
 	                include_once DOL_DOCUMENT_ROOT . '/core/lib/ajax.lib.php';
-	                $comboenhancement = ajax_combobox($htmlname);
+	                $events='';
+	                $comboenhancement = ajax_combobox($htmlname,$events);
 	                $out.=$comboenhancement;
 	                $nodatarole=($comboenhancement?' data-role="none"':'');
 	            }
@@ -872,6 +1146,9 @@ class ActionsFactory // extends CommonObject
 	    return $out;
 	}
 
+
+
+
 	function doActions($parameters, $object, $action) 
 	{
 		
@@ -906,7 +1183,7 @@ class ActionsFactory // extends CommonObject
 					0, 
 					0, 
 					$producto->id, 
-					0, 
+					$object->thirdparty->remise_percent+$object->array_options["options_desc_tot"], 
 					'HT'
 				);
 			}
@@ -940,6 +1217,7 @@ class ActionsFactory // extends CommonObject
 
 	            	$object_2 = new Product($db);
 	            	$object_2->fetch($id_obj);
+
 	            	$object_2->oldcopy= clone $object_2;
 	                $object_2->ref                    = GETPOST("ref2");
 	                $object_2->tratamiento            = GETPOST('tratamiento');
@@ -1017,16 +1295,65 @@ class ActionsFactory // extends CommonObject
 	                $object_2->accountancy_code_sell  = GETPOST('accountancy_code_sell');
 	                $object_2->accountancy_code_buy   = GETPOST('accountancy_code_buy');
 	                $extrafields = new ExtraFields($db);
+	                
+	                //echo price2num("1,112")."<br><br>";
+	
+	                foreach ($object_2->array_options as $key => $value) {
+	                	if ($value>0) {
+	                		$_POST[$key]=str_replace(",","",$_POST[$key]);
+	                	}
+	                }
+
 	                $extralabels=$extrafields->fetch_name_optionals_label($object_2->table_element);
 	                $ret = $extrafields->setOptionalsFromPost($extralabels,$object_2);
+	   
+	     
 	                if ($ret < 0) $error++;
-
+	                global $conf;
 	                if (! $error)
 	                {
 	                    if ($object_2->update($id_obj, $user) > 0)
 	                    {
+	                    	
+	                    	require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
+	                    	
+
+	                    	if (!empty($_REQUEST["selected"])) {
+	                    		dolibarr_set_const($db, "SELECTED_ROW",$_REQUEST["selected"],'chaine',0,'',$conf->entity);
+	                    	}
+
+	                    	
+
 	                    	$sql="UPDATE llx_product as a SET a.tratamiento=".$object_2->tratamiento." WHERE a.rowid=".$id_obj;
-                        $db->query($sql);
+                        	$db->query($sql);
+                        	if (isset($_POST["options_hmcnc"]) && $_POST["options_hmcnc"]>0) {
+                        		$factory = new Factory($db);
+                        		$factory->id =$id;
+	                            $producto2= new Product($db);
+	                            $producto2->fetch(141);
+	                            $pmp2=$producto2->pmp;
+	                            $price2=$producto2->price;
+	                            $factory->add_component($id_obj,141 , $_POST["options_hmcnc"], $pmp2, $price2, 0);
+	                        }
+
+	                        if (isset($_POST["options_hecnc"]) && $_POST["options_hecnc"]>0) {
+	                        	$factory = new Factory($db);
+                        		$factory->id =$id;
+	                            $producto2= new Product($db);
+	                            $producto2->fetch(140);
+	                            $pmp2=$producto2->pmp;
+	                            $price2=$producto2->price;
+	                            $factory->add_component($id_obj,140 , $_POST["options_hecnc"], $pmp2, $price2, 0);
+	                        }
+	                        if (isset($_POST["options_hr"]) && $_POST["options_hr"]>0) {
+	                        	$factory = new Factory($db);
+                        		$factory->id =$id;
+	                            $producto2= new Product($db);
+	                            $producto2->fetch(142);
+	                            $pmp2=$producto2->pmp;
+	                            $price2=$producto2->price;
+	                            $factory->add_component($id_obj,142 , $_POST["options_hr"], $pmp2, $price2, 0);
+	                        }
 	                        setEventMessages("Elemento Actualizado", "");
 	                        header("Location: ".$_SERVER["PHP_SELF"].'?id='.$id."&select_clave=".$select_clave."&cargar_clave=".$cargar_clave."&id_obj=".$id_obj);
 	                    	exit;
@@ -1095,16 +1422,15 @@ class ActionsFactory // extends CommonObject
 	        $cargar_clave=GETPOST("cargar_clave");
 	        $factory->id =$id_obj;
 	        $i=0;
-	        foreach ($_POST as $key => $value) {
-	            if ($_POST["prod_id_chk".$i]) {
-	                if ($factory->del_component($id_obj, $_POST["prod_id_chk".$i]) > 0)
+	        foreach ($_POST["prod_id_chk"] as $key => $value) {
+	           
+	                if ($factory->del_component($id_obj, $value ) > 0)
 	                {
 	                    $ban=1;
 	                    $factory->change_defaultPrice($id);
 	                    
 	                }
-	            }
-	            $i++;
+	            
 	        }
 	        if ($ban==1) {
 	            setEventMessages("Elemento eliminado satisfactoriamente","");
